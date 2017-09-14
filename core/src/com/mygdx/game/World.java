@@ -269,7 +269,7 @@ public class World {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-        texture.region = Assets.backgroundRegion;
+        texture.region = Assets.background;
 
         entity.add(background);
         entity.add(position);

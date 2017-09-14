@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 
 public class PlayerComponent implements Component {
 
+    public static final int STATE_DEAD = 1;
     public static final float MOVE_VELOCITY = 20;
     public static final float WIDTH = 0.8f;
     public static final float HEIGHT = 0.8f;

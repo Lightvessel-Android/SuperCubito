@@ -90,15 +90,15 @@ public class PlayerSystem extends IteratingSystem {
         }
     }
 
-//    public void hitSquirrel (Entity entity) {
-//        if (!family.matches(entity)) return;
-//
-//        StateComponent state = sm.get(entity);
-//        MovementComponent mov = mm.get(entity);
-//
-//        mov.velocity.set(0, 0);
-//        state.set(BobComponent.STATE_HIT);
-//    }
+    public void dead (Entity entity) {
+        if (!family.matches(entity)) return;
+
+        StateComponent state = sm.get(entity);
+        MovementComponent mov = mm.get(entity);
+
+        mov.velocity.set(0, 0);
+        state.set(PlayerComponent.STATE_DEAD);
+    }
 //
 //    public void hitPlatform (Entity entity) {
 //        if (!family.matches(entity)) return;

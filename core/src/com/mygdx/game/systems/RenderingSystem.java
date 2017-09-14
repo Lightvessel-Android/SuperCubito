@@ -67,17 +67,19 @@ public class RenderingSystem extends IteratingSystem {
 
             TransformComponent t = transformM.get(entity);
 
-            float width = tex.region.getRegionWidth();
-            float height = tex.region.getRegionHeight();
+            float width = tex.region.getWidth();
+            float height = tex.region.getHeight();
             float originX = width * 0.5f;
             float originY = height * 0.5f;
 
-            batch.draw(tex.region,
-                    t.pos.x - originX, t.pos.y - originY,
-                    originX, originY,
-                    width, height,
-                    t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES,
-                    MathUtils.radiansToDegrees * t.rotation);
+
+            batch.draw(tex.region, t.pos.x - originX, t.pos.y - originY,  width, height);
+//                batch.draw(tex.region,
+//                    t.pos.x - originX, t.pos.y - originY,
+//                    originX, originY,
+//                    width, height,
+//                    t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES,
+//                    MathUtils.radiansToDegrees * t.rotation);
         }
 
         batch.end();

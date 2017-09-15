@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Assets;
-import com.mygdx.game.Settings;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.systems.BackgroundSystem;
@@ -37,8 +36,6 @@ public class GameScreen extends ScreenAdapter {
     Rectangle pauseBounds;
     Rectangle resumeBounds;
     Rectangle quitBounds;
-//    String scoreString;
-
     PooledEngine engine;
     private GlyphLayout layout = new GlyphLayout();
 
@@ -61,16 +58,6 @@ public class GameScreen extends ScreenAdapter {
             public void dead () {
 //                Assets.playSound(Assets.deadSound);
             }
-
-//            @Override
-//            public void hit () {
-//                Assets.playSound(Assets.hitSound);
-//            }
-//
-//            @Override
-//            public void coin () {
-//                Assets.playSound(Assets.coinSound);
-//            }
         };
 
         engine = new PooledEngine();
@@ -78,24 +65,27 @@ public class GameScreen extends ScreenAdapter {
         world = new World(engine);
 
         engine.addSystem(new PlayerSystem(world));
-//        engine.addSystem(new SquirrelSystem());
-//        engine.addSystem(new PlatformSystem());
         engine.addSystem(new CameraSystem());
         engine.addSystem(new BackgroundSystem());
-//        engine.addSystem(new GravitySystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
-//        engine.addSystem(new StateSystem());
-//        engine.addSystem(new AnimationSystem());
         engine.addSystem(new CollisionSystem(world, collisionListener));
         engine.addSystem(new RenderingSystem(game.batcher));
+
+//        engine.addSystem(new GravitySystem());
+//        engine.addSystem(new StateSystem());
+//        engine.addSystem(new AnimationSystem());
+//        engine.addSystem(new SquirrelSystem());
+//        engine.addSystem(new PlatformSystem());
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 
         world.create();
 
         pauseBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
+
         resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
+
         quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
 
         pauseSystems();
@@ -158,23 +148,17 @@ public class GameScreen extends ScreenAdapter {
 
         engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
-//        if (world.score != lastScore) {
-//            lastScore = world.score;
-//            scoreString = "SCORE: " + lastScore;
-//        }
-//        if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
-//            game.setScreen(new WinScreen(game));
-//        }
-//        if (world.state == World.WORLD_STATE_GAME_OVER) {
-//            state = GAME_OVER;
-//            if (lastScore >= Settings.highscores[4])
-//                scoreString = "NEW HIGHSCORE: " + lastScore;
-//            else
-//                scoreString = "SCORE: " + lastScore;
-//            pauseSystems();
-//            Settings.addScore(lastScore);
-//            Settings.save();
-//        }
+        if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
+            game.setScreen(new WinScreen(game));
+        }
+
+        if (world.state == World.WORLD_STATE_GAME_OVER) {
+            state = GAME_OVER;
+            pauseSystems();
+
+        }
+
+
     }
 
     private void updatePaused () {
@@ -199,6 +183,7 @@ public class GameScreen extends ScreenAdapter {
     private void updateLevelEnd () {
         if (Gdx.input.justTouched()) {
             engine.removeAllEntities();
+            // ACA pasar al sig lvl
             world = new World(engine);
             state = GAME_READY;
         }
@@ -214,6 +199,7 @@ public class GameScreen extends ScreenAdapter {
         guiCam.update();
         game.batcher.setProjectionMatrix(guiCam.combined);
         game.batcher.begin();
+        game.batcher.draw(Assets.background, 0, 0, 320, 480); //NO DEBERIA HACER ESTO.
         switch (state) {
             case GAME_READY:
                 presentReady();
@@ -235,17 +221,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void presentReady () {
-        game.batcher.draw(Assets.ready, 160 - 192 / 2, 240 - 32 / 2, 192, 32);
+        game.batcher.draw(Assets.ready, 160 - 192 / 2, 440 - 32 / 2, 192, 32);
     }
 
     private void presentRunning () {
         game.batcher.draw(Assets.pause, 320 - 64, 480 - 64, 64, 64);
-//        Assets.font.draw(game.batcher, scoreString, 16, 480 - 20);
     }
 
     private void presentPaused () {
-        game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 240 - 96 / 2, 192, 96);
-//        Assets.font.draw(game.batcher, scoreString, 16, 480 - 20);
+        game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 440 - 96 / 2, 192, 96);
     }
 
     private void presentLevelEnd () {
@@ -271,26 +255,30 @@ public class GameScreen extends ScreenAdapter {
 
     private void pauseSystems() {
         engine.getSystem(PlayerSystem.class).setProcessing(false);
+        engine.getSystem(CollisionSystem.class).setProcessing(false);
+        engine.getSystem(MovementSystem.class).setProcessing(false);
+        engine.getSystem(BoundsSystem.class).setProcessing(false);
+
 //        engine.getSystem(SquirrelSystem.class).setProcessing(false);
 //        engine.getSystem(PlatformSystem.class).setProcessing(false);
 //        engine.getSystem(GravitySystem.class).setProcessing(false);
-        engine.getSystem(MovementSystem.class).setProcessing(false);
-        engine.getSystem(BoundsSystem.class).setProcessing(false);
 //        engine.getSystem(StateSystem.class).setProcessing(false);
 //        engine.getSystem(AnimationSystem.class).setProcessing(false);
-        engine.getSystem(CollisionSystem.class).setProcessing(false);
+
     }
 
     private void resumeSystems() {
         engine.getSystem(PlayerSystem.class).setProcessing(true);
+        engine.getSystem(CollisionSystem.class).setProcessing(true);
+        engine.getSystem(MovementSystem.class).setProcessing(true);
+        engine.getSystem(BoundsSystem.class).setProcessing(true);
+
 //        engine.getSystem(SquirrelSystem.class).setProcessing(true);
 //        engine.getSystem(PlatformSystem.class).setProcessing(true);
 //        engine.getSystem(GravitySystem.class).setProcessing(true);
-        engine.getSystem(MovementSystem.class).setProcessing(true);
-        engine.getSystem(BoundsSystem.class).setProcessing(true);
 //        engine.getSystem(StateSystem.class).setProcessing(true);
 //        engine.getSystem(AnimationSystem.class).setProcessing(true);
-        engine.getSystem(CollisionSystem.class).setProcessing(true);
+
     }
 
     @Override

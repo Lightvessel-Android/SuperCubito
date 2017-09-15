@@ -8,21 +8,22 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
-
+    public static Texture playGame;
     public static Texture background;
-//    public static TextureRegion backgroundRegion;
-//
     public static Texture items;
     public static Texture mainMenu;
     public static TextureRegion pauseMenu;
     public static TextureRegion ready;
     public static Texture gameOver;
-//    public static TextureRegion highScoresRegion;
+    public static BitmapFont font;
     public static Texture logo;
+    public static TextureRegion pause;
+
+//    public static TextureRegion backgroundRegion;
+//    public static TextureRegion highScoresRegion;
 //    public static TextureRegion soundOn;
 //    public static TextureRegion soundOff;
 //    public static TextureRegion arrow;
-    public static TextureRegion pause;
 //    public static TextureRegion spring;
 //    public static TextureRegion castle;
 //    public static Animation coinAnim;
@@ -32,7 +33,7 @@ public class Assets {
 //    public static Animation squirrelFly;
 //    public static Animation platform;
 //    public static Animation breakingPlatform;
-    public static BitmapFont font;
+
 
 //    public static Music music;
 //    public static Sound jumpSound;
@@ -47,20 +48,24 @@ public class Assets {
 
     public static void load () {
 
+        //Aca se cargan todas las texturas con sus posiciones.
+        playGame = loadTexture("data/playgame.jpg");
         background = loadTexture("data/level1.png");
-//        backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
-//
         items = loadTexture("data/items.png");
         mainMenu = loadTexture ("data/menu.jpg");
         pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
         ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = loadTexture("data/gameover.png");
-//        highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
         logo = loadTexture("data/menu.jpg");
+        pause = new TextureRegion(items, 64, 64, 64, 64);
+        font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+
+
+//        backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
+//        highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
 //        soundOff = new TextureRegion(items, 0, 0, 64, 64);
 //        soundOn = new TextureRegion(items, 64, 0, 64, 64);
 //        arrow = new TextureRegion(items, 0, 64, 64, 64);
-        pause = new TextureRegion(items, 64, 64, 64, 64);
 //
 //        spring = new TextureRegion(items, 128, 0, 32, 32);
 //        castle = new TextureRegion(items, 128, 64, 64, 64);
@@ -74,7 +79,7 @@ public class Assets {
 //        breakingPlatform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16), new TextureRegion(items, 64, 176, 64, 16),
 //                new TextureRegion(items, 64, 192, 64, 16), new TextureRegion(items, 64, 208, 64, 16));
 //
-        font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+
 //
 //        music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
 //        music.setLooping(true);

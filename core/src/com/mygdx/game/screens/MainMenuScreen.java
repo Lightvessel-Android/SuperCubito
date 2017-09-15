@@ -13,22 +13,27 @@ public class MainMenuScreen extends ScreenAdapter {
 
     SuperCubito game;
     OrthographicCamera guiCam;
-//    Rectangle soundBounds;
-    Rectangle playBounds;
-//    Rectangle highscoresBounds;
-//    Rectangle helpBounds;
     Vector3 touchPoint;
+    Rectangle playBounds;
+
+
+    //    Rectangle highscoresBounds;
+    //    Rectangle helpBounds;
+    //    Rectangle soundBounds;
+
 
     public MainMenuScreen(SuperCubito game) {
         this.game = game;
 
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
+        playBounds = new Rectangle(60, 50, 200, 200);
+        touchPoint = new Vector3();
+
 //        soundBounds = new Rectangle(0, 0, 64, 64);
-        playBounds = new Rectangle(160 - 150, 200 + 18, 300, 36);
 //        highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
 //        helpBounds = new Rectangle(160 - 150, 200 - 18 - 36, 300, 36);
-        touchPoint = new Vector3();
+
     }
 
     public void update() {
@@ -40,6 +45,10 @@ public class MainMenuScreen extends ScreenAdapter {
                 game.setScreen(new GameScreen(game));
                 return;
             }
+
+
+
+
 //            if (highscoresBounds.contains(touchPoint.x, touchPoint.y)) {
 //                Assets.playSound(Assets.clickSound);
 //                game.setScreen(new HighscoresScreen(game));
@@ -70,13 +79,14 @@ public class MainMenuScreen extends ScreenAdapter {
 
         game.batcher.disableBlending();
         game.batcher.begin();
-        game.batcher.draw(Assets.background, 0, 0, 320, 480);
+        //game.batcher.draw(Assets.background, 0, 0, 320, 480);
         game.batcher.end();
 
         game.batcher.enableBlending();
         game.batcher.begin();
-        //game.batcher.draw(Assets.logo, 160 - 274 / 2, 480 - 10 - 142, 274, 142);
         game.batcher.draw(Assets.mainMenu, 0, 0, 320, 480);
+        game.batcher.draw(Assets.playGame, 60, 50, 200, 200);
+        //game.batcher.draw(Assets.logo, 160 - 274 / 2, 480 - 10 - 142, 274, 142);
 //        game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
         game.batcher.end();
     }

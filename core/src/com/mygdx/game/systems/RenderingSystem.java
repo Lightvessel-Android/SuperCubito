@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.Assets;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
@@ -53,7 +54,6 @@ public class RenderingSystem extends IteratingSystem {
         super.update(deltaTime);
 
         renderQueue.sort(comparator);
-
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.begin();

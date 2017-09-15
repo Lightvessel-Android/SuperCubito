@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Assets;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
+import com.mygdx.game.states.GameState;
 import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
 import com.mygdx.game.systems.CameraSystem;
@@ -19,13 +20,14 @@ import com.mygdx.game.systems.CollisionSystem;
 import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
+import com.mygdx.game.systems.StateSystem;
+
+import static com.mygdx.game.states.GameState.GAME_OVER;
+import static com.mygdx.game.states.GameState.GAME_PAUSED;
+import static com.mygdx.game.states.GameState.GAME_READY;
+import static com.mygdx.game.states.GameState.GAME_RUNNING;
 
 public class GameScreen extends ScreenAdapter {
-    static final int GAME_READY = 0;
-    static final int GAME_RUNNING = 1;
-    static final int GAME_PAUSED = 2;
-    static final int GAME_LEVEL_END = 3;
-    static final int GAME_OVER = 4;
 
     SuperCubito game;
 
@@ -39,7 +41,7 @@ public class GameScreen extends ScreenAdapter {
     PooledEngine engine;
     private GlyphLayout layout = new GlyphLayout();
 
-    private int state;
+    private GameState state;
 
     public GameScreen (SuperCubito game) {
         this.game = game;
@@ -51,12 +53,12 @@ public class GameScreen extends ScreenAdapter {
         collisionListener = new CollisionSystem.CollisionListener() {
             @Override
             public void coin () {
-//                Assets.playSound(Assets.coinSound);
+                Assets.playSound(Assets.coinSound);
             }
 
             @Override
             public void dead () {
-//                Assets.playSound(Assets.deadSound);
+                Assets.playSound(Assets.deadSound);
             }
         };
 
@@ -72,8 +74,9 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new CollisionSystem(world, collisionListener));
         engine.addSystem(new RenderingSystem(game.batcher));
 
+        engine.addSystem(new StateSystem());
+
 //        engine.addSystem(new GravitySystem());
-//        engine.addSystem(new StateSystem());
 //        engine.addSystem(new AnimationSystem());
 //        engine.addSystem(new SquirrelSystem());
 //        engine.addSystem(new PlatformSystem());
@@ -84,9 +87,9 @@ public class GameScreen extends ScreenAdapter {
 
         pauseBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
 
-        resumeBounds = new Rectangle(160 - 96, 240, 192, 36);
+        resumeBounds = new Rectangle(160 - 96, 36, 192, 36);
 
-        quitBounds = new Rectangle(160 - 96, 240 - 36, 192, 36);
+        quitBounds = new Rectangle(160 - 96,0, 192, 36);
 
         pauseSystems();
     }
@@ -127,7 +130,7 @@ public class GameScreen extends ScreenAdapter {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             if (pauseBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.clickSound);
                 state = GAME_PAUSED;
                 pauseSystems();
                 return;
@@ -136,7 +139,6 @@ public class GameScreen extends ScreenAdapter {
 
         Application.ApplicationType appType = Gdx.app.getType();
 
-        // should work also with Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)
         float accelX = 0.0f;
 
         if (appType == Application.ApplicationType.Android || appType == Application.ApplicationType.iOS) {
@@ -166,14 +168,14 @@ public class GameScreen extends ScreenAdapter {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             if (resumeBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.clickSound);
                 state = GAME_RUNNING;
                 resumeSystems();
                 return;
             }
 
             if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.clickSound);
                 game.setScreen(new MainMenuScreen(game));
                 return;
             }
@@ -229,7 +231,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void presentPaused () {
-        game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 440 - 96 / 2, 192, 96);
+        game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 0 / 2, 192, 96);
     }
 
     private void presentLevelEnd () {
@@ -258,11 +260,11 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(CollisionSystem.class).setProcessing(false);
         engine.getSystem(MovementSystem.class).setProcessing(false);
         engine.getSystem(BoundsSystem.class).setProcessing(false);
+        engine.getSystem(StateSystem.class).setProcessing(false);
 
 //        engine.getSystem(SquirrelSystem.class).setProcessing(false);
 //        engine.getSystem(PlatformSystem.class).setProcessing(false);
 //        engine.getSystem(GravitySystem.class).setProcessing(false);
-//        engine.getSystem(StateSystem.class).setProcessing(false);
 //        engine.getSystem(AnimationSystem.class).setProcessing(false);
 
     }
@@ -272,11 +274,11 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(CollisionSystem.class).setProcessing(true);
         engine.getSystem(MovementSystem.class).setProcessing(true);
         engine.getSystem(BoundsSystem.class).setProcessing(true);
+        engine.getSystem(StateSystem.class).setProcessing(true);
 
 //        engine.getSystem(SquirrelSystem.class).setProcessing(true);
 //        engine.getSystem(PlatformSystem.class).setProcessing(true);
 //        engine.getSystem(GravitySystem.class).setProcessing(true);
-//        engine.getSystem(StateSystem.class).setProcessing(true);
 //        engine.getSystem(AnimationSystem.class).setProcessing(true);
 
     }

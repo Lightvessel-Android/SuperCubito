@@ -40,8 +40,8 @@ public class Assets {
     public static Music music;
 //    public static Sound jumpSound;
 //    public static Sound highJumpSound;
-//    public static Sound hitSound;
-//    public static Sound coinSound;
+    public static Sound deadSound;
+    public static Sound coinSound;
     public static Sound clickSound;
 
     public static Texture loadTexture (String file) {
@@ -64,8 +64,14 @@ public class Assets {
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
+        music.setLooping(true);
+        music.setVolume(0.5f);
+        if (Settings.soundEnabled) music.play();
+
         soundOff = new TextureRegion(items, 0, 0, 64, 64);
         soundOn = new TextureRegion(items, 64, 0, 64, 64);
+        deadSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
+        coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
 
 //        backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
 //        highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
@@ -86,14 +92,8 @@ public class Assets {
 
 //
 
-//        music.setLooping(true);
-//        music.setVolume(0.5f);
-//        if (Settings.soundEnabled) music.play();
 //        jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
 //        highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
-//        hitSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
-//        coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
-//
 //        coinAnim.setPlayMode(PlayMode.LOOP);
 //        bobJump.setPlayMode(PlayMode.LOOP);
 //        bobFall.setPlayMode(PlayMode.LOOP);

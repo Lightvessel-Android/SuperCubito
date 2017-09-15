@@ -18,8 +18,7 @@ public class MainMenuScreen extends ScreenAdapter {
     Rectangle playBounds;
     Rectangle soundBounds;
 
-    //    Rectangle highscoresBounds;
-    //    Rectangle helpBounds;
+    //    Rectangle highscoresBounds
 
 
     public MainMenuScreen(SuperCubito game) {
@@ -31,10 +30,7 @@ public class MainMenuScreen extends ScreenAdapter {
         touchPoint = new Vector3();
 
         soundBounds = new Rectangle(0, 0, 64, 64);
-        Assets.music.play();
 //        highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
-//        helpBounds = new Rectangle(160 - 150, 200 - 18 - 36, 300, 36);
-
     }
 
     public void update() {
@@ -42,7 +38,7 @@ public class MainMenuScreen extends ScreenAdapter {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
+                Assets.playSound(Assets.clickSound);
                 game.setScreen(new GameScreen(game));
                 return;
             }
@@ -59,11 +55,6 @@ public class MainMenuScreen extends ScreenAdapter {
 //            if (highscoresBounds.contains(touchPoint.x, touchPoint.y)) {
 //                Assets.playSound(Assets.clickSound);
 //                game.setScreen(new HighscoresScreen(game));
-//                return;
-//            }
-//            if (helpBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
-//                game.setScreen(new HelpScreen(game));
 //                return;
 //            }
         }
@@ -84,7 +75,6 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batcher.begin();
         game.batcher.draw(Assets.mainMenu, 0, 0, 320, 480);
         game.batcher.draw(Assets.playGame, 60, 50, 200, 200);
-        //game.batcher.draw(Assets.logo, 160 - 274 / 2, 480 - 10 - 142, 274, 142);
         game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
         game.batcher.end();
     }

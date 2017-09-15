@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -12,6 +13,8 @@ public class Assets {
     public static Texture playGame;
     public static Texture background;
     public static Texture items;
+    public static Texture coin;
+    public static Texture player;
     public static Texture mainMenu;
     public static TextureRegion pauseMenu;
     public static TextureRegion ready;
@@ -23,15 +26,17 @@ public class Assets {
     public static TextureRegion soundOn;
     public static TextureRegion soundOff;
 
+
+
 //    public static TextureRegion backgroundRegion;
 //    public static TextureRegion highScoresRegion;
 //    public static TextureRegion arrow;
 //    public static TextureRegion spring;
 //    public static TextureRegion castle;
-//    public static Animation coinAnim;
-//    public static Animation bobJump;
-//    public static Animation bobFall;
-//    public static Animation bobHit;
+
+    public static Animation bobJump;
+    public static Animation bobFall;
+    public static Animation bobHit;
 //    public static Animation squirrelFly;
 //    public static Animation platform;
 //    public static Animation breakingPlatform;
@@ -51,7 +56,10 @@ public class Assets {
     public static void load () {
 
         //Aca se cargan todas las texturas con sus posiciones.
+        player = loadTexture("data/player.png");
+        coin = loadTexture("data/coin.png");
         playGame = loadTexture("data/playgame.jpg");
+
         background = loadTexture("data/level1.png");
         items = loadTexture("data/items.png");
         mainMenu = loadTexture ("data/menu.jpg");
@@ -79,11 +87,7 @@ public class Assets {
 //
 //        spring = new TextureRegion(items, 128, 0, 32, 32);
 //        castle = new TextureRegion(items, 128, 64, 64, 64);
-//        coinAnim = new Animation(0.2f, new TextureRegion(items, 128, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32),
-//                new TextureRegion(items, 192, 32, 32, 32), new TextureRegion(items, 160, 32, 32, 32));
-//        bobJump = new Animation(0.2f, new TextureRegion(items, 0, 128, 32, 32), new TextureRegion(items, 32, 128, 32, 32));
-//        bobFall = new Animation(0.2f, new TextureRegion(items, 64, 128, 32, 32), new TextureRegion(items, 96, 128, 32, 32));
-//        bobHit = new Animation(0.2f, new TextureRegion(items, 128, 128, 32, 32));
+//
 //        squirrelFly = new Animation(0.2f, new TextureRegion(items, 0, 160, 32, 32), new TextureRegion(items, 32, 160, 32, 32));
 //        platform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16));
 //        breakingPlatform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16), new TextureRegion(items, 64, 176, 64, 16),
@@ -94,10 +98,6 @@ public class Assets {
 
 //        jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
 //        highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
-//        coinAnim.setPlayMode(PlayMode.LOOP);
-//        bobJump.setPlayMode(PlayMode.LOOP);
-//        bobFall.setPlayMode(PlayMode.LOOP);
-//        bobHit.setPlayMode(PlayMode.LOOP);
 //        squirrelFly.setPlayMode(PlayMode.LOOP);
 //        platform.setPlayMode(PlayMode.LOOP);
     }

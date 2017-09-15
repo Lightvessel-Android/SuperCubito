@@ -57,9 +57,9 @@ public class PlayerSystem extends IteratingSystem {
 //            hitPlatform(entity);
 //        }
 //
-//        if (state.get() != BobComponent.STATE_HIT) {
-//            mov.velocity.x = -accelX / 10.0f * BobComponent.MOVE_VELOCITY;
-//        }
+        if (state.get() != PlayerComponent.STATE_ALIVE) {
+            mov.velocity.x = -accelX / 10.0f * PlayerComponent.MOVE_VELOCITY;
+        }
 //
 //        if (mov.velocity.y > 0 && state.get() != BobComponent.STATE_HIT) {
 //            if (state.get() != BobComponent.STATE_JUMP) {
@@ -83,11 +83,11 @@ public class PlayerSystem extends IteratingSystem {
 
         t.scale.x = mov.velocity.x < 0.0f ? Math.abs(t.scale.x) * -1.0f : Math.abs(t.scale.x);
 
-        player.heightSoFar = Math.max(t.pos.y, player.heightSoFar);
+//        player.heightSoFar = Math.max(t.pos.y, player.heightSoFar);
 
-        if (player.heightSoFar - 7.5f > t.pos.y) {
-            world.state = World.WORLD_STATE_GAME_OVER;
-        }
+//        if (player.heightSoFar - 7.5f > t.pos.y) {
+//            world.state = World.WORLD_STATE_GAME_OVER;
+//        }
     }
 
     public void dead (Entity entity) {

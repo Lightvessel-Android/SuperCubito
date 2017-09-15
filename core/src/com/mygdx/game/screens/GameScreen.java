@@ -13,6 +13,7 @@ import com.mygdx.game.Assets;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.states.GameState;
+import com.mygdx.game.systems.AnimationSystem;
 import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
 import com.mygdx.game.systems.CameraSystem;
@@ -75,9 +76,10 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new RenderingSystem(game.batcher));
 
         engine.addSystem(new StateSystem());
+        engine.addSystem(new AnimationSystem());
 
 //        engine.addSystem(new GravitySystem());
-//        engine.addSystem(new AnimationSystem());
+
 //        engine.addSystem(new SquirrelSystem());
 //        engine.addSystem(new PlatformSystem());
 
@@ -201,7 +203,6 @@ public class GameScreen extends ScreenAdapter {
         guiCam.update();
         game.batcher.setProjectionMatrix(guiCam.combined);
         game.batcher.begin();
-        game.batcher.draw(Assets.background, 0, 0, 320, 480); //NO DEBERIA HACER ESTO.
         switch (state) {
             case GAME_READY:
                 presentReady();
@@ -249,10 +250,6 @@ public class GameScreen extends ScreenAdapter {
 
     private void presentGameOver () {
         game.batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
-
-//        layout.setText(Assets.font, scoreString);
-//        float scoreWidth = layout.width;
-//        Assets.font.draw(game.batcher, scoreString, 160 - scoreWidth / 2, 480 - 20);
     }
 
     private void pauseSystems() {
@@ -261,11 +258,13 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(MovementSystem.class).setProcessing(false);
         engine.getSystem(BoundsSystem.class).setProcessing(false);
         engine.getSystem(StateSystem.class).setProcessing(false);
+        engine.getSystem(AnimationSystem.class).setProcessing(false);
+
 
 //        engine.getSystem(SquirrelSystem.class).setProcessing(false);
 //        engine.getSystem(PlatformSystem.class).setProcessing(false);
 //        engine.getSystem(GravitySystem.class).setProcessing(false);
-//        engine.getSystem(AnimationSystem.class).setProcessing(false);
+
 
     }
 
@@ -275,11 +274,12 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(MovementSystem.class).setProcessing(true);
         engine.getSystem(BoundsSystem.class).setProcessing(true);
         engine.getSystem(StateSystem.class).setProcessing(true);
+        engine.getSystem(AnimationSystem.class).setProcessing(true);
+
 
 //        engine.getSystem(SquirrelSystem.class).setProcessing(true);
 //        engine.getSystem(PlatformSystem.class).setProcessing(true);
 //        engine.getSystem(GravitySystem.class).setProcessing(true);
-//        engine.getSystem(AnimationSystem.class).setProcessing(true);
 
     }
 

@@ -6,9 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Assets;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
@@ -74,6 +72,8 @@ public class RenderingSystem extends IteratingSystem {
 
 
             batch.draw(tex.region, t.pos.x - originX, t.pos.y - originY,  width, height);
+
+//            batch.draw(tex.region, t.pos.x - originX, t.pos.y - originY, width, height, t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES);
 //                batch.draw(tex.region,
 //                    t.pos.x - originX, t.pos.y - originY,
 //                    originX, originY,

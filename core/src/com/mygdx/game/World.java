@@ -2,9 +2,12 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CameraComponent;
+import com.mygdx.game.components.CoinComponent;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
@@ -30,17 +33,23 @@ public class World {
     }
 
     public void create() {
-        Entity player = createPlayer();
+        Entity player = createPlayer(100,100);
         createCamera(player);
         createBackground();
-//        generateLevel();
+        generateLevel();
 
         this.heightSoFar = 0;
         this.score = 0;
         this.state = WORLD_STATE_RUNNING;
     }
 
-//    private void generateLevel () {
+    private void generateLevel () {
+ //batcher.draw(Assets.background, 0, 0, 320, 480); //DEBERIA CARGAR EL BITMAP ACA
+
+        createCoin(200,200);
+        createEnemy(40,40);
+
+
 //        float y = PlatformComponent.HEIGHT / 2;
 //        float maxJumpHeight = BobComponent.JUMP_VELOCITY * BobComponent.JUMP_VELOCITY / (2 * -gravity.y);
 //        while (y < WORLD_HEIGHT - WORLD_WIDTH / 2) {
@@ -66,30 +75,30 @@ public class World {
 //        }
 //
 //        createCastle(WORLD_WIDTH / 2, y);
-//    }
+    }
 
-    private Entity createPlayer() {
+    private Entity createPlayer(float x, float y) {
         Entity entity = engine.createEntity();
 
 //        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
         PlayerComponent player = engine.createComponent(PlayerComponent.class);
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-//        GravityComponent gravity = engine.createComponent(GravityComponent.class);
         MovementComponent movement = engine.createComponent(MovementComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         StateComponent state = engine.createComponent(StateComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-//        animation.animations.put(BobComponent.STATE_FALL, Assets.bobFall);
-//        animation.animations.put(BobComponent.STATE_HIT, Assets.bobHit);
-//        animation.animations.put(BobComponent.STATE_JUMP, Assets.bobJump);
+//        animation.animations.put(PlayerComponent.STATE_DEAD, Assets.bobHit);
+//        animation.animations.put(PlayerComponent.STATE_ALIVE, Assets.bobJump);
+
+        texture.region = Assets.player;
 
         bounds.bounds.width = PlayerComponent.WIDTH;
         bounds.bounds.height = PlayerComponent.HEIGHT;
 
-        position.pos.set(5.0f, 1.0f, 0.0f);
+        position.pos.set(x, y, 0.0f);
 
-//        state.set(PlayerComponent.STATE_JUMP);
+        state.set(PlayerComponent.STATE_ALIVE);
 
 //        entity.add(animation);
         entity.add(player);
@@ -105,7 +114,11 @@ public class World {
         return entity;
     }
 
-//    private void createPlatform(int type, float x, float y) {
+    private void createPlatform(int type, float x, float y) {
+
+    // Aca podria crear el mapa mismo
+
+
 //        Entity entity = new Entity();//engine.createEntity();
 //
 //        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
@@ -140,32 +153,10 @@ public class World {
 //        entity.add(texture);
 //
 //        engine.addEntity(entity);
-//    }
+    }
 
-//    private void createSpring(float x, float y) {
-//        Entity entity = engine.createEntity();
-//
-//        SpringComponent spring = engine.createComponent(SpringComponent.class);
-//        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-//        TransformComponent position = engine.createComponent(TransformComponent.class);
-//        TextureComponent texture = engine.createComponent(TextureComponent.class);
-//
-//        bounds.bounds.width = SpringComponent.WIDTH;
-//        bounds.bounds.height = SpringComponent.HEIGHT;
-//
-//        position.pos.set(x, y, 2.0f);
-//
-//        texture.region = Assets.spring;
-//
-//        entity.add(spring);
-//        entity.add(bounds);
-//        entity.add(position);
-//        entity.add(texture);
-//
-//        engine.addEntity(entity);
-//    }
 
-//    private void createSquirrel(float x, float y) {
+    private void createEnemy(float x, float y) {
 //        Entity entity = engine.createEntity();
 //
 //        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
@@ -196,36 +187,38 @@ public class World {
 //        entity.add(texture);
 //
 //        engine.addEntity(entity);
-//    }
+    }
 
-//    private void createCoin(float x, float y) {
-//        Entity entity = engine.createEntity();
-//
+    private void createCoin(float x, float y) {
+        Entity entity = engine.createEntity();
+
 //        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
-//        CoinComponent coin = engine.createComponent(CoinComponent.class);
-//        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-//        TransformComponent position = engine.createComponent(TransformComponent.class);
-//        StateComponent state = engine.createComponent(StateComponent.class);
-//        TextureComponent texture = engine.createComponent(TextureComponent.class);
-//
+        CoinComponent coin = engine.createComponent(CoinComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        StateComponent state = engine.createComponent(StateComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+
 //        animation.animations.put(CoinComponent.STATE_NORMAL, Assets.coinAnim);
-//
-//        bounds.bounds.width = CoinComponent.WIDTH;
-//        bounds.bounds.height = CoinComponent.HEIGHT;
-//
-//        position.pos.set(x, y, 3.0f);
-//
-//        state.set(CoinComponent.STATE_NORMAL);
-//
-//        entity.add(coin);
-//        entity.add(bounds);
-//        entity.add(position);
-//        entity.add(texture);
+
+        bounds.bounds.width = CoinComponent.WIDTH;
+        bounds.bounds.height = CoinComponent.HEIGHT;
+
+        texture.region = Assets.coin;
+
+        position.pos.set(x, y, 3.0f);
+
+        state.set(CoinComponent.STATE_NORMAL);
+
+        entity.add(coin);
+        entity.add(bounds);
+        entity.add(position);
+        entity.add(texture);
 //        entity.add(animation);
-//        entity.add(state);
-//
-//        engine.addEntity(entity);
-//    }
+        entity.add(state);
+
+        engine.addEntity(entity);
+    }
 
 //    private void createCastle(float x, float y) {
 //        Entity entity = engine.createEntity();

@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class Settings {
 
     public static boolean soundEnabled = true;
+
 //    public final static int[] highscores = new int[] {100, 80, 50, 30, 10};
     public final static String file = ".supercubito";
 
@@ -15,12 +16,11 @@ public class Settings {
 
             String[] strings = filehandle.readString().split("\n");
 
-//            soundEnabled = Boolean.parseBoolean(strings[0]);
+            soundEnabled = Boolean.parseBoolean(strings[0]);
 //            for (int i = 0; i < 5; i++) {
 //                highscores[i] = Integer.parseInt(strings[i+1]);
 //            }
         } catch (Throwable e) {
-            // :( It's ok we have defaults
         }
     }
 

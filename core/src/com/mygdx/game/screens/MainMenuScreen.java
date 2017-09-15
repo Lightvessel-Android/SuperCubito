@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Assets;
+import com.mygdx.game.Settings;
 import com.mygdx.game.SuperCubito;
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -15,11 +16,10 @@ public class MainMenuScreen extends ScreenAdapter {
     OrthographicCamera guiCam;
     Vector3 touchPoint;
     Rectangle playBounds;
-
+    Rectangle soundBounds;
 
     //    Rectangle highscoresBounds;
     //    Rectangle helpBounds;
-    //    Rectangle soundBounds;
 
 
     public MainMenuScreen(SuperCubito game) {
@@ -30,7 +30,8 @@ public class MainMenuScreen extends ScreenAdapter {
         playBounds = new Rectangle(60, 50, 200, 200);
         touchPoint = new Vector3();
 
-//        soundBounds = new Rectangle(0, 0, 64, 64);
+        soundBounds = new Rectangle(0, 0, 64, 64);
+        Assets.music.play();
 //        highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
 //        helpBounds = new Rectangle(160 - 150, 200 - 18 - 36, 300, 36);
 
@@ -46,8 +47,14 @@ public class MainMenuScreen extends ScreenAdapter {
                 return;
             }
 
-
-
+            if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
+                Assets.playSound(Assets.clickSound);
+                Settings.soundEnabled = !Settings.soundEnabled;
+                if (Settings.soundEnabled)
+                    Assets.music.play();
+                else
+                    Assets.music.pause();
+            }
 
 //            if (highscoresBounds.contains(touchPoint.x, touchPoint.y)) {
 //                Assets.playSound(Assets.clickSound);
@@ -58,14 +65,6 @@ public class MainMenuScreen extends ScreenAdapter {
 //                Assets.playSound(Assets.clickSound);
 //                game.setScreen(new HelpScreen(game));
 //                return;
-//            }
-//            if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
-//                Settings.soundEnabled = !Settings.soundEnabled;
-//                if (Settings.soundEnabled)
-//                    Assets.music.play();
-//                else
-//                    Assets.music.pause();
 //            }
         }
     }
@@ -79,7 +78,6 @@ public class MainMenuScreen extends ScreenAdapter {
 
         game.batcher.disableBlending();
         game.batcher.begin();
-        //game.batcher.draw(Assets.background, 0, 0, 320, 480);
         game.batcher.end();
 
         game.batcher.enableBlending();
@@ -87,7 +85,7 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batcher.draw(Assets.mainMenu, 0, 0, 320, 480);
         game.batcher.draw(Assets.playGame, 60, 50, 200, 200);
         //game.batcher.draw(Assets.logo, 160 - 274 / 2, 480 - 10 - 142, 274, 142);
-//        game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
+        game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
         game.batcher.end();
     }
 

@@ -10,15 +10,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
-    public static Texture playGame;
-    public static Texture background;
+    public static TextureRegion playGame;
+    public static TextureRegion background;
     public static Texture items;
-    public static Texture coin;
-    public static Texture player;
-    public static Texture mainMenu;
+    public static TextureRegion coin;
+    public static TextureRegion player;
+    public static TextureRegion mainMenu;
     public static TextureRegion pauseMenu;
     public static TextureRegion ready;
-    public static Texture gameOver;
+    public static TextureRegion gameOver;
     public static BitmapFont font;
     public static Texture logo;
     public static TextureRegion pause;
@@ -56,17 +56,18 @@ public class Assets {
     public static void load () {
 
         //Aca se cargan todas las texturas con sus posiciones.
-        player = loadTexture("data/player.png");
-        coin = loadTexture("data/coin.png");
-        playGame = loadTexture("data/playgame.jpg");
 
-        background = loadTexture("data/level1.png");
+        player = new TextureRegion(loadTexture("data/player.png"));
+
+        coin = new TextureRegion(loadTexture("data/coin.png"));
+        playGame = new TextureRegion(loadTexture("data/playgame.jpg"));
+
+        background = new TextureRegion(loadTexture("data/level1.png"));
         items = loadTexture("data/items.png");
-        mainMenu = loadTexture ("data/menu.jpg");
+        mainMenu = new TextureRegion(loadTexture ("data/menu.jpg"));
         pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
         ready = new TextureRegion(items, 320, 224, 192, 32);
-        gameOver = loadTexture("data/gameover.png");
-        logo = loadTexture("data/menu.jpg");
+        gameOver = new TextureRegion(loadTexture("data/gameover.png"));
         pause = new TextureRegion(items, 64, 64, 64, 64);
         font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));

@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
@@ -34,7 +35,7 @@ public class AnimationSystem extends IteratingSystem {
         Animation animation = anim.animations.get(state.get());
 
         if (animation != null) {
-            tex.region = (Texture) animation.getKeyFrame(state.time);
+            tex.region = (TextureRegion) animation.getKeyFrame(state.time);
         }
 
         state.time += deltaTime;

@@ -14,9 +14,9 @@ import com.mygdx.game.components.TransformComponent;
 import java.util.Comparator;
 
 public class RenderingSystem extends IteratingSystem {
-    static final float FRUSTUM_WIDTH = 15;
-    static final float FRUSTUM_HEIGHT = 15;
-    static final float PIXELS_TO_METRES = 1.0f / 32.0f;
+    public static final float FRUSTUM_WIDTH = 15;
+    public static final float FRUSTUM_HEIGHT = 15;
+    public static final float PIXELS_TO_METRES = 1.0f / 32.0f;
 
     private SpriteBatch batch;
     private Array<Entity> renderQueue;

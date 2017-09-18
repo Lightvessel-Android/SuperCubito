@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -20,10 +22,6 @@ import com.mygdx.game.utils.Assets;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
 
 public class World {
-
-    public static final float WORLD_WIDTH = 10;
-    public static final float WORLD_HEIGHT = 15 * 20;
-
     public WorldState state;
 
     private PooledEngine engine;
@@ -33,21 +31,11 @@ public class World {
     }
 
     public void create() {
-        Entity player = createPlayer(0,0);
-        createCamera(player);
+//        createCamera(player);
         createBackground();
-        generateLevel();
+        generateLevel(Assets.level);
 
         state = WORLD_STATE_RUNNING;
-    }
-
-    private void generateLevel () {
-    //DEBERIA CARGAR EL BITMAP ACA
-
-        createCoin(5,5);
-        createEnemy(2.5f,2.5f);
-
-
     }
 
     private Entity createPlayer(float x, float y) {
@@ -136,7 +124,6 @@ public class World {
         engine.addEntity(entity);
     }
 
-
     private void createEnemy(float x, float y) {
         Entity entity = engine.createEntity();
 
@@ -168,5 +155,47 @@ public class World {
         entity.add(texture);
 
         engine.addEntity(entity);
+    }
+
+    private void generateLevel(Pixmap level) {
+
+        int width = level.getWidth();
+        int height = level.getHeight();
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                int pixel = level.getPixel(x, y);
+                float posX = x * RenderingSystem.PIXELS_TO_METRES;
+                float posY = y * RenderingSystem.PIXELS_TO_METRES;
+                switch (pixel) {
+                    case -824246273:
+                        //Exterior
+                        break;
+                    case -1660965377:
+                        //suelo verde
+                        break;
+                    case -1:
+                        //suelo blanco de juego
+                        break;
+                    case -140769025:
+                        //meta
+                        break;
+                    case 255:
+//                        entities.add(new BlockEntity(blockTexture, position, new Vector2(12,12), new Vector2(0, 0)));
+                        break;
+                    case 279280639:
+                        createPlayer(posX, posY);
+                        break;
+                    case -16776961:
+                        createEnemy(posX, posY);
+                        break;
+                    case -403223809:
+                        createCoin(posX, posY);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
     }
 }

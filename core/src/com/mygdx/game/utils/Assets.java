@@ -3,6 +3,7 @@ package com.mygdx.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,6 +13,7 @@ public class Assets {
     public static TextureRegion playGame, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
 
     public static BitmapFont font;
+    public static Pixmap level;
 
     public static Texture items;
 
@@ -25,6 +27,7 @@ public class Assets {
     }
 
     public static void load () {
+        level = new Pixmap(Gdx.files.internal("bitmaps/level1.bmp"));
         player = new TextureRegion(loadTexture("data/player.png"));
         enemy = new TextureRegion(loadTexture("data/enemy.png"));
         coin = new TextureRegion(loadTexture("data/coin.png"));

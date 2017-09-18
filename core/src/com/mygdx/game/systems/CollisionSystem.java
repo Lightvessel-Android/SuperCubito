@@ -23,9 +23,7 @@ public class CollisionSystem extends EntitySystem {
     private ComponentMapper<TransformComponent> tm;
 
     public static interface CollisionListener {
-//        public void jump ();
         public void dead ();
-//        public void hit ();
         public void coin ();
     }
 
@@ -76,17 +74,17 @@ public class CollisionSystem extends EntitySystem {
             TransformComponent playerPos = tm.get(player);
 
             for (int j = 0; j < enemies.size(); ++j) {
-                    Entity spring = enemies.get(j);
+                    Entity enemy = enemies.get(j);
 
-                    TransformComponent springPos = tm.get(spring);
-                    BoundsComponent springBounds = bm.get(spring);
+                    TransformComponent enemyPos = tm.get(enemy);
+                    BoundsComponent enemyBounds = bm.get(enemy);
 
-//                    if (playerPos.pos.y > springPos.pos.y) {
-//                        if (playerBounds.bounds.overlaps(springBounds.bounds)) {
-//                            playerSystem.dead(player);
-//                            listener.dead();
-//                        }
-//                    }
+                    if (playerPos.pos.y > enemyPos.pos.y) {
+                        if (playerBounds.bounds.overlaps(enemyBounds.bounds)) {
+                            playerSystem.dead(player);
+                            listener.dead();
+                        }
+                    }
                 }
 
             for (int j = 0; j < coins.size(); ++j) {
@@ -110,47 +108,6 @@ public class CollisionSystem extends EntitySystem {
                     world.state = World.WORLD_STATE_NEXT_LEVEL;
                 }
             }
-
-//            if (playerMov.velocity.y < 0.0f) {
-//                TransformComponent bobPos = tm.get(player);
-//
-//                for (int j = 0; j < platforms.size(); ++j) {
-//                    Entity platform = platforms.get(j);
-//
-//                    TransformComponent platPos = tm.get(platform);
-//
-//                    if (bobPos.pos.y > platPos.pos.y) {
-//                        BoundsComponent platBounds = bm.get(platform);
-//
-//                        if (playerBounds.bounds.overlaps(platBounds.bounds)) {
-//                            playerSystem.hitPlatform(player);
-//                            listener.jump();
-//                            if (rand.nextFloat() > 0.5f) {
-//                                platformSystem.pulverize(platform);
-//                            }
-//
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//
-//            };
-
-//            for (int j = 0; j < squirrels.size(); ++j) {
-//                Entity squirrel = squirrels.get(j);
-//
-//                BoundsComponent squirrelBounds = bm.get(squirrel);
-//
-//                if (squirrelBounds.bounds.overlaps(playerBounds.bounds)) {
-//                    playerSystem.hitSquirrel(player);
-//                    listener.hit();
-//                }
-//            }
-
-
-
-
         }
     }
 }

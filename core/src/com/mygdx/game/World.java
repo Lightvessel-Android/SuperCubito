@@ -34,7 +34,7 @@ public class World {
     }
 
     public void create() {
-        Entity player = createPlayer(200,100);
+        Entity player = createPlayer(0,0);
         createCamera(player);
         createBackground();
         generateLevel();

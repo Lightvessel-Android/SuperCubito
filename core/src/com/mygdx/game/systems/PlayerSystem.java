@@ -7,7 +7,6 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.World;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
@@ -48,13 +47,10 @@ public class PlayerSystem extends IteratingSystem {
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-
-
-
         accelX = 0.0f;
     }
 
-    private void checkButtons() {
+    private void updateVelocity(MovementComponent mov) {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
             velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
         else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
@@ -65,29 +61,18 @@ public class PlayerSystem extends IteratingSystem {
             velocity.set(0, PlayerComponent.MOVE_VELOCITY);
         else
             velocity.set(0, 0);
+
+        mov.velocity.set(velocity);
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         TransformComponent t = tm.get(entity);
-        StateComponent state = sm.get(entity);
         MovementComponent mov = mm.get(entity);
-        PlayerComponent player = pm.get(entity);
 
-        checkButtons();
-
-        mov.velocity.set(velocity);
-
-        if (t.pos.x < 0) {
-            t.pos.x = World.WORLD_WIDTH;
-        }
-
-        if (t.pos.x > World.WORLD_WIDTH) {
-            t.pos.x = 0;
-        }
+        updateVelocity(mov);
 
         t.scale.x = mov.velocity.x < 0.0f ? Math.abs(t.scale.x) * -1.0f : Math.abs(t.scale.x);
-
     }
 
     public void dead (Entity entity) {
@@ -99,24 +84,4 @@ public class PlayerSystem extends IteratingSystem {
         mov.velocity.set(0, 0);
         state.set(PlayerComponent.STATE_DEAD);
     }
-//
-//    public void hitPlatform (Entity entity) {
-//        if (!family.matches(entity)) return;
-//
-//        StateComponent state = sm.get(entity);
-//        MovementComponent mov = mm.get(entity);
-//
-//        mov.velocity.y = BobComponent.JUMP_VELOCITY;
-//        state.set(BobComponent.STATE_JUMP);
-//    }
-//
-//    public void hitSpring (Entity entity) {
-//        if (!family.matches(entity)) return;
-//
-//        StateComponent state = sm.get(entity);
-//        MovementComponent mov = mm.get(entity);
-//
-//        mov.velocity.y = BobComponent.JUMP_VELOCITY * 1.5f;
-//        state.set(BobComponent.STATE_JUMP);
-//    }
 }

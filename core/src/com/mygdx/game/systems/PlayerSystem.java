@@ -82,6 +82,7 @@ public class PlayerSystem extends IteratingSystem {
         MovementComponent mov = mm.get(entity);
 
         mov.velocity.set(0, 0);
+
         state.set(PlayerComponent.STATE_DEAD);
     }
 }

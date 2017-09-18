@@ -16,6 +16,7 @@ import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TransformComponent;
 
+import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class CollisionSystem extends EntitySystem {
@@ -68,6 +69,7 @@ public class CollisionSystem extends EntitySystem {
             StateComponent playerState = sm.get(player);
 
             if (playerState.get() == PlayerComponent.STATE_DEAD) {
+                world.state = WORLD_STATE_GAME_OVER;
                 continue;
             }
 

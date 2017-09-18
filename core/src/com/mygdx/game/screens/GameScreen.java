@@ -159,7 +159,6 @@ public class GameScreen extends ScreenAdapter {
         if (world.state == WORLD_STATE_GAME_OVER) {
             state = GAME_OVER;
             pauseSystems();
-
         }
 
 

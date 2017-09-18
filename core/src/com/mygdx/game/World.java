@@ -20,6 +20,7 @@ import com.mygdx.game.utils.Assets;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
 
 public class World {
+
     public static final float WORLD_WIDTH = 10;
     public static final float WORLD_HEIGHT = 15 * 20;
 

@@ -28,6 +28,8 @@ import static com.mygdx.game.states.GameState.GAME_OVER;
 import static com.mygdx.game.states.GameState.GAME_PAUSED;
 import static com.mygdx.game.states.GameState.GAME_READY;
 import static com.mygdx.game.states.GameState.GAME_RUNNING;
+import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
+import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -150,11 +152,11 @@ public class GameScreen extends ScreenAdapter {
 
         engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
-        if (world.state == World.WORLD_STATE_NEXT_LEVEL) {
+        if (world.state == WORLD_STATE_NEXT_LEVEL) {
             game.setScreen(new WinScreen(game));
         }
 
-        if (world.state == World.WORLD_STATE_GAME_OVER) {
+        if (world.state == WORLD_STATE_GAME_OVER) {
             state = GAME_OVER;
             pauseSystems();
 

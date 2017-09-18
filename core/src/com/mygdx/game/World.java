@@ -13,19 +13,17 @@ import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
+import com.mygdx.game.states.WorldState;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.utils.Assets;
+
+import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
 
 public class World {
     public static final float WORLD_WIDTH = 10;
     public static final float WORLD_HEIGHT = 15 * 20;
-    public static final int WORLD_STATE_RUNNING = 0;
-    public static final int WORLD_STATE_NEXT_LEVEL = 1;
-    public static final int WORLD_STATE_GAME_OVER = 2;
 
-    public float heightSoFar;
-    public int score;
-    public int state;
+    public WorldState state;
 
     private PooledEngine engine;
 
@@ -39,16 +37,14 @@ public class World {
         createBackground();
         generateLevel();
 
-        heightSoFar = 0;
-        score = 0;
         state = WORLD_STATE_RUNNING;
     }
 
     private void generateLevel () {
     //DEBERIA CARGAR EL BITMAP ACA
 
-        createCoin(220,100);
-        createEnemy(230,150);
+        createCoin(10,10);
+        createEnemy(20,20);
 
 
     }

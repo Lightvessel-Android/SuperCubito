@@ -16,6 +16,8 @@ import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TransformComponent;
 
+import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
+
 public class CollisionSystem extends EntitySystem {
     private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<MovementComponent> mm;
@@ -95,7 +97,6 @@ public class CollisionSystem extends EntitySystem {
                 if (coinBounds.bounds.overlaps(playerBounds.bounds)) {
                     engine.removeEntity(coin);
                     listener.coin();
-                    world.score += CoinComponent.SCORE;
                 }
             }
 
@@ -105,7 +106,7 @@ public class CollisionSystem extends EntitySystem {
                 BoundsComponent castleBounds = bm.get(exit);
 
                 if (castleBounds.bounds.overlaps(playerBounds.bounds)) {
-                    world.state = World.WORLD_STATE_NEXT_LEVEL;
+                    world.state = WORLD_STATE_NEXT_LEVEL;
                 }
             }
         }

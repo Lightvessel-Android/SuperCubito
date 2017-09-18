@@ -17,25 +17,12 @@ public class Assets {
 
     public static Texture items;
 
-
-
-//    public static TextureRegion backgroundRegion;
-//    public static TextureRegion highScoresRegion;
-//    public static TextureRegion arrow;
-//    public static TextureRegion spring;
-//    public static TextureRegion castle;
-
     public static Animation bobJump;
     public static Animation bobFall;
     public static Animation bobHit;
-//    public static Animation squirrelFly;
-//    public static Animation platform;
-//    public static Animation breakingPlatform;
 
 
     public static Music music;
-//    public static Sound jumpSound;
-//    public static Sound highJumpSound;
     public static Sound deadSound;
     public static Sound coinSound;
     public static Sound clickSound;
@@ -45,16 +32,10 @@ public class Assets {
     }
 
     public static void load () {
-
-        //Aca se cargan todas las texturas con sus posiciones.
-
         player = new TextureRegion(loadTexture("data/player.png"));
-
         enemy = new TextureRegion(loadTexture("data/enemy.png"));
-
         coin = new TextureRegion(loadTexture("data/coin.png"));
         playGame = new TextureRegion(loadTexture("data/playgame.jpg"));
-
         background = new TextureRegion(loadTexture("data/level1.png"));
         items = loadTexture("data/items.png");
         mainMenu = new TextureRegion(loadTexture ("data/menu.jpg"));
@@ -74,26 +55,6 @@ public class Assets {
         soundOn = new TextureRegion(items, 64, 0, 64, 64);
         deadSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
-
-//        backgroundRegion = new TextureRegion(background, 0, 0, 320, 480);
-//        highScoresRegion = new TextureRegion(Assets.items, 0, 257, 300, 110 / 3);
-//        arrow = new TextureRegion(items, 0, 64, 64, 64);
-//
-//        spring = new TextureRegion(items, 128, 0, 32, 32);
-//        castle = new TextureRegion(items, 128, 64, 64, 64);
-//
-//        squirrelFly = new Animation(0.2f, new TextureRegion(items, 0, 160, 32, 32), new TextureRegion(items, 32, 160, 32, 32));
-//        platform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16));
-//        breakingPlatform = new Animation(0.2f, new TextureRegion(items, 64, 160, 64, 16), new TextureRegion(items, 64, 176, 64, 16),
-//                new TextureRegion(items, 64, 192, 64, 16), new TextureRegion(items, 64, 208, 64, 16));
-//
-
-//
-
-//        jumpSound = Gdx.audio.newSound(Gdx.files.internal("data/jump.wav"));
-//        highJumpSound = Gdx.audio.newSound(Gdx.files.internal("data/highjump.wav"));
-//        squirrelFly.setPlayMode(PlayMode.LOOP);
-//        platform.setPlayMode(PlayMode.LOOP);
     }
 
     public static void playSound (Sound sound) {

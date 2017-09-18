@@ -160,8 +160,6 @@ public class GameScreen extends ScreenAdapter {
             state = GAME_OVER;
             pauseSystems();
         }
-
-
     }
 
     private void updatePaused () {

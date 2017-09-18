@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -13,14 +12,8 @@ public class Assets {
     public static TextureRegion playGame, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
 
     public static BitmapFont font;
-    public static Texture logo;
 
     public static Texture items;
-
-    public static Animation bobJump;
-    public static Animation bobFall;
-    public static Animation bobHit;
-
 
     public static Music music;
     public static Sound deadSound;

@@ -43,8 +43,8 @@ public class World {
     private void generateLevel () {
     //DEBERIA CARGAR EL BITMAP ACA
 
-        createCoin(10,10);
-        createEnemy(20,20);
+        createCoin(5,5);
+        createEnemy(2.5f,2.5f);
 
 
     }

@@ -16,8 +16,6 @@ import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.utils.Assets;
 
-import java.util.Random;
-
 public class World {
     public static final float WORLD_WIDTH = 10;
     public static final float WORLD_HEIGHT = 15 * 20;
@@ -71,6 +69,8 @@ public class World {
         bounds.bounds.height = PlayerComponent.HEIGHT;
 
         position.pos.set(x, y, 0.0f);
+
+        movement.velocity.set(10, 10);
 
         state.set(PlayerComponent.STATE_ALIVE);
 

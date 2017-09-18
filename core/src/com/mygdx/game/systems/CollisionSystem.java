@@ -37,11 +37,6 @@ public class CollisionSystem extends EntitySystem {
     private ImmutableArray<Entity> players;
     private ImmutableArray<Entity> coins;
 
-    //private Random rand = new Random();
-    //private ImmutableArray<Entity> squirrels;
-    //private ImmutableArray<Entity> springs;
-    //private ImmutableArray<Entity> castles;
-
 
     public CollisionSystem(World world, CollisionListener listener) {
         this.world = world;
@@ -61,11 +56,6 @@ public class CollisionSystem extends EntitySystem {
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         exits = engine.getEntitiesFor(Family.all(ExistComponent.class, BoundsComponent.class, TransformComponent.class).get());
-
-
-//        squirrels = engine.getEntitiesFor(Family.all(SquirrelComponent.class, BoundsComponent.class).get());
-//        springs = engine.getEntitiesFor(Family.all(SpringComponent.class, BoundsComponent.class, TransformComponent.class).get());
-//        castles = engine.getEntitiesFor(Family.all(CastleComponent.class, BoundsComponent.class).get());
     }
 
     @Override

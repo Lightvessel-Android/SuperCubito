@@ -6,6 +6,8 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.World;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
@@ -35,6 +37,7 @@ public class PlayerSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         mm = ComponentMapper.getFor(MovementComponent.class);
+
     }
 
     public void setAccelX(float accelX) {
@@ -45,7 +48,20 @@ public class PlayerSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
+
+
         accelX = 0.0f;
+    }
+
+    private void checkButtons(TransformComponent t, MovementComponent mov, float deltaTime) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            t.pos.x = (t.pos.x - mov.velocity.x * deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            t.pos.x = (t.pos.x + mov.velocity.x * deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            t.pos.y = (t.pos.y - mov.velocity.y * deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            t.pos.y = (t.pos.y + mov.velocity.y * deltaTime);
     }
 
     @Override
@@ -55,29 +71,7 @@ public class PlayerSystem extends IteratingSystem {
         MovementComponent mov = mm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-
-        if (Gdx.input.isButtonPressed(Input.Keys.LEFT))
-
-
-//        if (state.get() != BobComponent.STATE_HIT && t.pos.y <= 0.5f) {
-//            hitPlatform(entity);
-//        }
-//
-        if (state.get() != PlayerComponent.STATE_ALIVE) {
-            mov.velocity.x = -accelX / 10.0f * PlayerComponent.MOVE_VELOCITY;
-        }
-//
-//        if (mov.velocity.y > 0 && state.get() != BobComponent.STATE_HIT) {
-//            if (state.get() != BobComponent.STATE_JUMP) {
-//                state.set(BobComponent.STATE_JUMP);
-//            }
-//        }
-//
-//        if (mov.velocity.y < 0 && state.get() != BobComponent.STATE_HIT) {
-//            if (state.get() != BobComponent.STATE_FALL) {
-//                state.set(BobComponent.STATE_FALL);
-//            }
-//        }
+        checkButtons(t, mov, deltaTime);
 
         if (t.pos.x < 0) {
             t.pos.x = World.WORLD_WIDTH;
@@ -89,11 +83,6 @@ public class PlayerSystem extends IteratingSystem {
 
         t.scale.x = mov.velocity.x < 0.0f ? Math.abs(t.scale.x) * -1.0f : Math.abs(t.scale.x);
 
-//        player.heightSoFar = Math.max(t.pos.y, player.heightSoFar);
-
-//        if (player.heightSoFar - 7.5f > t.pos.y) {
-//            world.state = World.WORLD_STATE_GAME_OVER;
-//        }
     }
 
     public void dead (Entity entity) {

@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.mygdx.game.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -10,21 +10,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
-    public static TextureRegion playGame;
-    public static TextureRegion background;
-    public static Texture items;
-    public static TextureRegion coin;
-    public static TextureRegion player;
-    public static TextureRegion mainMenu;
-    public static TextureRegion pauseMenu;
-    public static TextureRegion ready;
-    public static TextureRegion gameOver;
+    public static TextureRegion playGame, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
+
     public static BitmapFont font;
     public static Texture logo;
-    public static TextureRegion pause;
 
-    public static TextureRegion soundOn;
-    public static TextureRegion soundOff;
+    public static Texture items;
 
 
 
@@ -58,6 +49,8 @@ public class Assets {
         //Aca se cargan todas las texturas con sus posiciones.
 
         player = new TextureRegion(loadTexture("data/player.png"));
+
+        enemy = new TextureRegion(loadTexture("data/enemy.png"));
 
         coin = new TextureRegion(loadTexture("data/coin.png"));
         playGame = new TextureRegion(loadTexture("data/playgame.jpg"));

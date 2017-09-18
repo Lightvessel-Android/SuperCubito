@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.Assets;
-import com.mygdx.game.Settings;
+import com.mygdx.game.utils.Assets;
+import com.mygdx.game.utils.Settings;
 import com.mygdx.game.SuperCubito;
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -15,14 +15,12 @@ public class MainMenuScreen extends ScreenAdapter {
     SuperCubito game;
     OrthographicCamera guiCam;
     Vector3 touchPoint;
+
     Rectangle playBounds;
     Rectangle soundBounds;
 
-    //    Rectangle highscoresBounds
-
-
-    public MainMenuScreen(SuperCubito game) {
-        this.game = game;
+    public MainMenuScreen(SuperCubito gameC) {
+        game = gameC;
 
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
@@ -30,7 +28,12 @@ public class MainMenuScreen extends ScreenAdapter {
         touchPoint = new Vector3();
 
         soundBounds = new Rectangle(0, 0, 64, 64);
-//        highscoresBounds = new Rectangle(160 - 150, 200 - 18, 300, 36);
+    }
+
+    @Override
+    public void render(float delta) {
+        update();
+        draw();
     }
 
     public void update() {
@@ -51,12 +54,6 @@ public class MainMenuScreen extends ScreenAdapter {
                 else
                     Assets.music.pause();
             }
-
-//            if (highscoresBounds.contains(touchPoint.x, touchPoint.y)) {
-//                Assets.playSound(Assets.clickSound);
-//                game.setScreen(new HighscoresScreen(game));
-//                return;
-//            }
         }
     }
 
@@ -77,11 +74,5 @@ public class MainMenuScreen extends ScreenAdapter {
         game.batcher.draw(Assets.playGame, 60, 50, 200, 200);
         game.batcher.draw(Settings.soundEnabled ? Assets.soundOn : Assets.soundOff, 0, 0, 64, 64);
         game.batcher.end();
-    }
-
-    @Override
-    public void render(float delta) {
-        update();
-        draw();
     }
 }

@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.mygdx.game.World;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
@@ -24,10 +26,10 @@ public class PlayerSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<MovementComponent> mm;
 
-    public PlayerSystem(World world) {
+    public PlayerSystem(World worldD) {
         super(family);
 
-        this.world = world;
+        world = worldD;
 
         pm = ComponentMapper.getFor(PlayerComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
@@ -52,6 +54,10 @@ public class PlayerSystem extends IteratingSystem {
         StateComponent state = sm.get(entity);
         MovementComponent mov = mm.get(entity);
         PlayerComponent player = pm.get(entity);
+
+
+        if (Gdx.input.isButtonPressed(Input.Keys.LEFT))
+
 
 //        if (state.get() != BobComponent.STATE_HIT && t.pos.y <= 0.5f) {
 //            hitPlatform(entity);

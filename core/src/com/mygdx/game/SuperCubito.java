@@ -3,9 +3,9 @@ package com.mygdx.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screens.MainMenuScreen;
+import com.mygdx.game.utils.Settings;
 
 public class SuperCubito extends Game {
 
@@ -15,7 +15,7 @@ public class SuperCubito extends Game {
 	public void create () {
 		batcher = new SpriteBatch();
 		Settings.load();
-		Assets.load();
+		com.mygdx.game.utils.Assets.load();
 		setScreen(new MainMenuScreen(this));
 	}
 

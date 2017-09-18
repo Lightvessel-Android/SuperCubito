@@ -91,12 +91,12 @@ public class CollisionSystem extends EntitySystem {
                     TransformComponent springPos = tm.get(spring);
                     BoundsComponent springBounds = bm.get(spring);
 
-                    if (playerPos.pos.y > springPos.pos.y) {
-                        if (playerBounds.bounds.overlaps(springBounds.bounds)) {
-                            playerSystem.dead(player);
-                            listener.dead();
-                        }
-                    }
+//                    if (playerPos.pos.y > springPos.pos.y) {
+//                        if (playerBounds.bounds.overlaps(springBounds.bounds)) {
+//                            playerSystem.dead(player);
+//                            listener.dead();
+//                        }
+//                    }
                 }
 
             for (int j = 0; j < coins.size(); ++j) {

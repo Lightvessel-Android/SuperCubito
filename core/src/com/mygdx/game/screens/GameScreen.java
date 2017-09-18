@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.Assets;
+import com.mygdx.game.systems.EnemySystem;
+import com.mygdx.game.utils.Assets;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.states.GameState;
@@ -78,10 +79,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new StateSystem());
         engine.addSystem(new AnimationSystem());
 
-//        engine.addSystem(new GravitySystem());
-
-//        engine.addSystem(new SquirrelSystem());
-//        engine.addSystem(new PlatformSystem());
+        engine.addSystem(new EnemySystem());
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 
@@ -259,12 +257,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(BoundsSystem.class).setProcessing(false);
         engine.getSystem(StateSystem.class).setProcessing(false);
         engine.getSystem(AnimationSystem.class).setProcessing(false);
-
-
-//        engine.getSystem(SquirrelSystem.class).setProcessing(false);
-//        engine.getSystem(PlatformSystem.class).setProcessing(false);
-//        engine.getSystem(GravitySystem.class).setProcessing(false);
-
+        engine.getSystem(EnemySystem.class).setProcessing(false);
 
     }
 
@@ -275,12 +268,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(BoundsSystem.class).setProcessing(true);
         engine.getSystem(StateSystem.class).setProcessing(true);
         engine.getSystem(AnimationSystem.class).setProcessing(true);
-
-
-//        engine.getSystem(SquirrelSystem.class).setProcessing(true);
-//        engine.getSystem(PlatformSystem.class).setProcessing(true);
-//        engine.getSystem(GravitySystem.class).setProcessing(true);
-
+        engine.getSystem(EnemySystem.class).setProcessing(true);
     }
 
     @Override

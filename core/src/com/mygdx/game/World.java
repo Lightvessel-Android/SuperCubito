@@ -70,8 +70,6 @@ public class World {
 
         position.pos.set(x, y, 0.0f);
 
-        movement.velocity.set(10, 10);
-
         state.set(PlayerComponent.STATE_ALIVE);
 
         entity.add(player);

@@ -22,6 +22,7 @@ public class PlayerSystem extends IteratingSystem {
 
     private float accelX = 0.0f;
     private World world;
+    private Vector2 velocity;
 
     private ComponentMapper<PlayerComponent> pm;
     private ComponentMapper<StateComponent> sm;
@@ -37,7 +38,7 @@ public class PlayerSystem extends IteratingSystem {
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         mm = ComponentMapper.getFor(MovementComponent.class);
-
+        velocity = new Vector2(0, 0);
     }
 
     public void setAccelX(float accelX) {
@@ -53,15 +54,17 @@ public class PlayerSystem extends IteratingSystem {
         accelX = 0.0f;
     }
 
-    private void checkButtons(TransformComponent t, MovementComponent mov, float deltaTime) {
+    private void checkButtons() {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            t.pos.x = (t.pos.x - mov.velocity.x * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            t.pos.x = (t.pos.x + mov.velocity.x * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            t.pos.y = (t.pos.y - mov.velocity.y * deltaTime);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            t.pos.y = (t.pos.y + mov.velocity.y * deltaTime);
+            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
+        else
+            velocity.set(0, 0);
     }
 
     @Override
@@ -71,7 +74,9 @@ public class PlayerSystem extends IteratingSystem {
         MovementComponent mov = mm.get(entity);
         PlayerComponent player = pm.get(entity);
 
-        checkButtons(t, mov, deltaTime);
+        checkButtons();
+
+        mov.velocity.set(velocity);
 
         if (t.pos.x < 0) {
             t.pos.x = World.WORLD_WIDTH;

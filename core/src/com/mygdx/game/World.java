@@ -3,9 +3,9 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.BackgroundComponent;
+import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CameraComponent;
 import com.mygdx.game.components.CoinComponent;
@@ -15,25 +15,30 @@ import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
+import com.mygdx.game.components.WinComponent;
 import com.mygdx.game.states.WorldState;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.utils.Assets;
 
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
+import static com.mygdx.game.systems.RenderingSystem.CELL_TO_METERS;
+import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
 
 public class World {
     public WorldState state;
 
     private PooledEngine engine;
 
+    private Entity player;
+
     public World (PooledEngine engine) {
         this.engine = engine;
     }
 
     public void create() {
-//        createCamera(player);
-        createBackground();
+//        createBackground();
         generateLevel(Assets.level);
+        createCamera(player);
 
         state = WORLD_STATE_RUNNING;
     }
@@ -124,10 +129,38 @@ public class World {
         engine.addEntity(entity);
     }
 
+    private void createBlock(float x, float y) {
+
+        Entity entity = engine.createEntity();
+        BlockComponent block = engine.createComponent(BlockComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+
+        texture.region = Assets.wallblock;
+
+
+        texture.region.setRegionWidth((int) (BlockComponent.WIDTH / PIXELS_TO_METERS));
+
+        texture.region.setRegionHeight((int) (BlockComponent.HEIGHT / PIXELS_TO_METERS));
+
+        bounds.bounds.width = BlockComponent.WIDTH;
+        bounds.bounds.height = BlockComponent.HEIGHT;
+
+
+        position.pos.set(x, y, 3.0f);
+
+        entity.add(block);
+        entity.add(bounds);
+        entity.add(position);
+        entity.add(texture);
+
+        engine.addEntity(entity);
+    }
+
     private void createEnemy(float x, float y) {
         Entity entity = engine.createEntity();
 
-        AnimationComponent animation = engine.createComponent(AnimationComponent.class);
         EnemyComponent enemy = engine.createComponent(EnemyComponent.class);
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         MovementComponent movement = engine.createComponent(MovementComponent.class);
@@ -144,14 +177,38 @@ public class World {
 
         position.pos.set(x, y, 2.0f);
 
-        state.set(EnemyComponent.STATE_NORMAL);
-
-        entity.add(animation);
         entity.add(enemy);
         entity.add(bounds);
         entity.add(movement);
         entity.add(position);
-        entity.add(state);
+        entity.add(texture);
+
+        engine.addEntity(entity);
+    }
+
+    private void createWinFloor(float x, float y) {
+
+        Entity entity = engine.createEntity();
+        WinComponent winBlock = engine.createComponent(WinComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        TransformComponent position = engine.createComponent(TransformComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+
+        texture.region = Assets.winBlock;
+
+        texture.region.setRegionWidth((int) (WinComponent.WIDTH / PIXELS_TO_METERS));
+
+        texture.region.setRegionHeight((int) (WinComponent.HEIGHT / PIXELS_TO_METERS));
+
+        bounds.bounds.width = WinComponent.WIDTH;
+        bounds.bounds.height = WinComponent.HEIGHT;
+
+
+        position.pos.set(x, y, 3.0f);
+
+        entity.add(winBlock);
+        entity.add(bounds);
+        entity.add(position);
         entity.add(texture);
 
         engine.addEntity(entity);
@@ -165,8 +222,8 @@ public class World {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pixel = level.getPixel(x, y);
-                float posX = x * RenderingSystem.PIXELS_TO_METRES;
-                float posY = y * RenderingSystem.PIXELS_TO_METRES;
+                float posX = x * CELL_TO_METERS;
+                float posY = y * CELL_TO_METERS;
                 switch (pixel) {
                     case -824246273:
                         //Exterior
@@ -178,13 +235,13 @@ public class World {
                         //suelo blanco de juego
                         break;
                     case -140769025:
-                        //meta
+                        createWinFloor(posX, posY);
                         break;
                     case 255:
-//                        entities.add(new BlockEntity(blockTexture, position, new Vector2(12,12), new Vector2(0, 0)));
+                        createBlock(posX, posY);
                         break;
                     case 279280639:
-                        createPlayer(posX, posY);
+                        player = createPlayer(posX, posY);
                         break;
                     case -16776961:
                         createEnemy(posX, posY);

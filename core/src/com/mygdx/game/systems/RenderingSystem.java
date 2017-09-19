@@ -16,7 +16,8 @@ import java.util.Comparator;
 public class RenderingSystem extends IteratingSystem {
     public static final float FRUSTUM_WIDTH = 15;
     public static final float FRUSTUM_HEIGHT = 15;
-    public static final float PIXELS_TO_METRES = 1.0f / 32.0f;
+    public static final float PIXELS_TO_METERS = 1.0f / 32.0f;
+    public static final float CELL_TO_METERS = 1.0f;
 
     private SpriteBatch batch;
     private Array<Entity> renderQueue;
@@ -75,7 +76,7 @@ public class RenderingSystem extends IteratingSystem {
                 t.pos.x - originX, t.pos.y - originY,
                 originX, originY,
                 width, height,
-                t.scale.x * PIXELS_TO_METRES, t.scale.y * PIXELS_TO_METRES,
+                t.scale.x * PIXELS_TO_METERS, t.scale.y * PIXELS_TO_METERS,
                 MathUtils.radiansToDegrees * t.rotation);
         }
 

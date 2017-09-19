@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Assets {
 
-    public static TextureRegion playGame, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
+    public static TextureRegion playGame, winBlock, wallblock, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
 
     public static BitmapFont font;
     public static Pixmap level;
@@ -27,7 +27,10 @@ public class Assets {
     }
 
     public static void load () {
+
         level = new Pixmap(Gdx.files.internal("bitmaps/level1.bmp"));
+        wallblock = new TextureRegion(loadTexture("data/blackBox.png"));
+        winBlock = new TextureRegion(loadTexture("data/winBox.png"));
         player = new TextureRegion(loadTexture("data/player.png"));
         enemy = new TextureRegion(loadTexture("data/enemy.png"));
         coin = new TextureRegion(loadTexture("data/coin.png"));

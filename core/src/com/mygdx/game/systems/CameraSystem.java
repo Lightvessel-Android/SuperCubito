@@ -36,7 +36,7 @@ public class CameraSystem extends IteratingSystem {
 
         //Lo dejo comentado porque no es necesario para este juego.
 
-        //cam.camera.position.y =target.pos.y;
-        //cam.camera.position.x =target.pos.x;
+        cam.camera.position.x =target.pos.x;
+        cam.camera.position.y =target.pos.y;
     }
 }

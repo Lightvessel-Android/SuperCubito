@@ -7,14 +7,15 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.mygdx.game.World;
+import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CoinComponent;
 import com.mygdx.game.components.EnemyComponent;
-import com.mygdx.game.components.ExistComponent;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TransformComponent;
+import com.mygdx.game.components.WinComponent;
 
 import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
@@ -33,10 +34,7 @@ public class CollisionSystem extends EntitySystem {
     private Engine engine;
     private World world;
     private CollisionListener listener;
-    private ImmutableArray<Entity> exits;
-    private ImmutableArray<Entity> enemies;
-    private ImmutableArray<Entity> players;
-    private ImmutableArray<Entity> coins;
+    private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
 
 
     public CollisionSystem(World world, CollisionListener listener) {
@@ -56,7 +54,8 @@ public class CollisionSystem extends EntitySystem {
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
-        exits = engine.getEntitiesFor(Family.all(ExistComponent.class, BoundsComponent.class, TransformComponent.class).get());
+        blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
+        exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
     }
 
     @Override
@@ -99,6 +98,17 @@ public class CollisionSystem extends EntitySystem {
                 if (coinBounds.bounds.overlaps(playerBounds.bounds)) {
                     engine.removeEntity(coin);
                     listener.coin();
+                }
+            }
+
+            for (int j = 0; j < blocks.size(); ++j) {
+                Entity block = blocks.get(j);
+
+                BoundsComponent blockBounds = bm.get(block);
+
+                if (blockBounds.bounds.overlaps(playerBounds.bounds)) {
+                    //TODO: hay que hacer que no pueda traspasarlo
+                    playerSystem.dead(player);
                 }
             }
 

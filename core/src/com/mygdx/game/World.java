@@ -165,7 +165,6 @@ public class World {
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         MovementComponent movement = engine.createComponent(MovementComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
-        StateComponent state = engine.createComponent(StateComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
         movement.velocity.x = EnemyComponent.VELOCITY;
@@ -175,7 +174,7 @@ public class World {
         bounds.bounds.width = EnemyComponent.WIDTH;
         bounds.bounds.height = EnemyComponent.HEIGHT;
 
-        position.pos.set(x, y, 2.0f);
+        position.pos.set(x, y, 3.0f);
 
         entity.add(enemy);
         entity.add(bounds);

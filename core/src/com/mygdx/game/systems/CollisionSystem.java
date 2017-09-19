@@ -53,7 +53,7 @@ public class CollisionSystem extends EntitySystem {
 
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
-        enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
+        enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
         blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
         exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
     }
@@ -79,14 +79,11 @@ public class CollisionSystem extends EntitySystem {
             for (int j = 0; j < enemies.size(); ++j) {
                     Entity enemy = enemies.get(j);
 
-                    TransformComponent enemyPos = tm.get(enemy);
                     BoundsComponent enemyBounds = bm.get(enemy);
 
-                    if (playerPos.pos.y > enemyPos.pos.y) {
-                        if (playerBounds.bounds.overlaps(enemyBounds.bounds)) {
-                            playerSystem.dead(player);
-                            listener.dead();
-                        }
+                    if (enemyBounds.bounds.overlaps(playerBounds.bounds)) {
+                        playerSystem.dead(player);
+                        listener.dead();
                     }
                 }
 

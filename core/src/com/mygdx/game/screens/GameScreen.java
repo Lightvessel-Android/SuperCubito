@@ -153,7 +153,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
         if (world.state == WORLD_STATE_NEXT_LEVEL) {
-            game.setScreen(new WinScreen(game));
+            game.setScreen(new MainMenuScreen(game));
         }
 
         if (world.state == WORLD_STATE_GAME_OVER) {

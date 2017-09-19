@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -34,6 +35,8 @@ public class CollisionSystem extends EntitySystem {
     private Engine engine;
     private World world;
     private CollisionListener listener;
+    private Vector2 vector;
+
     private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
 
 
@@ -45,6 +48,8 @@ public class CollisionSystem extends EntitySystem {
         mm = ComponentMapper.getFor(MovementComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
+
+        vector = new Vector2(0, 0);
     }
 
     @Override
@@ -104,8 +109,8 @@ public class CollisionSystem extends EntitySystem {
                 BoundsComponent blockBounds = bm.get(block);
 
                 if (blockBounds.bounds.overlaps(playerBounds.bounds)) {
-                    //TODO: hay que hacer que no pueda traspasarlo
-                    playerSystem.dead(player);
+                    vector = (blockBounds.bounds.getPosition(vector).sub(playerPos.pos.x, playerPos.pos.y)).nor();
+                    //TODO: hacer que no lo traspase
                 }
             }
 

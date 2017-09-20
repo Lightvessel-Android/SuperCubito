@@ -48,14 +48,6 @@ public class PlayerSystem extends IteratingSystem {
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
-        TransformComponent t = tm.get(entity);
-        MovementComponent mov = mm.get(entity);
-        StateComponent state = sm.get(entity);
-
-        if (state.get() == PlayerComponent.STATE_HIT) {
-            mov.velocity.scl(-1);
-            state.set(PlayerComponent.STATE_ALIVE);
-        }
     }
 
     public void dead (Entity entity) {
@@ -71,6 +63,9 @@ public class PlayerSystem extends IteratingSystem {
 
     public void hitBlock(Entity entity) {
         StateComponent state = sm.get(entity);
+        TransformComponent tr = tm.get(entity);
+
         state.set(PlayerComponent.STATE_HIT);
+        tr.pos.set(tr.lastPosition);
     }
 }

@@ -28,7 +28,7 @@ public class Assets {
 
     public static void load () {
 
-        level = new Pixmap(Gdx.files.internal("bitmaps/level1.bmp"));
+        level = new Pixmap(Gdx.files.internal("bitmaps/level.bmp"));
         wallblock = new TextureRegion(loadTexture("data/blackBox.png"));
         winBlock = new TextureRegion(loadTexture("data/winBox.png"));
         player = new TextureRegion(loadTexture("data/player.png"));

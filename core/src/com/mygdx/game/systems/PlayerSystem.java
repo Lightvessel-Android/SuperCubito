@@ -66,6 +66,6 @@ public class PlayerSystem extends IteratingSystem {
         TransformComponent tr = tm.get(entity);
 
         state.set(PlayerComponent.STATE_HIT);
-        tr.pos.set(tr.lastPosition);
+        tr.pos.set(tr.lastPosition, 0);
     }
 }

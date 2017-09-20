@@ -6,7 +6,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -48,7 +50,6 @@ public class CollisionSystem extends EntitySystem {
         mm = ComponentMapper.getFor(MovementComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
-
         vector = new Vector2(0, 0);
     }
 
@@ -77,16 +78,10 @@ public class CollisionSystem extends EntitySystem {
                 continue;
             }
 
-            MovementComponent playerMov = mm.get(player);
-            BoundsComponent playerBounds = bm.get(player);
-            TransformComponent playerPos = tm.get(player);
-
             for (int j = 0; j < enemies.size(); ++j) {
                     Entity enemy = enemies.get(j);
 
-                    BoundsComponent enemyBounds = bm.get(enemy);
-
-                    if (enemyBounds.bounds.overlaps(playerBounds.bounds)) {
+                    if (isCollide(enemy, player)) {
                         playerSystem.dead(player);
                         listener.dead();
                     }
@@ -95,9 +90,7 @@ public class CollisionSystem extends EntitySystem {
             for (int j = 0; j < coins.size(); ++j) {
                 Entity coin = coins.get(j);
 
-                BoundsComponent coinBounds = bm.get(coin);
-
-                if (coinBounds.bounds.overlaps(playerBounds.bounds)) {
+                if (isCollide(coin, player)) {
                     engine.removeEntity(coin);
                     listener.coin();
                 }
@@ -106,23 +99,56 @@ public class CollisionSystem extends EntitySystem {
             for (int j = 0; j < blocks.size(); ++j) {
                 Entity block = blocks.get(j);
 
-                BoundsComponent blockBounds = bm.get(block);
 
-                if (blockBounds.bounds.overlaps(playerBounds.bounds)) {
-                    vector = (blockBounds.bounds.getPosition(vector).sub(playerPos.pos.x, playerPos.pos.y)).nor();
+                if (isCollide(block, player)) {
                     playerSystem.hitBlock(player);
+                }
+
+                for (int k = 0; k < enemies.size(); ++k) {
+                    Entity enemy = enemies.get(k);
+
+                    MovementComponent enemyMov = mm.get(enemy);
+
+                    if (isCollide(enemy, block)) {
+                        enemyMov.velocity.scl(-1);
+                    }
                 }
             }
 
             for (int j = 0; j < exits.size(); ++j) {
                 Entity exit = exits.get(j);
 
-                BoundsComponent castleBounds = bm.get(exit);
-
-                if (castleBounds.bounds.overlaps(playerBounds.bounds)) {
+                if (isCollide(exit, player)) {
                     world.state = WORLD_STATE_NEXT_LEVEL;
                 }
             }
         }
+    }
+
+    private boolean isCircleColide(Entity enemy, Entity block) {
+        TransformComponent trEnemy= tm.get(enemy);
+        BoundsComponent bounds1 = bm.get(block);
+
+        Vector2 initialPos = trEnemy.lastPosition;
+
+        Vector2 direction = (new Vector2(trEnemy.pos.x - trEnemy.lastPosition.x, trEnemy.pos.y - trEnemy.lastPosition.y));
+
+        float norma = direction.len();
+
+        direction.nor().scl(0.5f);
+
+        while(direction.len() <= norma) {
+            if(bounds1.bounds.contains(initialPos.x + direction.x, initialPos.y + direction.y)) return true;
+            direction.add(0.5f, 0.5f);
+        }
+
+        return false;
+    }
+
+    private boolean isCollide(Entity entity1, Entity entity2) {
+        BoundsComponent bounds1 = bm.get(entity1);
+        BoundsComponent bounds2 = bm.get(entity2);
+
+        return bounds1.bounds.overlaps(bounds2.bounds);
     }
 }

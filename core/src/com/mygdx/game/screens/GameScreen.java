@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.systems.EnemySystem;
+import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
@@ -70,12 +71,13 @@ public class GameScreen extends ScreenAdapter {
 
         world = new World(engine);
 
-        engine.addSystem(new PlayerSystem(world));
         engine.addSystem(new CameraSystem());
         engine.addSystem(new BackgroundSystem());
-        engine.addSystem(new MovementSystem());
+        engine.addSystem(new InputSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new CollisionSystem(world, collisionListener));
+        engine.addSystem(new PlayerSystem(world));
+        engine.addSystem(new MovementSystem());
         engine.addSystem(new RenderingSystem(game.batcher));
 
         engine.addSystem(new StateSystem());
@@ -257,6 +259,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(StateSystem.class).setProcessing(false);
         engine.getSystem(AnimationSystem.class).setProcessing(false);
         engine.getSystem(EnemySystem.class).setProcessing(false);
+        engine.getSystem(InputSystem.class).setProcessing(false);
 
     }
 
@@ -268,6 +271,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(StateSystem.class).setProcessing(true);
         engine.getSystem(AnimationSystem.class).setProcessing(true);
         engine.getSystem(EnemySystem.class).setProcessing(true);
+        engine.getSystem(InputSystem.class).setProcessing(true);
     }
 
     @Override

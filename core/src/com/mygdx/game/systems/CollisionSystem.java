@@ -110,7 +110,7 @@ public class CollisionSystem extends EntitySystem {
 
                 if (blockBounds.bounds.overlaps(playerBounds.bounds)) {
                     vector = (blockBounds.bounds.getPosition(vector).sub(playerPos.pos.x, playerPos.pos.y)).nor();
-                    //TODO: hacer que no lo traspase
+                    playerSystem.hitBlock(player);
                 }
             }
 

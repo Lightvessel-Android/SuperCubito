@@ -245,10 +245,11 @@ public class World {
                     case -16776961:
                         createEnemy(posX, posY);
                         break;
-                    case -403223809:
+                    case -420001025:
                         createCoin(posX, posY);
                         break;
                     default:
+                        System.out.print(pixel);
                         break;
                 }
             }

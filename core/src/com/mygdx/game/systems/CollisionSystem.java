@@ -118,7 +118,7 @@ public class CollisionSystem extends EntitySystem {
             for (int j = 0; j < exits.size(); ++j) {
                 Entity exit = exits.get(j);
 
-                if (isCollide(exit, player)) {
+                if (isCollide(exit, player) && coins.size() == 0) {
                     world.state = WORLD_STATE_NEXT_LEVEL;
                 }
             }

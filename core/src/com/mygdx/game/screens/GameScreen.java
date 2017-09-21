@@ -51,7 +51,7 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen (SuperCubito game) {
         this.game = game;
 
-        state = GAME_READY;
+        state = GAME_RUNNING;
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
         touchPoint = new Vector3();
@@ -73,7 +73,7 @@ public class GameScreen extends ScreenAdapter {
 
         engine.addSystem(new CameraSystem());
         engine.addSystem(new BackgroundSystem());
-        engine.addSystem(new InputSystem());
+        engine.addSystem(new InputSystem(this));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new CollisionSystem(world, collisionListener));
@@ -95,7 +95,7 @@ public class GameScreen extends ScreenAdapter {
 
         quitBounds = new Rectangle(160 - 96,0, 192, 36);
 
-        pauseSystems();
+//        pauseSystems();
     }
 
     public void update (float deltaTime) {
@@ -286,5 +286,13 @@ public class GameScreen extends ScreenAdapter {
             state = GAME_PAUSED;
             pauseSystems();
         }
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
     }
 }

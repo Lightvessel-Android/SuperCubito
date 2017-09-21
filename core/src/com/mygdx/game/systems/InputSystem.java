@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,16 +31,12 @@ public class InputSystem extends EntitySystem {
 
     private Entity player;
 
-    private GameScreen gameScreen;
-
     private ComponentMapper<MovementComponent> mm;
     private ComponentMapper<TransformComponent> tr;
 
-    public InputSystem(GameScreen gameScreenN) {
+    public InputSystem() {
         mm = ComponentMapper.getFor(MovementComponent.class);
         tr = ComponentMapper.getFor(TransformComponent.class);
-
-        gameScreen = gameScreenN;
     }
 
     @Override
@@ -58,15 +55,18 @@ public class InputSystem extends EntitySystem {
 
         TransformComponent pos = tr.get(player);
 
-        if(Gdx.input.isTouched() && gameScreen.getState().equals(GameState.GAME_RUNNING)){
-
+        if(Gdx.input.isTouched()) {
             float x = Gdx.input.getX();
             float y = Gdx.input.getY();
+
             touch.set(x, y);
             touch.sub(pos.pos.x, pos.pos.y).nor();
 
             mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
+        } else {
+            mov.velocity.set(0, 0);
         }
+
 
 //        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
 //            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);

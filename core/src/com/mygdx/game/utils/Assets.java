@@ -3,20 +3,28 @@ package com.mygdx.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Assets {
 
-    public static TextureRegion playGame, winBlock, wallblock, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
+    public static TextureRegion playGame, winBlock, wallblock, button, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
 
     public static BitmapFont font;
-    public static Pixmap level;
+
+    public static List<Pixmap> levels = new ArrayList<Pixmap>();
 
     public static Texture items;
+
+    public static Skin skin;
 
     public static Music music;
     public static Sound deadSound;
@@ -29,7 +37,8 @@ public class Assets {
 
     public static void load () {
 
-        level = new Pixmap(Gdx.files.internal("bitmaps/level.bmp"));
+        button = new TextureRegion(loadTexture("data/button.png"));
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         wallblock = new TextureRegion(loadTexture("data/blackBox.png"));
         winBlock = new TextureRegion(loadTexture("data/winBox.png"));
         player = new TextureRegion(loadTexture("data/player.png"));
@@ -43,7 +52,18 @@ public class Assets {
         ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = new TextureRegion(loadTexture("data/gameover.png"));
         pause = new TextureRegion(items, 64, 64, 64, 64);
-        font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 8;
+        parameter.color = Color.BLACK;
+        font = generator.generateFont(parameter);
+        generator.dispose();
+
+//        font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
+
+
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
@@ -55,6 +75,9 @@ public class Assets {
         soundOn = new TextureRegion(items, 64, 0, 64, 64);
         deadSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+
+        //Levels:
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
     }
 
     public static void playSound (Sound sound) {

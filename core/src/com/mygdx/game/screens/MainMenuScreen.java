@@ -12,12 +12,12 @@ import com.mygdx.game.SuperCubito;
 
 public class MainMenuScreen extends ScreenAdapter {
 
-    SuperCubito game;
-    OrthographicCamera guiCam;
-    Vector3 touchPoint;
+    private SuperCubito game;
+    private OrthographicCamera guiCam;
+    private Vector3 touchPoint;
 
-    Rectangle playBounds;
-    Rectangle soundBounds;
+    private Rectangle playBounds;
+    private Rectangle soundBounds;
 
     public MainMenuScreen(SuperCubito gameC) {
         game = gameC;
@@ -36,13 +36,13 @@ public class MainMenuScreen extends ScreenAdapter {
         draw();
     }
 
-    public void update() {
+    private void update() {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             if (playBounds.contains(touchPoint.x, touchPoint.y)) {
                 Assets.playSound(Assets.clickSound);
-                game.setScreen(new GameScreen(game));
+                game.setScreen(new LevelsScreen(game));
                 return;
             }
 
@@ -57,7 +57,7 @@ public class MainMenuScreen extends ScreenAdapter {
         }
     }
 
-    public void draw() {
+    private void draw() {
         GL20 gl = Gdx.gl;
         gl.glClearColor(1, 0, 0, 1);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

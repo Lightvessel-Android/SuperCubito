@@ -3,7 +3,6 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.mygdx.game.components.AnimationComponent;
 import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -29,15 +28,18 @@ public class World {
 
     private PooledEngine engine;
 
+    private Pixmap level;
+
     private Entity player;
 
-    public World (PooledEngine engine) {
+    public World (PooledEngine engine, Pixmap pixmap) {
         this.engine = engine;
+        level = pixmap;
     }
 
     public void create() {
 //        createBackground();
-        generateLevel(Assets.level);
+        generateLevel();
         createCamera(player);
 
         state = WORLD_STATE_RUNNING;
@@ -213,7 +215,7 @@ public class World {
         engine.addEntity(entity);
     }
 
-    private void generateLevel(Pixmap level) {
+    private void generateLevel() {
 
         int width = level.getWidth();
         int height = level.getHeight();

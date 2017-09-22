@@ -55,31 +55,31 @@ public class InputSystem extends EntitySystem {
 
         TransformComponent pos = tr.get(player);
 
-        if(Gdx.input.isTouched()) {
-            float x = Gdx.input.getX();
-            float y = Gdx.input.getY();
-
-            touch.set(x, y);
-            touch.sub(pos.pos.x, pos.pos.y).nor();
-
-            mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
-        } else {
-            mov.velocity.set(0, 0);
-        }
-
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-//            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
-//            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
-//        else
-//            velocity.set(0, 0);
+//        if(Gdx.input.isTouched()) {
+//            float x = Gdx.input.getX();
+//            float y = Gdx.input.getY();
 //
-//        mov.velocity.set(velocity);
+//            touch.set(x, y);
+//            touch.sub(pos.pos.x, pos.pos.y).nor();
+//
+//            mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
+//        } else {
+//            mov.velocity.set(0, 0);
+//        }
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
+        else
+            velocity.set(0, 0);
+
+        mov.velocity.set(velocity);
     }
 
 

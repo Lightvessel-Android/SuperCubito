@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -44,12 +45,16 @@ public class GameScreen extends ScreenAdapter {
     Rectangle resumeBounds;
     Rectangle quitBounds;
     PooledEngine engine;
+
+    private Pixmap level;
     private GlyphLayout layout = new GlyphLayout();
 
     private GameState state;
 
-    public GameScreen (SuperCubito game) {
+    public GameScreen (SuperCubito game, Pixmap pixmap) {
         this.game = game;
+
+        level = pixmap;
 
         state = GAME_RUNNING;
         guiCam = new OrthographicCamera(320, 480);
@@ -69,7 +74,7 @@ public class GameScreen extends ScreenAdapter {
 
         engine = new PooledEngine();
 
-        world = new World(engine);
+        world = new World(engine, pixmap);
 
         engine.addSystem(new CameraSystem());
         engine.addSystem(new BackgroundSystem());
@@ -94,8 +99,6 @@ public class GameScreen extends ScreenAdapter {
         resumeBounds = new Rectangle(160 - 96, 36, 192, 36);
 
         quitBounds = new Rectangle(160 - 96,0, 192, 36);
-
-//        pauseSystems();
     }
 
     public void update (float deltaTime) {
@@ -155,7 +158,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
         if (world.state == WORLD_STATE_NEXT_LEVEL) {
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new LevelsScreen(game));
         }
 
         if (world.state == WORLD_STATE_GAME_OVER) {
@@ -186,8 +189,7 @@ public class GameScreen extends ScreenAdapter {
     private void updateLevelEnd () {
         if (Gdx.input.justTouched()) {
             engine.removeAllEntities();
-            // ACA pasar al sig lvl
-            world = new World(engine);
+            world = new World(engine, level);
             state = GAME_READY;
         }
     }

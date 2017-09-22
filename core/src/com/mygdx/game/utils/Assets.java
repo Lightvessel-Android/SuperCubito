@@ -77,7 +77,18 @@ public class Assets {
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
 
         //Levels:
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));
+        
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+
+
     }
 
     public static void playSound (Sound sound) {

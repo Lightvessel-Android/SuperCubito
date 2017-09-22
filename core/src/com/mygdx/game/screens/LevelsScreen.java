@@ -5,20 +5,20 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.utils.Assets;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mygdx.game.utils.Settings.levelMax;
+
 public class LevelsScreen extends ScreenAdapter {
 
-    private Skin skin;
-
     private SuperCubito game;
+
+    public static int actualLevel = 1;
 
     private OrthographicCamera guiCam;
 
@@ -27,7 +27,6 @@ public class LevelsScreen extends ScreenAdapter {
     private List<Rectangle> buttons;
 
     public LevelsScreen(final SuperCubito gameE) {
-        skin = Assets.skin;
         game = gameE;
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
@@ -40,26 +39,25 @@ public class LevelsScreen extends ScreenAdapter {
 
     private void generateLevels() {
 
+        float max_x = guiCam.viewportWidth;
+
         for (int i = 0; i < Assets.levels.size(); i++) {
+            Rectangle rec = new Rectangle();
+            rec.setHeight(50);
+            rec.setWidth(50);
 
-            Rectangle rec = new Rectangle(10, 420, 50, 50);
-
+            if(i == 0) {
+                rec.setPosition(10, 420);
+            } else {
+                Rectangle succ = buttons.get(i - 1);
+                if(succ.getX() + succ.getWidth() * 2 + 10 > max_x){
+                    rec.setPosition(10, succ.getY() - succ.getHeight() - 10);
+                } else {
+                    rec.setPosition(succ.getX() + succ.getWidth() + 10, succ.getY());
+                }
+            }
 
             buttons.add(rec);
-
-
-//            TextButton button = new TextButton("Level " + i, skin);
-//
-//            final int finalI = i;
-//
-//            button.addCaptureListener(new ChangeListener() {
-//                @Override
-//                public void changed(ChangeEvent event, Actor actor) {
-//                    game.setScreen(new GameScreen(game, Assets.levels.get(finalI)));
-//                }
-//            });
-//
-//            buttons.add(button);
         }
     }
 
@@ -76,8 +74,10 @@ public class LevelsScreen extends ScreenAdapter {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             for (Rectangle rectangle : buttons) {
-                if (rectangle.contains(touchPoint.x, touchPoint.y)) {
-                    game.setScreen(new GameScreen(game, Assets.levels.get(buttons.indexOf(rectangle))));
+                int index = buttons.indexOf(rectangle);
+                if (rectangle.contains(touchPoint.x, touchPoint.y) && levelMax >= index + 1) {
+                    game.setScreen(new GameScreen(game, Assets.levels.get(index)));
+                    actualLevel = index + 1;
                     return;
                 }
             }

@@ -7,6 +7,8 @@ public class Settings {
 
     public static boolean soundEnabled = true;
 
+    public static int levelMax = 1;
+
     public final static String file = ".supercubito";
 
     public static void load () {
@@ -16,6 +18,9 @@ public class Settings {
             String[] strings = filehandle.readString().split("\n");
 
             soundEnabled = Boolean.parseBoolean(strings[0]);
+
+            levelMax = Integer.parseInt(strings[1]);
+
         } catch (Throwable e) {
         }
     }
@@ -24,6 +29,7 @@ public class Settings {
         try {
             FileHandle filehandle = Gdx.files.external(file);
 
+            filehandle.writeString(Integer.toString(levelMax)+"\n", true);
         } catch (Throwable e) {
         }
     }

@@ -26,12 +26,15 @@ import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.systems.StateSystem;
 
+import static com.mygdx.game.screens.LevelsScreen.actualLevel;
 import static com.mygdx.game.states.GameState.GAME_OVER;
 import static com.mygdx.game.states.GameState.GAME_PAUSED;
 import static com.mygdx.game.states.GameState.GAME_READY;
 import static com.mygdx.game.states.GameState.GAME_RUNNING;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
+import static com.mygdx.game.utils.Settings.levelMax;
+import static java.lang.Math.max;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -158,6 +161,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
         if (world.state == WORLD_STATE_NEXT_LEVEL) {
+            levelMax = max(levelMax, actualLevel +1);
             game.setScreen(new LevelsScreen(game));
         }
 

@@ -45,7 +45,7 @@ public class Assets {
         enemy = new TextureRegion(loadTexture("data/enemy.png"));
         coin = new TextureRegion(loadTexture("data/coin.png"));
         playGame = new TextureRegion(loadTexture("data/playgame.jpg"));
-        background = new TextureRegion(loadTexture("data/level1.png"));
+        background = new TextureRegion(loadTexture("data/background.png"));
         items = loadTexture("data/items.png");
         mainMenu = new TextureRegion(loadTexture ("data/menu.jpg"));
         pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
@@ -78,7 +78,7 @@ public class Assets {
 
         //Levels:
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));
-        
+
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));

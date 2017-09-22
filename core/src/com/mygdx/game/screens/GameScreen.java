@@ -25,6 +25,7 @@ import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.systems.StateSystem;
+import com.mygdx.game.utils.Settings;
 
 import static com.mygdx.game.screens.LevelsScreen.actualLevel;
 import static com.mygdx.game.states.GameState.GAME_OVER;
@@ -163,11 +164,13 @@ public class GameScreen extends ScreenAdapter {
         if (world.state == WORLD_STATE_NEXT_LEVEL) {
             levelMax = max(levelMax, actualLevel +1);
             game.setScreen(new LevelsScreen(game));
+            Settings.save();
         }
 
         if (world.state == WORLD_STATE_GAME_OVER) {
             state = GAME_OVER;
             pauseSystems();
+            Settings.save();
         }
     }
 

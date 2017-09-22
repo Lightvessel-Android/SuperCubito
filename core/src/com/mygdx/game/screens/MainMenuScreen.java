@@ -36,6 +36,11 @@ public class MainMenuScreen extends ScreenAdapter {
         draw();
     }
 
+    @Override
+    public void pause () {
+        Settings.save();
+    }
+
     private void update() {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));

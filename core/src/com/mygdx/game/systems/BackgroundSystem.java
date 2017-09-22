@@ -16,6 +16,7 @@ public class BackgroundSystem extends IteratingSystem {
     public BackgroundSystem() {
         super(Family.all(BackgroundComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
+
     }
 
 
@@ -23,7 +24,7 @@ public class BackgroundSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent t = tm.get(entity);
         t.pos.set(camera.position.x, camera.position.y, 10.0f);
-        t.scale.set(1.2f, 1.4f);
+        t.scale.set(4f, 8f);
     }
 
     public OrthographicCamera getCamera() {

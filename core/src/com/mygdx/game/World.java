@@ -38,7 +38,7 @@ public class World {
     }
 
     public void create() {
-//        createBackground();
+        createBackground();
         generateLevel();
         createCamera(player);
 
@@ -122,6 +122,8 @@ public class World {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
+
+        //Habria que crear muchos
         texture.region = Assets.background;
 
         entity.add(background);

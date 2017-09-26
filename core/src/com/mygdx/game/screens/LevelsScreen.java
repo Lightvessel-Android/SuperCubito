@@ -44,10 +44,8 @@ public class LevelsScreen extends ScreenAdapter {
         main = new Table(Assets.skin);
         main.setFillParent(true);
         main.setBackground(new TextureRegionDrawable(Assets.background));
-        main.row();
-        main.pad(10F, 30F, 10F, 10F);
+        main.pad(10f);
         main.top().left();
-        main.row();
         generateLevels();
 
         scroll = new ScrollPane(main);
@@ -73,7 +71,9 @@ public class LevelsScreen extends ScreenAdapter {
             });
             main.add(button).size(100, 75).spaceBottom(20).spaceRight(20);
 
-            if((i+1) % 5 == 0)
+            int countMax = (int) (stage.getWidth() / 100);
+
+            if((i+1) % countMax == 0)
                 main.row();
         }
     }

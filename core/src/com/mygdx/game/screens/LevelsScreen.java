@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.utils.Assets;
@@ -28,6 +29,8 @@ public class LevelsScreen extends ScreenAdapter {
 
     private Table main;
 
+    private ScrollPane scroll;
+
     public static int actualLevel = 0;
 
     private OrthographicCamera guiCam;
@@ -38,19 +41,20 @@ public class LevelsScreen extends ScreenAdapter {
         guiCam.position.set(320 / 2, 480 / 2, 0);
         stage = new Stage(new ScreenViewport());
 
-
         main = new Table(Assets.skin);
         main.setFillParent(true);
-
         main.setBackground(new TextureRegionDrawable(Assets.background));
         main.row();
-        main.pad(10F, 10F, 10F, 0F);
+        main.pad(10F, 30F, 10F, 10F);
         main.top().left();
         main.row();
-
-
         generateLevels();
-        stage.addActor(main);
+
+        scroll = new ScrollPane(main);
+        scroll.setFillParent(true);
+        scroll.setOverscroll(false, false);
+
+        stage.addActor(scroll);
     }
 
     private void generateLevels() {
@@ -69,9 +73,8 @@ public class LevelsScreen extends ScreenAdapter {
             });
             main.add(button).size(100, 75).spaceBottom(20).spaceRight(20);
 
-            if (main.getCell(button).isEndRow()) {
-               main.row();
-            }
+            if((i+1) % 5 == 0)
+                main.row();
         }
     }
 

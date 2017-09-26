@@ -163,6 +163,10 @@ public class World {
         engine.addEntity(entity);
     }
 
+    private void createDiagonalEnemy(float x, float y){
+        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY / 2, EnemyComponent.VELOCITY / 2));
+    }
+
     private void createVerticalEnemy(float x, float y) {
         createLinearEnemy(x, y, new Vector2(0, EnemyComponent.VELOCITY));
     }
@@ -260,6 +264,9 @@ public class World {
                         break;
                     case -175308801:
                         createVerticalEnemy(posX, posY);
+                        break;
+                    case 65535:
+                        createDiagonalEnemy(posX, posY);
                         break;
                     case -420001025:
                         createCoin(posX, posY);

@@ -87,6 +87,22 @@ public class Assets {
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
 
 
     }

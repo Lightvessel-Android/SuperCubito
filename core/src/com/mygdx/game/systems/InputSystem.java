@@ -57,37 +57,37 @@ public class InputSystem extends EntitySystem {
 
         MovementComponent mov = mm.get(player);
 
-        System.out.println(mov.velocity);
+//        System.out.println(mov.velocity);
 
         TransformComponent pos = tr.get(player);
 
-        if(Gdx.input.isTouched()) {
-            float x = Gdx.input.getX();
-            float y = Gdx.input.getY();
-
-            playerPos.set(pos.pos.x, pos.pos.y);
-            touch.set(x, y);
-
-            touch.sub(playerPos.x, playerPos.y).nor();
-
-            mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
-        } else {
-            mov.velocity.set(0, 0);
-        }
-
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-//            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
-//            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
-//        else
-//            velocity.set(0, 0);
+//        if(Gdx.input.isTouched()) {
+//            float x = Gdx.input.getX();
+//            float y = Gdx.input.getY();
 //
-//        mov.velocity.set(velocity);
+//            playerPos.set(pos.pos.x, pos.pos.y);
+//            touch.set(x, y);
+//
+//            touch.sub(playerPos.x, playerPos.y).nor();
+//
+//            mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
+//        } else {
+//            mov.velocity.set(0, 0);
+//        }
+
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
+        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
+        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
+            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
+        else
+            velocity.set(0, 0);
+
+        mov.velocity.set(velocity);
     }
 
 

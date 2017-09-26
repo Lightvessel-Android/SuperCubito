@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -162,7 +163,15 @@ public class World {
         engine.addEntity(entity);
     }
 
-    private void createEnemy(float x, float y) {
+    private void createVerticalEnemy(float x, float y) {
+        createLinearEnemy(x, y, new Vector2(0, EnemyComponent.VELOCITY));
+    }
+
+    private void createHorizontalEnemy(float x, float y) {
+        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY, 0));
+    }
+
+    private void createLinearEnemy(float x, float y, Vector2 speed) {
         Entity entity = engine.createEntity();
 
         EnemyComponent enemy = engine.createComponent(EnemyComponent.class);
@@ -171,7 +180,7 @@ public class World {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-        movement.velocity.x = EnemyComponent.VELOCITY;
+        movement.velocity.set(speed);
 
         texture.region = Assets.enemy;
 
@@ -247,13 +256,16 @@ public class World {
                         player = createPlayer(posX, posY);
                         break;
                     case -16776961:
-                        createEnemy(posX, posY);
+                        createHorizontalEnemy(posX, posY);
+                        break;
+                    case -175308801:
+                        createVerticalEnemy(posX, posY);
                         break;
                     case -420001025:
                         createCoin(posX, posY);
                         break;
                     default:
-                        System.out.print(pixel);
+                        System.out.println(pixel);
                         break;
                 }
             }

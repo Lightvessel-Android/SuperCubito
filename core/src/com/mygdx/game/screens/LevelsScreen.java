@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -42,15 +43,15 @@ public class LevelsScreen extends ScreenAdapter {
         stage = new Stage(new ScreenViewport());
 
         main = new Table(Assets.skin);
-        main.setFillParent(true);
-        main.setBackground(new TextureRegionDrawable(Assets.background));
-        main.pad(10f);
-        main.top().left();
         generateLevels();
+        main.setHeight(stage.getHeight());
+        main.setWidth(stage.getWidth());
+
+        main.setBackground(new TextureRegionDrawable(Assets.background));
 
         scroll = new ScrollPane(main);
         scroll.setFillParent(true);
-        scroll.setOverscroll(false, false);
+        scroll.setOverscroll(false, true);
 
         stage.addActor(scroll);
     }
@@ -71,7 +72,7 @@ public class LevelsScreen extends ScreenAdapter {
             });
             main.add(button).size(100, 75).spaceBottom(20).spaceRight(20);
 
-            int countMax = (int) (stage.getWidth() / 100);
+            int countMax = (int) (stage.getWidth() / 120);
 
             if((i+1) % countMax == 0)
                 main.row();

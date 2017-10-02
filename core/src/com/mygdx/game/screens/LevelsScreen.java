@@ -51,7 +51,7 @@ public class LevelsScreen extends ScreenAdapter {
 
         scroll = new ScrollPane(main);
         scroll.setFillParent(true);
-        scroll.setOverscroll(false, true);
+        scroll.setOverscroll(false, false);
 
         stage.addActor(scroll);
     }

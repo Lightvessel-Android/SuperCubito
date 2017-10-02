@@ -164,7 +164,7 @@ public class World {
     }
 
     private void createDiagonalEnemy(float x, float y){
-        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY, EnemyComponent.VELOCITY));
+        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY / 2, EnemyComponent.VELOCITY / 2));
     }
 
     private void createVerticalEnemy(float x, float y) {

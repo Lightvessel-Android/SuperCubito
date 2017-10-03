@@ -21,13 +21,12 @@ public class MainMenuScreen extends ScreenAdapter {
 
     public MainMenuScreen(SuperCubito gameC) {
         game = gameC;
-
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
         playBounds = new Rectangle(60, 50, 200, 200);
-        touchPoint = new Vector3();
-
         soundBounds = new Rectangle(0, 0, 64, 64);
+
+        touchPoint = new Vector3();
     }
 
     @Override
@@ -45,20 +44,27 @@ public class MainMenuScreen extends ScreenAdapter {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (playBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound);
-                game.setScreen(new LevelsScreen(game));
-                return;
-            }
+            checkPlayButton();
 
-            if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound);
-                Settings.soundEnabled = !Settings.soundEnabled;
-                if (Settings.soundEnabled)
-                    Assets.music.play();
-                else
-                    Assets.music.pause();
-            }
+            checkSoundButton();
+        }
+    }
+
+    private void checkSoundButton() {
+        if (soundBounds.contains(touchPoint.x, touchPoint.y)) {
+            Assets.playSound(Assets.clickSound);
+            Settings.soundEnabled = !Settings.soundEnabled;
+            if (Settings.soundEnabled)
+                Assets.music.play();
+            else
+                Assets.music.pause();
+        }
+    }
+
+    private void checkPlayButton() {
+        if (playBounds.contains(touchPoint.x, touchPoint.y)) {
+            Assets.playSound(Assets.clickSound);
+            game.setScreen(new LevelsScreen(game));
         }
     }
 

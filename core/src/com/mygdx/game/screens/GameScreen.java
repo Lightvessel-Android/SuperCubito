@@ -1,30 +1,27 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.systems.EnemySystem;
-import com.mygdx.game.systems.InputSystem;
-import com.mygdx.game.utils.Assets;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.states.GameState;
-import com.mygdx.game.systems.AnimationSystem;
 import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
 import com.mygdx.game.systems.CameraSystem;
 import com.mygdx.game.systems.CollisionSystem;
+import com.mygdx.game.systems.EnemySystem;
+import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.systems.StateSystem;
+import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
 import static com.mygdx.game.screens.LevelsScreen.actualLevel;
@@ -89,7 +86,6 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new PlayerSystem(world));
         engine.addSystem(new RenderingSystem(game.batcher));
         engine.addSystem(new StateSystem());
-        engine.addSystem(new AnimationSystem());
         engine.addSystem(new EnemySystem());
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
@@ -138,37 +134,40 @@ public class GameScreen extends ScreenAdapter {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (pauseBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound);
-                state = GAME_PAUSED;
-                pauseSystems();
-                return;
-            }
+            checkPauseButton();
         }
 
-        Application.ApplicationType appType = Gdx.app.getType();
+//        Application.ApplicationType appType = Gdx.app.getType();
+//
+//        float accelX = 0.0f;
+//
+//        if (appType == Application.ApplicationType.Android || appType == Application.ApplicationType.iOS) {
+//            accelX = Gdx.input.getAccelerometerX();
+//        } else {
+//            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) accelX = 5f;
+//            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) accelX = -5f;
+//        }
+//
+//        engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
-        float accelX = 0.0f;
-
-        if (appType == Application.ApplicationType.Android || appType == Application.ApplicationType.iOS) {
-            accelX = Gdx.input.getAccelerometerX();
-        } else {
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) accelX = 5f;
-            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) accelX = -5f;
-        }
-
-        engine.getSystem(PlayerSystem.class).setAccelX(accelX);
-
-        if (world.state == WORLD_STATE_NEXT_LEVEL) {
+        if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
             levelMax = max(levelMax, actualLevel +1);
             game.setScreen(new LevelsScreen(game));
             Settings.save();
         }
 
-        if (world.state == WORLD_STATE_GAME_OVER) {
+        if (world.state.equals(WORLD_STATE_GAME_OVER)) {
             state = GAME_OVER;
             pauseSystems();
             Settings.save();
+        }
+    }
+
+    private void checkPauseButton() {
+        if (pauseBounds.contains(touchPoint.x, touchPoint.y)) {
+            Assets.playSound(Assets.clickSound);
+            state = GAME_PAUSED;
+            pauseSystems();
         }
     }
 
@@ -176,18 +175,24 @@ public class GameScreen extends ScreenAdapter {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
-            if (resumeBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound);
-                state = GAME_RUNNING;
-                resumeSystems();
-                return;
-            }
+            checkResumeButton();
 
-            if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
-                Assets.playSound(Assets.clickSound);
-                game.setScreen(new MainMenuScreen(game));
-                return;
-            }
+            checkQuitButton();
+        }
+    }
+
+    private void checkQuitButton() {
+        if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
+            Assets.playSound(Assets.clickSound);
+            game.setScreen(new MainMenuScreen(game));
+        }
+    }
+
+    private void checkResumeButton() {
+        if (resumeBounds.contains(touchPoint.x, touchPoint.y)) {
+            Assets.playSound(Assets.clickSound);
+            state = GAME_RUNNING;
+            resumeSystems();
         }
     }
 
@@ -219,9 +224,6 @@ public class GameScreen extends ScreenAdapter {
             case GAME_PAUSED:
                 presentPaused();
                 break;
-            case GAME_LEVEL_END:
-                presentLevelEnd();
-                break;
             case GAME_OVER:
                 presentGameOver();
                 break;
@@ -241,19 +243,6 @@ public class GameScreen extends ScreenAdapter {
         game.batcher.draw(Assets.pauseMenu, 160 - 192 / 2, 0 / 2, 192, 96);
     }
 
-    private void presentLevelEnd () {
-        String topText = "the princess is ...";
-        String bottomText = "in another castle!";
-
-        layout.setText(Assets.font, topText);
-        float topWidth = layout.width;
-
-        layout.setText(Assets.font, bottomText);
-        float bottomWidth = layout.width;
-        Assets.font.draw(game.batcher, topText, 160 - topWidth / 2, 480 - 40);
-        Assets.font.draw(game.batcher, bottomText, 160 - bottomWidth / 2, 40);
-    }
-
     private void presentGameOver () {
         game.batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
     }
@@ -264,7 +253,6 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(MovementSystem.class).setProcessing(false);
         engine.getSystem(BoundsSystem.class).setProcessing(false);
         engine.getSystem(StateSystem.class).setProcessing(false);
-        engine.getSystem(AnimationSystem.class).setProcessing(false);
         engine.getSystem(EnemySystem.class).setProcessing(false);
         engine.getSystem(InputSystem.class).setProcessing(false);
 
@@ -276,7 +264,6 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(MovementSystem.class).setProcessing(true);
         engine.getSystem(BoundsSystem.class).setProcessing(true);
         engine.getSystem(StateSystem.class).setProcessing(true);
-        engine.getSystem(AnimationSystem.class).setProcessing(true);
         engine.getSystem(EnemySystem.class).setProcessing(true);
         engine.getSystem(InputSystem.class).setProcessing(true);
     }

@@ -7,8 +7,10 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
@@ -26,11 +28,11 @@ public class InputSystem extends EntitySystem {
 
     private Engine engine;
 
-    private Vector2 touch;
+    private Vector3 touch;
     private Vector2 velocity;
 
     Vector2 playerPos;
-
+    private CameraSystem cameraSystem;
 
     private Entity player;
 
@@ -45,8 +47,9 @@ public class InputSystem extends EntitySystem {
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
+        cameraSystem = engine.getSystem(CameraSystem.class);
 
-        touch = new Vector2(0, 0);
+        touch = new Vector3(0, 0, 0);
         velocity = new Vector2(0, 0);
         playerPos = new Vector2(0, 0);
     }
@@ -57,37 +60,35 @@ public class InputSystem extends EntitySystem {
 
         MovementComponent mov = mm.get(player);
 
-//        System.out.println(mov.velocity);
-
         TransformComponent pos = tr.get(player);
 
-//        if(Gdx.input.isTouched()) {
-//            float x = Gdx.input.getX();
-//            float y = Gdx.input.getY();
-//
-//            playerPos.set(pos.pos.x, pos.pos.y);
-//            touch.set(x, y);
-//
-//            touch.sub(playerPos.x, playerPos.y).nor();
-//
-//            mov.velocity.set(touch).scl(PlayerComponent.MOVE_VELOCITY);
-//        } else {
-//            mov.velocity.set(0, 0);
-//        }
+        if(Gdx.input.isTouched()) {
+
+            // hay que pedir el cam component posta.
+            cameraSystem.unproject(touch.set(Gdx.input.getX(), Gdx.input.getY(), 0));
+
+            playerPos.set(pos.pos.x, pos.pos.y);
+
+            touch.sub(playerPos.x, playerPos.y, 0).nor();
+
+            mov.velocity.set(touch.x, touch.y).scl(PlayerComponent.MOVE_VELOCITY);
+        } else {
+            mov.velocity.set(0, 0);
+        }
 
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
-        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
-        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
-        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
-            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
-        else
-            velocity.set(0, 0);
-
-        mov.velocity.set(velocity);
+//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
+//            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
+//        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+//            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
+//        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
+//            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
+//        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
+//            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
+//        else
+//            velocity.set(0, 0);
+//
+//        mov.velocity.set(velocity);
     }
 
 

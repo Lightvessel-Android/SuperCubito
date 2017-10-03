@@ -6,9 +6,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
@@ -41,6 +40,8 @@ public class CollisionSystem extends EntitySystem {
 
     private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
 
+    private Array<Entity> enemiesCol;
+
 
     public CollisionSystem(World world, CollisionListener listener) {
         this.world = world;
@@ -62,11 +63,15 @@ public class CollisionSystem extends EntitySystem {
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
         blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
         exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
+
+        enemiesCol = new Array<Entity>();
     }
 
     @Override
     public void update(float deltaTime) {
         PlayerSystem playerSystem = engine.getSystem(PlayerSystem.class);
+
+        enemiesCol.clear();
 
         for (int i = 0; i < players.size(); ++i) {
             Entity player = players.get(i);
@@ -110,7 +115,10 @@ public class CollisionSystem extends EntitySystem {
                     MovementComponent enemyMov = mm.get(enemy);
 
                     if (isCollide(enemy, block)) {
-                        enemyMov.velocity.scl(-1);
+                        if(!enemiesCol.contains(enemy, false)) {
+                            enemiesCol.add(enemy);
+                        }
+//                        enemyMov.velocity.scl(-1);
                     }
                 }
             }
@@ -151,4 +159,13 @@ public class CollisionSystem extends EntitySystem {
 
         return bounds1.bounds.overlaps(bounds2.bounds);
     }
+
+    public Array<Entity> getEnemiesCol() {
+        return enemiesCol;
+    }
+
+    public void setEnemiesCol(Array<Entity> enemiesCol) {
+        this.enemiesCol = enemiesCol;
+    }
+
 }

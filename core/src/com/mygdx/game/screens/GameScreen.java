@@ -48,7 +48,6 @@ public class GameScreen extends ScreenAdapter {
     PooledEngine engine;
 
     private Pixmap level;
-    private GlyphLayout layout = new GlyphLayout();
 
     private GameState state;
 
@@ -136,19 +135,6 @@ public class GameScreen extends ScreenAdapter {
 
             checkPauseButton();
         }
-
-//        Application.ApplicationType appType = Gdx.app.getType();
-//
-//        float accelX = 0.0f;
-//
-//        if (appType == Application.ApplicationType.Android || appType == Application.ApplicationType.iOS) {
-//            accelX = Gdx.input.getAccelerometerX();
-//        } else {
-//            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_LEFT)) accelX = 5f;
-//            if (Gdx.input.isKeyPressed(Input.Keys.DPAD_RIGHT)) accelX = -5f;
-//        }
-//
-//        engine.getSystem(PlayerSystem.class).setAccelX(accelX);
 
         if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
             levelMax = max(levelMax, actualLevel +1);

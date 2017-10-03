@@ -61,9 +61,6 @@ public class Assets {
         font = generator.generateFont(parameter);
         generator.dispose();
 
-//        font = new BitmapFont(Gdx.files.internal("data/font.fnt"), Gdx.files.internal("data/font.png"), false);
-
-
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
@@ -80,6 +77,7 @@ public class Assets {
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level2.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level3.bmp")));
+
 
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));

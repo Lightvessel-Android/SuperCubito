@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.World;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
@@ -17,7 +16,6 @@ public class PlayerSystem extends IteratingSystem {
             TransformComponent.class,
             MovementComponent.class).get();
 
-    private float accelX = 0.0f;
     private World world;
 
     private ComponentMapper<PlayerComponent> pm;
@@ -36,14 +34,9 @@ public class PlayerSystem extends IteratingSystem {
         mm = ComponentMapper.getFor(MovementComponent.class);
     }
 
-    public void setAccelX(float accelX) {
-        this.accelX = accelX;
-    }
-
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        accelX = 0.0f;
     }
 
     @Override

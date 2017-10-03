@@ -83,63 +83,75 @@ public class CollisionSystem extends EntitySystem {
                 continue;
             }
 
-            for (int j = 0; j < enemies.size(); ++j) {
-                    Entity enemy = enemies.get(j);
+            checkEnemiesCollision(playerSystem, player);
 
-                    if (isCollide(enemy, player)) {
-                        playerSystem.dead(player);
-                        listener.dead();
-                    }
-                }
+            checkCoinsCollision(player);
 
-            for (int j = 0; j < coins.size(); ++j) {
-                Entity coin = coins.get(j);
+            checkBlocksCollision(playerSystem, player, deltaTime);
 
-                if (isCollide(coin, player)) {
-                    engine.removeEntity(coin);
-                    listener.coin();
-                }
+            checkExitsCollision(player);
+        }
+    }
+
+    private void checkExitsCollision(Entity player) {
+        for (int j = 0; j < exits.size(); ++j) {
+            Entity exit = exits.get(j);
+
+            if (isCollide(exit, player) && coins.size() == 0) {
+                world.state = WORLD_STATE_NEXT_LEVEL;
+            }
+        }
+    }
+
+    private void checkBlocksCollision(PlayerSystem playerSystem, Entity player, float deltaTime) {
+        for (int j = 0; j < blocks.size(); ++j) {
+            Entity block = blocks.get(j);
+
+
+            if (isCollide(block, player)) {
+                playerSystem.hitBlock(player);
             }
 
-            for (int j = 0; j < blocks.size(); ++j) {
-                Entity block = blocks.get(j);
+            for (int k = 0; k < enemies.size(); ++k) {
+                Entity enemy = enemies.get(k);
 
-
-                if (isCollide(block, player)) {
-                    playerSystem.hitBlock(player);
-                }
-
-                for (int k = 0; k < enemies.size(); ++k) {
-                    Entity enemy = enemies.get(k);
-
-                    MovementComponent enemyMov = mm.get(enemy);
-
-                    if (isNextPositionColide(enemy, block, deltaTime)) {
-                        if(!enemiesCol.contains(enemy, false)) {
-                            enemiesCol.add(enemy);
-                        }
-//                        enemyMov.velocity.scl(-1);
+                if (isNextPositionColide(enemy, block, deltaTime)) {
+                    if(!enemiesCol.contains(enemy, false)) {
+                        enemiesCol.add(enemy);
                     }
-                }
-            }
-
-            for (int j = 0; j < exits.size(); ++j) {
-                Entity exit = exits.get(j);
-
-                if (isCollide(exit, player) && coins.size() == 0) {
-                    world.state = WORLD_STATE_NEXT_LEVEL;
                 }
             }
         }
     }
 
+    private void checkCoinsCollision(Entity player) {
+        for (int j = 0; j < coins.size(); ++j) {
+            Entity coin = coins.get(j);
+
+            if (isCollide(coin, player)) {
+                engine.removeEntity(coin);
+                listener.coin();
+            }
+        }
+    }
+
+    private void checkEnemiesCollision(PlayerSystem playerSystem, Entity player) {
+        for (int j = 0; j < enemies.size(); ++j) {
+            Entity enemy = enemies.get(j);
+
+            if (isCollide(enemy, player)) {
+                playerSystem.dead(player);
+                listener.dead();
+            }
+        }
+    }
+
     private boolean isNextPositionColide(Entity enemy, Entity block, float delta) {
-        TransformComponent trEnemy= tm.get(enemy);
         BoundsComponent bounds1 = bm.get(block);
         BoundsComponent bounds2 = bm.get(enemy);
         MovementSystem movementSystem = engine.getSystem(MovementSystem.class);
 
-        Vector2 initialPos = movementSystem.nextPosition(enemy, delta);//trEnemy.lastPosition;
+        Vector2 initialPos = movementSystem.nextPosition(enemy, delta);
 
 
         bounds2.bounds.setPosition(initialPos);
@@ -147,19 +159,6 @@ public class CollisionSystem extends EntitySystem {
 
 
         return bounds1.bounds.overlaps(bounds2.bounds);
-
-//        Vector2 direction = (new Vector2(trEnemy.pos.x - trEnemy.lastPosition.x, trEnemy.pos.y - trEnemy.lastPosition.y));
-//
-//        float norma = direction.len();
-//
-//        direction.nor().scl(0.5f);
-//
-//        while(direction.len() <= norma) {
-//            if(bounds1.bounds.contains(initialPos.x + direction.x, initialPos.y + direction.y)) return true;
-//            direction.add(0.5f, 0.5f);
-//        }
-//
-//        return false;
     }
 
     private boolean isCollide(Entity entity1, Entity entity2) {

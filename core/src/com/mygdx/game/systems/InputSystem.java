@@ -64,7 +64,6 @@ public class InputSystem extends EntitySystem {
 
         if(Gdx.input.isTouched()) {
 
-            // hay que pedir el cam component posta.
             cameraSystem.unproject(touch.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
             playerPos.set(pos.pos.x, pos.pos.y);

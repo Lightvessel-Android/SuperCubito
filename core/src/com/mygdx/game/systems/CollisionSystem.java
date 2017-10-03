@@ -114,7 +114,7 @@ public class CollisionSystem extends EntitySystem {
 
                     MovementComponent enemyMov = mm.get(enemy);
 
-                    if (isCollide(enemy, block)) {
+                    if (isNextPositionColide(enemy, block, deltaTime)) {
                         if(!enemiesCol.contains(enemy, false)) {
                             enemiesCol.add(enemy);
                         }
@@ -133,24 +133,33 @@ public class CollisionSystem extends EntitySystem {
         }
     }
 
-    private boolean isCircleColide(Entity enemy, Entity block) {
+    private boolean isNextPositionColide(Entity enemy, Entity block, float delta) {
         TransformComponent trEnemy= tm.get(enemy);
         BoundsComponent bounds1 = bm.get(block);
+        BoundsComponent bounds2 = bm.get(enemy);
+        MovementSystem movementSystem = engine.getSystem(MovementSystem.class);
 
-        Vector2 initialPos = trEnemy.lastPosition;
+        Vector2 initialPos = movementSystem.nextPosition(enemy, delta);//trEnemy.lastPosition;
 
-        Vector2 direction = (new Vector2(trEnemy.pos.x - trEnemy.lastPosition.x, trEnemy.pos.y - trEnemy.lastPosition.y));
 
-        float norma = direction.len();
+        bounds2.bounds.setPosition(initialPos);
 
-        direction.nor().scl(0.5f);
 
-        while(direction.len() <= norma) {
-            if(bounds1.bounds.contains(initialPos.x + direction.x, initialPos.y + direction.y)) return true;
-            direction.add(0.5f, 0.5f);
-        }
 
-        return false;
+        return bounds1.bounds.overlaps(bounds2.bounds);
+
+//        Vector2 direction = (new Vector2(trEnemy.pos.x - trEnemy.lastPosition.x, trEnemy.pos.y - trEnemy.lastPosition.y));
+//
+//        float norma = direction.len();
+//
+//        direction.nor().scl(0.5f);
+//
+//        while(direction.len() <= norma) {
+//            if(bounds1.bounds.contains(initialPos.x + direction.x, initialPos.y + direction.y)) return true;
+//            direction.add(0.5f, 0.5f);
+//        }
+//
+//        return false;
     }
 
     private boolean isCollide(Entity entity1, Entity entity2) {

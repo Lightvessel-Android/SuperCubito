@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.mygdx.game.World;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
@@ -16,19 +15,13 @@ public class PlayerSystem extends IteratingSystem {
             TransformComponent.class,
             MovementComponent.class).get();
 
-    private World world;
-
-    private ComponentMapper<PlayerComponent> pm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<MovementComponent> mm;
 
-    public PlayerSystem(World worldD) {
+    public PlayerSystem() {
         super(family);
 
-        world = worldD;
-
-        pm = ComponentMapper.getFor(PlayerComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
         mm = ComponentMapper.getFor(MovementComponent.class);

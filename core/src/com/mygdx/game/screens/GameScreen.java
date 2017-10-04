@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.SuperCubito;
@@ -20,7 +19,6 @@ import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
-import com.mygdx.game.systems.StateSystem;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
@@ -53,10 +51,9 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen (SuperCubito game, Pixmap pixmap) {
         this.game = game;
-
         level = pixmap;
-
         state = GAME_RUNNING;
+
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
         touchPoint = new Vector3();
@@ -82,9 +79,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new CollisionSystem(world, collisionListener));
-        engine.addSystem(new PlayerSystem(world));
+        engine.addSystem(new PlayerSystem());
         engine.addSystem(new RenderingSystem(game.batcher));
-        engine.addSystem(new StateSystem());
         engine.addSystem(new EnemySystem());
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
@@ -92,15 +88,11 @@ public class GameScreen extends ScreenAdapter {
         world.create();
 
         pauseBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
-
         resumeBounds = new Rectangle(160 - 96, 36, 192, 36);
-
         quitBounds = new Rectangle(160 - 96,0, 192, 36);
     }
 
     public void update (float deltaTime) {
-        if (deltaTime > 0.1f) deltaTime = 0.1f;
-
         engine.update(deltaTime);
 
         switch (state) {
@@ -108,7 +100,7 @@ public class GameScreen extends ScreenAdapter {
                 updateReady();
                 break;
             case GAME_RUNNING:
-                updateRunning(deltaTime);
+                updateRunning();
                 break;
             case GAME_PAUSED:
                 updatePaused();
@@ -129,7 +121,7 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    private void updateRunning (float deltaTime) {
+    private void updateRunning () {
         if (Gdx.input.justTouched()) {
             guiCam.unproject(touchPoint.set(Gdx.input.getX(), Gdx.input.getY(), 0));
 
@@ -238,7 +230,6 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(CollisionSystem.class).setProcessing(false);
         engine.getSystem(MovementSystem.class).setProcessing(false);
         engine.getSystem(BoundsSystem.class).setProcessing(false);
-        engine.getSystem(StateSystem.class).setProcessing(false);
         engine.getSystem(EnemySystem.class).setProcessing(false);
         engine.getSystem(InputSystem.class).setProcessing(false);
 
@@ -249,7 +240,6 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(CollisionSystem.class).setProcessing(true);
         engine.getSystem(MovementSystem.class).setProcessing(true);
         engine.getSystem(BoundsSystem.class).setProcessing(true);
-        engine.getSystem(StateSystem.class).setProcessing(true);
         engine.getSystem(EnemySystem.class).setProcessing(true);
         engine.getSystem(InputSystem.class).setProcessing(true);
     }

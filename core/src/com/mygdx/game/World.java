@@ -44,7 +44,6 @@ public class World {
         CoinTransformer coinTransformer = new CoinTransformer(engine, diagonalEnemyTransformer);
         WinTransformer winTransformer = new WinTransformer(engine, coinTransformer);
 
-
         firstTransformer = new PlayerTransformer(engine, this, winTransformer);
     }
 
@@ -56,7 +55,6 @@ public class World {
 
         state = WORLD_STATE_RUNNING;
     }
-
 
     private void createCamera(Entity target) {
         Entity entity = engine.createEntity();
@@ -91,6 +89,7 @@ public class World {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+
                 int pixel = level.getPixel(x, y);
                 float posX = x * CELL_TO_METERS;
                 float posY = y * CELL_TO_METERS;

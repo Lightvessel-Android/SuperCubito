@@ -16,9 +16,7 @@ public class BackgroundSystem extends IteratingSystem {
     public BackgroundSystem() {
         super(Family.all(BackgroundComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
-
     }
-
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {

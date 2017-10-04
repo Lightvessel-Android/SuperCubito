@@ -5,8 +5,9 @@ import com.badlogic.ashley.core.PooledEngine;
 public abstract class EntityTransformer {
 
     protected PooledEngine engine;
-    protected EntityTransformer next;
     protected float color;
+
+    private EntityTransformer next;
 
     public EntityTransformer(PooledEngine engine, EntityTransformer next){
         this.next = next;

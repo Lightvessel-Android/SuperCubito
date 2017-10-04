@@ -6,30 +6,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.TransformComponent;
-import com.mygdx.game.screens.GameScreen;
-import com.mygdx.game.states.GameState;
-import com.mygdx.game.utils.Assets;
-
-import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
 
 public class InputSystem extends EntitySystem {
 
     private Engine engine;
 
     private Vector3 touch;
-    private Vector2 velocity;
 
     Vector2 playerPos;
     private CameraSystem cameraSystem;
@@ -50,7 +38,6 @@ public class InputSystem extends EntitySystem {
         cameraSystem = engine.getSystem(CameraSystem.class);
 
         touch = new Vector3(0, 0, 0);
-        velocity = new Vector2(0, 0);
         playerPos = new Vector2(0, 0);
     }
 
@@ -74,20 +61,6 @@ public class InputSystem extends EntitySystem {
         } else {
             mov.velocity.set(0, 0);
         }
-
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT))
-//            velocity.set(- PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-//            velocity.set(PlayerComponent.MOVE_VELOCITY, 0);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.DOWN))
-//            velocity.set(0, -PlayerComponent.MOVE_VELOCITY);
-//        else if (Gdx.input.isKeyPressed(Input.Keys.UP))
-//            velocity.set(0, PlayerComponent.MOVE_VELOCITY);
-//        else
-//            velocity.set(0, 0);
-//
-//        mov.velocity.set(velocity);
     }
 
 

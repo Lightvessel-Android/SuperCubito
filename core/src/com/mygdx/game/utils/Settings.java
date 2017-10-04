@@ -21,7 +21,7 @@ public class Settings {
 
             levelMax = Integer.parseInt(strings[1]);
 
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
         }
     }
 
@@ -30,7 +30,7 @@ public class Settings {
             FileHandle filehandle = Gdx.files.external(file);
 
             filehandle.writeString(Integer.toString(levelMax)+"\n", true);
-        } catch (Throwable e) {
+        } catch (Throwable ignored) {
         }
     }
 

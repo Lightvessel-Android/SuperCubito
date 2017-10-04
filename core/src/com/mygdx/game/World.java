@@ -3,26 +3,24 @@ package com.mygdx.game;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.components.BackgroundComponent;
-import com.mygdx.game.components.BlockComponent;
-import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CameraComponent;
-import com.mygdx.game.components.CoinComponent;
-import com.mygdx.game.components.EnemyComponent;
-import com.mygdx.game.components.MovementComponent;
-import com.mygdx.game.components.PlayerComponent;
-import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
-import com.mygdx.game.components.WinComponent;
 import com.mygdx.game.states.WorldState;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.utils.Assets;
+import com.mygdx.game.utils.transformers.BlockTransformer;
+import com.mygdx.game.utils.transformers.CoinTransformer;
+import com.mygdx.game.utils.transformers.DiagonalEnemyTransformer;
+import com.mygdx.game.utils.transformers.EntityTransformer;
+import com.mygdx.game.utils.transformers.HorizontalEnemyTransformer;
+import com.mygdx.game.utils.transformers.PlayerTransformer;
+import com.mygdx.game.utils.transformers.VerticalEnemyTransformer;
+import com.mygdx.game.utils.transformers.WinTransformer;
 
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
 import static com.mygdx.game.systems.RenderingSystem.CELL_TO_METERS;
-import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
 
 public class World {
     public WorldState state;
@@ -33,74 +31,30 @@ public class World {
 
     private Entity player;
 
+    private EntityTransformer firstTransformer;
+
     public World (PooledEngine engine, Pixmap pixmap) {
         this.engine = engine;
         level = pixmap;
+
+        BlockTransformer blockTransformer = new BlockTransformer(engine, null);
+        HorizontalEnemyTransformer horizontalEnemyTransformer = new HorizontalEnemyTransformer(engine, blockTransformer);
+        VerticalEnemyTransformer verticalEnemyTransformer = new VerticalEnemyTransformer(engine, horizontalEnemyTransformer);
+        DiagonalEnemyTransformer diagonalEnemyTransformer = new DiagonalEnemyTransformer(engine, verticalEnemyTransformer);
+        CoinTransformer coinTransformer = new CoinTransformer(engine, diagonalEnemyTransformer);
+        WinTransformer winTransformer = new WinTransformer(engine, coinTransformer);
+
+
+        firstTransformer = new PlayerTransformer(engine, this, winTransformer);
     }
 
     public void create() {
         createBackground();
-        generateLevel();
+        generateLevel(level.getWidth(), level.getHeight());
+
         createCamera(player);
 
         state = WORLD_STATE_RUNNING;
-    }
-
-    private Entity createPlayer(float x, float y) {
-        Entity entity = engine.createEntity();
-
-        PlayerComponent player = engine.createComponent(PlayerComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        MovementComponent movement = engine.createComponent(MovementComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        StateComponent state = engine.createComponent(StateComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        texture.region = Assets.player;
-
-        bounds.bounds.width = PlayerComponent.WIDTH;
-        bounds.bounds.height = PlayerComponent.HEIGHT;
-
-        position.pos.set(x, y, 0.0f);
-
-        state.set(PlayerComponent.STATE_ALIVE);
-
-        entity.add(player);
-        entity.add(bounds);
-        entity.add(movement);
-        entity.add(position);
-        entity.add(state);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-
-        return entity;
-    }
-
-    private void createCoin(float x, float y) {
-        Entity entity = engine.createEntity();
-        CoinComponent coin = engine.createComponent(CoinComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        StateComponent state = engine.createComponent(StateComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        texture.region = Assets.coin;
-
-        bounds.bounds.width = CoinComponent.WIDTH;
-        bounds.bounds.height = CoinComponent.HEIGHT;
-
-        position.pos.set(x, y, 3.0f);
-
-        state.set(CoinComponent.STATE_NORMAL);
-
-        entity.add(coin);
-        entity.add(bounds);
-        entity.add(position);
-        entity.add(texture);
-        entity.add(state);
-
-        engine.addEntity(entity);
     }
 
 
@@ -132,147 +86,21 @@ public class World {
         engine.addEntity(entity);
     }
 
-    private void createBlock(float x, float y) {
 
-        Entity entity = engine.createEntity();
-        BlockComponent block = engine.createComponent(BlockComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        texture.region = Assets.wallblock;
-
-
-        texture.region.setRegionWidth((int) (BlockComponent.WIDTH / PIXELS_TO_METERS));
-
-        texture.region.setRegionHeight((int) (BlockComponent.HEIGHT / PIXELS_TO_METERS));
-
-        bounds.bounds.width = BlockComponent.WIDTH;
-        bounds.bounds.height = BlockComponent.HEIGHT;
-
-
-        position.pos.set(x, y, 3.0f);
-
-        entity.add(block);
-        entity.add(bounds);
-        entity.add(position);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-    }
-
-    private void createDiagonalEnemy(float x, float y){
-        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY / 2, EnemyComponent.VELOCITY / 2));
-    }
-
-    private void createVerticalEnemy(float x, float y) {
-        createLinearEnemy(x, y, new Vector2(0, EnemyComponent.VELOCITY));
-    }
-
-    private void createHorizontalEnemy(float x, float y) {
-        createLinearEnemy(x, y, new Vector2(EnemyComponent.VELOCITY, 0));
-    }
-
-    private void createLinearEnemy(float x, float y, Vector2 speed) {
-        Entity entity = engine.createEntity();
-
-        EnemyComponent enemy = engine.createComponent(EnemyComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        MovementComponent movement = engine.createComponent(MovementComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        movement.velocity.set(speed);
-
-        texture.region = Assets.enemy;
-
-        bounds.bounds.width = EnemyComponent.WIDTH;
-        bounds.bounds.height = EnemyComponent.HEIGHT;
-
-        position.pos.set(x, y, 3.0f);
-
-        entity.add(enemy);
-        entity.add(bounds);
-        entity.add(movement);
-        entity.add(position);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-    }
-
-    private void createWinFloor(float x, float y) {
-
-        Entity entity = engine.createEntity();
-        WinComponent winBlock = engine.createComponent(WinComponent.class);
-        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
-        TransformComponent position = engine.createComponent(TransformComponent.class);
-        TextureComponent texture = engine.createComponent(TextureComponent.class);
-
-        texture.region = Assets.winBlock;
-
-        texture.region.setRegionWidth((int) (WinComponent.WIDTH / PIXELS_TO_METERS));
-
-        texture.region.setRegionHeight((int) (WinComponent.HEIGHT / PIXELS_TO_METERS));
-
-        bounds.bounds.width = WinComponent.WIDTH;
-        bounds.bounds.height = WinComponent.HEIGHT;
-
-        position.pos.set(x, y, 3.0f);
-
-        entity.add(winBlock);
-        entity.add(bounds);
-        entity.add(position);
-        entity.add(texture);
-
-        engine.addEntity(entity);
-    }
-
-    private void generateLevel() {
-
-        int width = level.getWidth();
-        int height = level.getHeight();
+    private void generateLevel(int width, int height) {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 int pixel = level.getPixel(x, y);
                 float posX = x * CELL_TO_METERS;
                 float posY = y * CELL_TO_METERS;
-                switch (pixel) {
-                    case -824246273:
-                        //Exterior
-                        break;
-                    case -1660965377:
-                        //suelo verde
-                        break;
-                    case -1:
-                        //suelo blanco de juego
-                        break;
-                    case -140769025:
-                        createWinFloor(posX, posY);
-                        break;
-                    case 255:
-                        createBlock(posX, posY);
-                        break;
-                    case 279280639:
-                        player = createPlayer(posX, posY);
-                        break;
-                    case -16776961:
-                        createHorizontalEnemy(posX, posY);
-                        break;
-                    case -175308801:
-                        createVerticalEnemy(posX, posY);
-                        break;
-                    case 65535:
-                        createDiagonalEnemy(posX, posY);
-                        break;
-                    case -420001025:
-                        createCoin(posX, posY);
-                        break;
-                    default:
-                        System.out.println(pixel);
-                        break;
-                }
+
+                firstTransformer.create(posX, posY, pixel);
             }
         }
+    }
+
+    public void setPlayer(Entity player) {
+        this.player = player;
     }
 }

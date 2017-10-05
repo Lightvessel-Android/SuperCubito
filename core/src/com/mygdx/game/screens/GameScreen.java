@@ -19,6 +19,7 @@ import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
 import com.mygdx.game.systems.RenderingSystem;
+import com.mygdx.game.systems.TransformerEntitiesSystem;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
@@ -82,6 +83,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new PlayerSystem());
         engine.addSystem(new RenderingSystem(game.batcher));
         engine.addSystem(new EnemySystem());
+        engine.addSystem(new TransformerEntitiesSystem());
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 
@@ -232,6 +234,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(BoundsSystem.class).setProcessing(false);
         engine.getSystem(EnemySystem.class).setProcessing(false);
         engine.getSystem(InputSystem.class).setProcessing(false);
+        engine.getSystem(TransformerEntitiesSystem.class).setProcessing(false);
 
     }
 
@@ -242,6 +245,7 @@ public class GameScreen extends ScreenAdapter {
         engine.getSystem(BoundsSystem.class).setProcessing(true);
         engine.getSystem(EnemySystem.class).setProcessing(true);
         engine.getSystem(InputSystem.class).setProcessing(true);
+        engine.getSystem(TransformerEntitiesSystem.class).setProcessing(true);
     }
 
     @Override

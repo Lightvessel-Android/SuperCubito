@@ -14,6 +14,7 @@ import com.mygdx.game.utils.transformers.BlockTransformer;
 import com.mygdx.game.utils.transformers.CoinTransformer;
 import com.mygdx.game.utils.transformers.DiagonalEnemyTransformer;
 import com.mygdx.game.utils.transformers.EntityTransformer;
+import com.mygdx.game.utils.transformers.ExpandEnemyTransformer;
 import com.mygdx.game.utils.transformers.HorizontalEnemyTransformer;
 import com.mygdx.game.utils.transformers.PlayerTransformer;
 import com.mygdx.game.utils.transformers.VerticalEnemyTransformer;
@@ -44,7 +45,9 @@ public class World {
         CoinTransformer coinTransformer = new CoinTransformer(engine, diagonalEnemyTransformer);
         WinTransformer winTransformer = new WinTransformer(engine, coinTransformer);
 
-        firstTransformer = new PlayerTransformer(engine, this, winTransformer);
+        ExpandEnemyTransformer expandEnemyTransformer = new ExpandEnemyTransformer(engine, winTransformer);
+
+        firstTransformer = new PlayerTransformer(engine, this, expandEnemyTransformer);
     }
 
     public void create() {

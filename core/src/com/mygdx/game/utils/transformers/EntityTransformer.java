@@ -19,6 +19,8 @@ public abstract class EntityTransformer {
             createEntity(posX, posY);
         } else if (next != null){
             next.create(posX, posY, pixel);
+        } else {
+            System.out.println("Unknown pixel: " + pixel);
         }
     }
 

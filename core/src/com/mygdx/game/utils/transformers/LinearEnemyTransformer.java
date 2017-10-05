@@ -20,7 +20,7 @@ public class LinearEnemyTransformer extends EntityTransformer {
     public void createEntity(float posX, float posY) {
     }
 
-    public void createLinearEnemy(float posX, float posY, Vector2 speed) {
+    public Entity createLinearEnemy(float posX, float posY, Vector2 speed) {
         Entity entity = engine.createEntity();
 
         EnemyComponent enemy = engine.createComponent(EnemyComponent.class);
@@ -44,6 +44,6 @@ public class LinearEnemyTransformer extends EntityTransformer {
         entity.add(position);
         entity.add(texture);
 
-        engine.addEntity(entity);
+        return entity;
     }
 }

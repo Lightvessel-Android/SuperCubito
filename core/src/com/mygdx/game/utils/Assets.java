@@ -78,9 +78,14 @@ public class Assets {
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level2.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level3.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level4.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level5.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level6.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level7.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level8.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level9.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level10.bmp")));
 
 
-
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
@@ -105,7 +110,6 @@ public class Assets {
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-
 
     }
 

@@ -13,6 +13,6 @@ public class DiagonalEnemyTransformer extends LinearEnemyTransformer {
 
     @Override
     public void createEntity(float posX, float posY) {
-        createLinearEnemy(posX, posY, new Vector2(EnemyComponent.VELOCITY / 2, EnemyComponent.VELOCITY / 2));
+        engine.addEntity(createLinearEnemy(posX, posY, new Vector2(EnemyComponent.VELOCITY / 2, EnemyComponent.VELOCITY / 2)));
     }
 }

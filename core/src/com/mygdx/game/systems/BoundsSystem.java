@@ -5,26 +5,31 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.components.BoundsComponent;
+import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
 public class BoundsSystem extends IteratingSystem {
 
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<BoundsComponent> bm;
+    private ComponentMapper<TextureComponent> tx;
 
     public BoundsSystem() {
         super(Family.all(BoundsComponent.class, TransformComponent.class).get());
 
         tm = ComponentMapper.getFor(TransformComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
+        tx = ComponentMapper.getFor(TextureComponent.class);
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         TransformComponent pos = tm.get(entity);
         BoundsComponent bounds = bm.get(entity);
+        TextureComponent texture = tx.get(entity);
 
-        bounds.bounds.x = pos.pos.x - bounds.bounds.width * 0.5f * pos.scale.x;
-        bounds.bounds.y = pos.pos.y - bounds.bounds.height * 0.5f * pos.scale.y;
+        bounds.bounds.x = pos.pos.x - bounds.bounds.width * 0.5f;
+
+        bounds.bounds.y = pos.pos.y - bounds.bounds.height * 0.5f;
     }
 }

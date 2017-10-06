@@ -4,19 +4,25 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.ads.AdInterface;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.utils.Settings;
 
 public class SuperCubito extends Game {
 
 	public SpriteBatch batcher;
+	private AdInterface adInterface;
+
+	public SuperCubito(AdInterface adInterface){
+		this.adInterface = adInterface;
+	}
 
 	@Override
 	public void create () {
 		batcher = new SpriteBatch();
 		Settings.load();
 		com.mygdx.game.utils.Assets.load();
-		setScreen(new MainMenuScreen(this));
+		setScreen(new MainMenuScreen(this, adInterface));
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
+import com.mygdx.game.ads.AdInterface;
 import com.mygdx.game.states.GameState;
 import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
@@ -46,11 +47,12 @@ public class GameScreen extends ScreenAdapter {
     Rectangle quitBounds;
     PooledEngine engine;
 
+    private AdInterface adInterface;
     private Pixmap level;
 
     private GameState state;
 
-    public GameScreen (SuperCubito game, Pixmap pixmap) {
+    public GameScreen(SuperCubito game, Pixmap pixmap, AdInterface adInterface) {
         this.game = game;
         level = pixmap;
         state = GAME_RUNNING;
@@ -92,6 +94,8 @@ public class GameScreen extends ScreenAdapter {
         pauseBounds = new Rectangle(320 - 64, 480 - 64, 64, 64);
         resumeBounds = new Rectangle(160 - 96, 36, 192, 36);
         quitBounds = new Rectangle(160 - 96,0, 192, 36);
+
+        this.adInterface = adInterface;
     }
 
     public void update (float deltaTime) {
@@ -132,7 +136,7 @@ public class GameScreen extends ScreenAdapter {
 
         if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
             levelMax = max(levelMax, actualLevel +1);
-            game.setScreen(new LevelsScreen(game));
+            game.setScreen(new LevelsScreen(game, adInterface));
             Settings.save();
         }
 
@@ -164,7 +168,7 @@ public class GameScreen extends ScreenAdapter {
     private void checkQuitButton() {
         if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
             Assets.playSound(Assets.clickSound);
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new MainMenuScreen(game, adInterface));
         }
     }
 
@@ -186,7 +190,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void updateGameOver () {
         if (Gdx.input.justTouched()) {
-            game.setScreen(new MainMenuScreen(game));
+            game.setScreen(new MainMenuScreen(game, adInterface));
         }
     }
 

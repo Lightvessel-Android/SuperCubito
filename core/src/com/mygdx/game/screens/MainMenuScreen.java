@@ -30,7 +30,6 @@ public class MainMenuScreen extends ScreenAdapter {
         soundBounds = new Rectangle(0, 0, 64, 64);
         touchPoint = new Vector3();
         this.adInterface = adInterface;
-        adInterface.showAd();
     }
 
     @Override

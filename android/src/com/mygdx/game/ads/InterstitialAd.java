@@ -1,17 +1,24 @@
 package com.mygdx.game.ads;
 
-import android.content.Context;
+import android.widget.Toast;
+
+import com.mygdx.game.AndroidLauncher;
 
 public class InterstitialAd implements AdInterface {
 
-    private Context context;
+    private AndroidLauncher context;
 
-    public InterstitialAd(Context context){
+    public InterstitialAd(AndroidLauncher context){
         this.context = context;
     }
 
     @Override
     public void showAd() {
 
+        context.runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(context, "PERDISTE", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

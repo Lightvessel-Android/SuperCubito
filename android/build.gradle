@@ -86,9 +86,16 @@ idea {
 apply plugin: 'kotlin-android'
 repositories {
     mavenCentral()
+    jcenter()
 }
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.jakewharton.timber:timber:4.5.1'
+
     compile 'com.google.android.gms:play-services-ads:11.0.4'
+
+    //compile 'com.google.android.exoplayer:exoplayer:r1.5.11'
+
+    compile 'com.facebook.android:audience-network-sdk:4.26.0'
+    compile 'com.google.android.exoplayer:exoplayer:r1.4.1'
 }

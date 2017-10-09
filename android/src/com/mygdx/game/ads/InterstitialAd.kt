@@ -7,7 +7,7 @@ class InterstitialAd(context : AndroidLauncher) : AdInterface {
     var firstInterstitialProvider: Provider<*>? = null
 
     init {
-        firstInterstitialProvider = AdmobInterstitialProvider(context, null)
+        firstInterstitialProvider = FbInterstitialProvider(context, null) //AdmobInterstitialProvider(context, null)
 
         firstInterstitialProvider?.load()
     }

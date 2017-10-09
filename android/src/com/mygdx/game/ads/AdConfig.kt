@@ -18,5 +18,9 @@ object AdConfig {
     fun adPlacementAdmobInterstitial() : String {
         return "sarasa"
     }
+
+    fun adPlacementFacebookInterstitial() : String {
+        return "156496048280442"
+    }
 }
 

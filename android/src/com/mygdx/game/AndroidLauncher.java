@@ -13,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SuperCubito(new EmptyAd()), config); //new InterstitialAd(this)
+		initialize(new SuperCubito(new InterstitialAd(this)), config); //new InterstitialAd(this)
 	}
 }

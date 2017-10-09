@@ -7,7 +7,7 @@ class InterstitialAd(context : AndroidLauncher) : AdInterface {
     var firstInterstitialProvider: Provider<*>? = null
 
     init {
-        //firstInterstitialProvider = AdmobInterstitialProvider(null)
+        firstInterstitialProvider = AdmobInterstitialProvider(context, null)
 
         firstInterstitialProvider?.load()
     }
@@ -16,5 +16,6 @@ class InterstitialAd(context : AndroidLauncher) : AdInterface {
     override fun showAd() {
         firstInterstitialProvider?.show()
     }
+
 
 }

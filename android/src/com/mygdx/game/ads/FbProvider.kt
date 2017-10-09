@@ -1,11 +1,7 @@
-//package com.mobilearb.inspirational.ads
+//package com.mygdx.game.ads
 //
 //import android.content.Context
 //import android.util.Log
-//import com.facebook.ads.*
-//import com.mobilearb.inspirational.config.RemoteConfig
-//import com.mobilearb.inspirational.events.LogEvent
-//import com.mygdx.game.ads.Provider
 //import com.mygdx.game.ads.adState.NotLoadedState
 //import com.mygdx.game.ads.adState.ProviderState
 //

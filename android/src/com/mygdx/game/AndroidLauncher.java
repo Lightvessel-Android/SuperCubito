@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.mygdx.game.ads.EmptyAd;
 import com.mygdx.game.ads.InterstitialAd;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -12,6 +13,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new SuperCubito(new InterstitialAd(this)), config);
+		initialize(new SuperCubito(new EmptyAd()), config); //new InterstitialAd(this)
 	}
 }

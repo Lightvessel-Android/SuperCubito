@@ -1,5 +1,6 @@
 package com.mygdx.game.ads
 
+import com.facebook.ads.AdSettings
 import com.google.android.gms.ads.AdRequest
 import com.mygdx.game.BuildConfig
 
@@ -8,11 +9,17 @@ object AdConfig {
     fun getAdmobAdRequest(): AdRequest {
         val builder = AdRequest.Builder()
         if (BuildConfig.DEBUG){
-//            builder.addTestDevice(BuildConfig.ADMOB_TEST_DEVICE_KEY)
-            builder.addTestDevice("7C1BCD1372AE7D2209ABDA89389B5356")
-//            builder.addTestDevice(Settings.Secure.getString(BaseApplication.appContext.contentResolver, Settings.Secure.ANDROID_ID))
+            AdRequest.DEVICE_ID_EMULATOR
         }
         return builder.build()
+    }
+
+    fun initializeAdNetwork() {
+        if (BuildConfig.DEBUG) {
+            AdSettings.addTestDevices(listOf(
+                    "c1a4343588297d20b882344cdfaa2bd2"
+                ))
+        }
     }
 
     fun adPlacementAdmobInterstitial() : String {
@@ -20,7 +27,7 @@ object AdConfig {
     }
 
     fun adPlacementFacebookInterstitial() : String {
-        return "156496048280442"
+        return "156496048280442_156758051587575"
     }
 }
 

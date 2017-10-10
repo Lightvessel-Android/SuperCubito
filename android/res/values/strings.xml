@@ -2,5 +2,6 @@
 <resources>
 
     <string name="app_name">SuperCubito</string>
+    <string name="facebook_app_id">156496048280442</string>
 
 </resources>

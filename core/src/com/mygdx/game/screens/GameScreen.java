@@ -36,6 +36,7 @@ import static java.lang.Math.max;
 
 public class GameScreen extends ScreenAdapter {
 
+    private final RenderingSystem renderingSystem;
     SuperCubito game;
 
     OrthographicCamera guiCam;
@@ -83,7 +84,8 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new BoundsSystem());
         engine.addSystem(new CollisionSystem(world, collisionListener));
         engine.addSystem(new PlayerSystem());
-        engine.addSystem(new RenderingSystem(game.batcher));
+        renderingSystem = new RenderingSystem(game.batcher);
+        engine.addSystem(renderingSystem);
         engine.addSystem(new EnemySystem());
         engine.addSystem(new TransformerEntitiesSystem());
 
@@ -265,6 +267,12 @@ public class GameScreen extends ScreenAdapter {
             state = GAME_PAUSED;
             pauseSystems();
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        renderingSystem.resize(width,height);
     }
 
     public GameState getState() {

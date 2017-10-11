@@ -191,7 +191,7 @@ public class GameScreen extends ScreenAdapter {
     private void updateGameOver () {
         if (Gdx.input.justTouched()) {
             adInterface.showAd();
-            game.setScreen(new MainMenuScreen(game, adInterface));
+            game.setScreen(new GameScreen(game, level, adInterface));
         }
     }
 

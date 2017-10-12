@@ -4,13 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SuperCubito;
@@ -58,7 +63,16 @@ public class LevelsScreen extends ScreenAdapter {
     private void generateLevels() {
         for (int i = 0; i < Assets.levels.size(); i++) {
             final int level = i;
-            Button button = new TextButton("Level " +  (level + 1), Assets.skin);
+
+            final Button button = new TextButton("" + (level + 1), Assets.skin);
+
+
+
+
+            if(level > levelMax){
+                button.setStyle(Assets.skin.get("locked", TextButton.TextButtonStyle.class));
+            } else button.setStyle(Assets.skin.get("unLocked", TextButton.TextButtonStyle.class));
+
 
             button.addCaptureListener(new ChangeListener() {
                 @Override
@@ -69,6 +83,7 @@ public class LevelsScreen extends ScreenAdapter {
                     }
                 }
             });
+
             main.add(button).size(100, 75).spaceBottom(20).spaceRight(20);
 
             int countMax = (int) (stage.getWidth() / 120);

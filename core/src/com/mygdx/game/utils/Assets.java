@@ -16,7 +16,7 @@ import java.util.List;
 
 public class Assets {
 
-    public static TextureRegion playGame, winBlock, wallblock, button, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause;
+    public static TextureRegion playGame, winBlock, wallblock, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause, unLockedLevel, lockedLevel;
 
     public static BitmapFont font;
 
@@ -37,8 +37,10 @@ public class Assets {
 
     public static void load () {
 
-        button = new TextureRegion(loadTexture("data/button.png"));
+
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
+        lockedLevel = new TextureRegion(loadTexture("data/buttonLocked.png"));
+        unLockedLevel = new TextureRegion(loadTexture("data/button.png"));
         wallblock = new TextureRegion(loadTexture("data/blackBox.png"));
         winBlock = new TextureRegion(loadTexture("data/winBox.png"));
         player = new TextureRegion(loadTexture("data/player.png"));
@@ -52,7 +54,6 @@ public class Assets {
         ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = new TextureRegion(loadTexture("data/gameover.png"));
         pause = new TextureRegion(items, 64, 64, 64, 64);
-
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();

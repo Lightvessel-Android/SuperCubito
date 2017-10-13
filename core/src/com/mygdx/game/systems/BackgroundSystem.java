@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.TransformComponent;
 
+import static com.mygdx.game.systems.RenderingSystem.FRUSTUM_SIDE;
+
 public class BackgroundSystem extends IteratingSystem {
 
     private OrthographicCamera camera;
     private ComponentMapper<TransformComponent> tm;
+
 
     public BackgroundSystem() {
         super(Family.all(BackgroundComponent.class).get());
@@ -22,7 +25,8 @@ public class BackgroundSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent t = tm.get(entity);
         t.pos.set(camera.position.x, camera.position.y, 10.0f);
-        t.scale.set(4f, 8f);
+
+        t.scale.set(camera.zoom * FRUSTUM_SIDE, camera.zoom * FRUSTUM_SIDE);
     }
 
     public OrthographicCamera getCamera() {

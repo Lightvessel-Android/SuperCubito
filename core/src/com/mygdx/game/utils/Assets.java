@@ -18,7 +18,7 @@ public class Assets {
 
     public static TextureRegion playGame, winBlock, wallblock, enemy, background, coin, player, mainMenu, pauseMenu, ready, gameOver, soundOn, soundOff, pause, unLockedLevel, lockedLevel;
 
-    public static BitmapFont font;
+    public static BitmapFont font, yellowFont;
 
     public static List<Pixmap> levels = new ArrayList<Pixmap>();
 
@@ -57,9 +57,11 @@ public class Assets {
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 8;
+        parameter.size = 18;
         parameter.color = Color.BLACK;
         font = generator.generateFont(parameter);
+        parameter.color = Color.NAVY;
+        yellowFont = generator.generateFont(parameter);
         generator.dispose();
 
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));

@@ -176,4 +176,8 @@ public class CollisionSystem extends EntitySystem {
         this.enemiesCol = enemiesCol;
     }
 
+    public int totalCoins(){
+        return coins.size();
+    }
+
 }

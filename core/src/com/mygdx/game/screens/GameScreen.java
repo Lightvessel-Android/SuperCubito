@@ -137,7 +137,7 @@ public class GameScreen extends ScreenAdapter {
         }
 
         if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
-            levelMax = max(levelMax, actualLevel + 1); // esta bien.
+            levelMax = max(levelMax, actualLevel + 1);
             Settings.save();
             actualLevel +=1;
             Pixmap nextLevel = Assets.getLevel(actualLevel+1);
@@ -225,7 +225,15 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void presentRunning () {
+        renderMissingCoins();
         game.batcher.draw(Assets.pause, 320 - 64, 480 - 64, 64, 64);
+    }
+
+    private void renderMissingCoins() {
+        int count = engine.getSystem(CollisionSystem.class).totalCoins();
+
+        Assets.yellowFont.draw(game.batcher, "Missing coins: " + count, 0, 460);
+
     }
 
     private void presentPaused () {

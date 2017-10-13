@@ -24,15 +24,15 @@ import com.mygdx.game.systems.TransformerEntitiesSystem;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
-import static com.mygdx.game.screens.LevelsScreen.actualLevel;
 import static com.mygdx.game.states.GameState.GAME_OVER;
 import static com.mygdx.game.states.GameState.GAME_PAUSED;
 import static com.mygdx.game.states.GameState.GAME_READY;
 import static com.mygdx.game.states.GameState.GAME_RUNNING;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
+import static com.mygdx.game.utils.Settings.actualLevel;
 import static com.mygdx.game.utils.Settings.levelMax;
-import static java.lang.Math.max;
+import static java.lang.StrictMath.max;
 
 public class GameScreen extends ScreenAdapter {
 
@@ -137,9 +137,11 @@ public class GameScreen extends ScreenAdapter {
         }
 
         if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
-            levelMax = max(levelMax, actualLevel +1);
-            game.setScreen(new LevelsScreen(game, adInterface));
+            levelMax = max(levelMax, actualLevel + 1); // esta bien.
             Settings.save();
+            actualLevel +=1;
+            Pixmap nextLevel = Assets.getLevel(actualLevel+1);
+            game.setScreen(new GameScreen(game, nextLevel, adInterface));
         }
 
         if (world.state.equals(WORLD_STATE_GAME_OVER)) {

@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.ads.AdInterface;
 import com.mygdx.game.utils.Assets;
+import com.mygdx.game.utils.Settings;
 
 import static com.mygdx.game.utils.Settings.levelMax;
 
@@ -34,7 +35,6 @@ public class LevelsScreen extends ScreenAdapter {
 
     private ScrollPane scroll;
     private AdInterface adInterface;
-    public static int actualLevel = 0;
 
     private OrthographicCamera guiCam;
 
@@ -76,8 +76,8 @@ public class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
                     if(levelMax >= level) {
-                        game.setScreen(new GameScreen(game, Assets.levels.get(level), adInterface));
-                        actualLevel = level;
+                        Settings.actualLevel = level;
+                        game.setScreen(new GameScreen(game, Assets.getLevel(level), adInterface));
                     }
                 }
             });

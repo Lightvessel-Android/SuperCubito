@@ -7,7 +7,9 @@ public class Settings {
 
     public static boolean soundEnabled = true;
 
-    public static int levelMax = 1;
+    public static int levelMax = 0;
+
+    public static int actualLevel = 0;
 
     public final static String file = ".supercubito";
 

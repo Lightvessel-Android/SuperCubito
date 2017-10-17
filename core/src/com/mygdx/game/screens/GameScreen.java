@@ -137,10 +137,10 @@ public class GameScreen extends ScreenAdapter {
         }
 
         if (world.state.equals(WORLD_STATE_NEXT_LEVEL)) {
-            levelMax = max(levelMax, actualLevel + 1);
-            Settings.save();
             actualLevel +=1;
-            Pixmap nextLevel = Assets.getLevel(actualLevel+1);
+            levelMax = max(levelMax, actualLevel);
+            Settings.save();
+            Pixmap nextLevel = Assets.getLevel(actualLevel);
             game.setScreen(new GameScreen(game, nextLevel, adInterface));
         }
 

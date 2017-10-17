@@ -66,10 +66,10 @@ public class LevelsScreen extends ScreenAdapter {
 
             final Button button = new TextButton("" + (level + 1), Assets.skin);
 
-
             if(level > levelMax){
-                button.setStyle(Assets.skin.get("locked", TextButton.TextButtonStyle.class));
-            } else button.setStyle(Assets.skin.get("unLocked", TextButton.TextButtonStyle.class));
+                button.setStyle(Assets.lockedStyle);
+                //button.setStyle(Assets.skin.get("locked", TextButton.TextButtonStyle.class));
+            } else button.setStyle(Assets.unLockedStyle);  //button.setStyle(Assets.skin.get("unLocked", TextButton.TextButtonStyle.class));
 
 
             button.addCaptureListener(new ChangeListener() {

@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,8 @@ public class Assets {
     public static List<Pixmap> levels = new ArrayList<Pixmap>();
 
     public static Texture items, backgroundTexture;
+
+    public static TextButton.TextButtonStyle lockedStyle, unLockedStyle;
 
     public static Skin skin;
 
@@ -59,7 +63,7 @@ public class Assets {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
-        parameter.color = Color.BLACK;
+        parameter.color = Color.WHITE;
         font = generator.generateFont(parameter);
         parameter.color = Color.NAVY;
         yellowFont = generator.generateFont(parameter);
@@ -76,6 +80,26 @@ public class Assets {
         soundOn = new TextureRegion(items, 64, 0, 64, 64);
         deadSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+
+
+
+        //Button styles
+        lockedStyle = new TextButton.TextButtonStyle();
+        lockedStyle.up = new TextureRegionDrawable(lockedLevel);
+        lockedStyle.down = new TextureRegionDrawable(lockedLevel);
+        lockedStyle.over = new TextureRegionDrawable(lockedLevel);
+        lockedStyle.pressedOffsetX = 1;
+        lockedStyle.pressedOffsetY = -1;
+        lockedStyle.font = font;
+
+        unLockedStyle = new TextButton.TextButtonStyle();
+        unLockedStyle.up = new TextureRegionDrawable(unLockedLevel);
+        unLockedStyle.down = new TextureRegionDrawable(unLockedLevel);
+        unLockedStyle.over = new TextureRegionDrawable(unLockedLevel);
+        unLockedStyle.pressedOffsetX = 1;
+        unLockedStyle.pressedOffsetY = -1;
+        unLockedStyle.font = font;
+
 
         //Levels:
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));

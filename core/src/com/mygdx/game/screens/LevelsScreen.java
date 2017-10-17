@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.ads.AdInterface;
+import com.mygdx.game.analytics.Analytic;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
@@ -35,10 +36,11 @@ public class LevelsScreen extends ScreenAdapter {
 
     private ScrollPane scroll;
     private AdInterface adInterface;
+    private Analytic analytic;
 
     private OrthographicCamera guiCam;
 
-    public LevelsScreen(final SuperCubito gameE, AdInterface adInterface) {
+    public LevelsScreen(final SuperCubito gameE, AdInterface adInterface, Analytic analytic) {
         game = gameE;
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
@@ -58,6 +60,7 @@ public class LevelsScreen extends ScreenAdapter {
         stage.addActor(scroll);
 
         this.adInterface = adInterface;
+        this.analytic = analytic;
     }
 
     private void generateLevels() {
@@ -68,8 +71,7 @@ public class LevelsScreen extends ScreenAdapter {
 
             if(level > levelMax){
                 button.setStyle(Assets.lockedStyle);
-                //button.setStyle(Assets.skin.get("locked", TextButton.TextButtonStyle.class));
-            } else button.setStyle(Assets.unLockedStyle);  //button.setStyle(Assets.skin.get("unLocked", TextButton.TextButtonStyle.class));
+            } else button.setStyle(Assets.unLockedStyle);
 
 
             button.addCaptureListener(new ChangeListener() {
@@ -77,7 +79,8 @@ public class LevelsScreen extends ScreenAdapter {
                 public void changed(ChangeEvent event, Actor actor) {
                     if(levelMax >= level) {
                         Settings.actualLevel = level;
-                        game.setScreen(new GameScreen(game, Assets.getLevel(level), adInterface));
+                        analytic.startLevel();
+                        game.setScreen(new GameScreen(game, Assets.getLevel(level), adInterface, analytic));
                     }
                 }
             });

@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.ads.AdInterface;
+import com.mygdx.game.analytics.Analytic;
 import com.mygdx.game.states.GameState;
 import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
@@ -49,11 +50,12 @@ public class GameScreen extends ScreenAdapter {
     PooledEngine engine;
 
     private AdInterface adInterface;
+    private Analytic analytic;
     private Pixmap level;
 
     private GameState state;
 
-    public GameScreen(SuperCubito game, Pixmap pixmap, AdInterface adInterface) {
+    public GameScreen(SuperCubito game, Pixmap pixmap, AdInterface adInterface, Analytic analytic) {
         this.game = game;
         level = pixmap;
         state = GAME_RUNNING;
@@ -98,6 +100,7 @@ public class GameScreen extends ScreenAdapter {
         quitBounds = new Rectangle(160 - 96,0, 192, 36);
 
         this.adInterface = adInterface;
+        this.analytic = analytic;
     }
 
     public void update (float deltaTime) {
@@ -141,7 +144,8 @@ public class GameScreen extends ScreenAdapter {
             levelMax = max(levelMax, actualLevel);
             Settings.save();
             Pixmap nextLevel = Assets.getLevel(actualLevel);
-            game.setScreen(new GameScreen(game, nextLevel, adInterface));
+            analytic.nextLevel();
+            game.setScreen(new GameScreen(game, nextLevel, adInterface, analytic));
         }
 
         if (world.state.equals(WORLD_STATE_GAME_OVER)) {
@@ -172,7 +176,7 @@ public class GameScreen extends ScreenAdapter {
     private void checkQuitButton() {
         if (quitBounds.contains(touchPoint.x, touchPoint.y)) {
             Assets.playSound(Assets.clickSound);
-            game.setScreen(new MainMenuScreen(game, adInterface));
+            game.setScreen(new MainMenuScreen(game, adInterface, analytic));
         }
     }
 
@@ -195,7 +199,8 @@ public class GameScreen extends ScreenAdapter {
     private void updateGameOver () {
         if (Gdx.input.justTouched()) {
             adInterface.showAd();
-            game.setScreen(new GameScreen(game, level, adInterface));
+            analytic.gameOver();
+            game.setScreen(new GameScreen(game, level, adInterface, analytic));
         }
     }
 

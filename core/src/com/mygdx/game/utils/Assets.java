@@ -102,6 +102,9 @@ public class Assets {
 
 
         //Levels:
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level-2.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level-1.bmp")));
+        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level0.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level2.bmp")));
         levels.add(new Pixmap(Gdx.files.internal("bitmaps/level3.bmp")));

@@ -81,8 +81,10 @@ public class World {
 
         texture.region = Assets.background;
 
-        texture.region.setRegionWidth((int) (level.getWidth() / PIXELS_TO_METERS));
-        texture.region.setRegionHeight((int) (level.getHeight()  / PIXELS_TO_METERS));
+        texture.region.setRegionWidth((int) (level.getWidth() / PIXELS_TO_METERS) * 2);
+        texture.region.setRegionHeight((int) (level.getHeight()  / PIXELS_TO_METERS) * 2);
+        position.pos.set(level.getWidth() /2, level.getHeight()/2, 10 );
+
 
         entity.add(background);
         entity.add(position);

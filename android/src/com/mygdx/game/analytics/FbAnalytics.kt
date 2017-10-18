@@ -1,16 +1,20 @@
 package com.mygdx.game.analytics
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 
-class FbAnalytics : Analytic {
-
+class FbAnalytics() : Analytic {
+    init {
+//        logger = AppEventsLogger(context);
+    }
     override fun gameOver() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        logger.logEvent("gameOver");
     }
 
     override fun startLevel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        logger.logEvent("startLevel");
     }
 
     override fun nextLevel() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        //logger.logEvent("nextLevel");
     }
 }

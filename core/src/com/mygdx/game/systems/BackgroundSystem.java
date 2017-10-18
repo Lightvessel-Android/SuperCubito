@@ -29,9 +29,6 @@ public class BackgroundSystem extends IteratingSystem {
             t.pos.set(camera.position.x, camera.position.y, 10.0f);
             isSetPos = true;
         }
-
-
-        //t.scale.set(camera.zoom * FRUSTUM_SIDE, camera.zoom * FRUSTUM_SIDE);
     }
 
     public OrthographicCamera getCamera() {

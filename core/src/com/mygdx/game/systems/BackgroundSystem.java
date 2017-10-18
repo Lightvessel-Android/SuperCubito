@@ -14,19 +14,24 @@ public class BackgroundSystem extends IteratingSystem {
 
     private OrthographicCamera camera;
     private ComponentMapper<TransformComponent> tm;
-
+    private boolean isSetPos;
 
     public BackgroundSystem() {
         super(Family.all(BackgroundComponent.class).get());
         tm = ComponentMapper.getFor(TransformComponent.class);
+        isSetPos = false;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent t = tm.get(entity);
-        t.pos.set(camera.position.x, camera.position.y, 10.0f);
+        if(!isSetPos){
+            t.pos.set(camera.position.x, camera.position.y, 10.0f);
+            isSetPos = true;
+        }
 
-        t.scale.set(camera.zoom * FRUSTUM_SIDE, camera.zoom * FRUSTUM_SIDE);
+
+        //t.scale.set(camera.zoom * FRUSTUM_SIDE, camera.zoom * FRUSTUM_SIDE);
     }
 
     public OrthographicCamera getCamera() {

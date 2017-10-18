@@ -22,6 +22,7 @@ import com.mygdx.game.utils.transformers.WinTransformer;
 
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
 import static com.mygdx.game.systems.RenderingSystem.CELL_TO_METERS;
+import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
 
 public class World {
     public WorldState state;
@@ -79,6 +80,9 @@ public class World {
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
         texture.region = Assets.background;
+
+        texture.region.setRegionWidth((int) (level.getWidth() / PIXELS_TO_METERS));
+        texture.region.setRegionHeight((int) (level.getHeight()  / PIXELS_TO_METERS));
 
         entity.add(background);
         entity.add(position);

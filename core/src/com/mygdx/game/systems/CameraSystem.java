@@ -44,4 +44,8 @@ public class CameraSystem extends IteratingSystem {
     public void unproject(Vector3 set) {
         cameraComponent.camera.unproject(set);
     }
+
+    public void addZoom(float delta) {
+        cameraComponent.camera.zoom +=delta;
+    }
 }

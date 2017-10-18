@@ -51,6 +51,10 @@ public class LevelsScreen extends ScreenAdapter {
         main.setHeight(stage.getHeight());
         main.setWidth(stage.getWidth());
 
+        Assets.background.setRegionWidth(Gdx.graphics.getWidth());
+        Assets.background.setRegionHeight(Gdx.graphics.getHeight());
+
+
         main.setBackground(new TextureRegionDrawable(Assets.background));
 
         scroll = new ScrollPane(main);

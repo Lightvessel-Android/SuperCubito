@@ -51,8 +51,11 @@ public class Assets {
         enemy = new TextureRegion(loadTexture("data/enemy.png"));
         coin = new TextureRegion(loadTexture("data/coin.png"));
         playGame = new TextureRegion(loadTexture("data/playgame.jpg"));
+
         backgroundTexture = loadTexture("data/background.png");
+        backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         background = new TextureRegion(backgroundTexture);
+
         items = loadTexture("data/items.png");
         mainMenu = new TextureRegion(loadTexture ("data/menu.jpg"));
         pauseMenu = new TextureRegion(items, 224, 128, 192, 96);

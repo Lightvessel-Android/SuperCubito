@@ -25,10 +25,6 @@ public class BackgroundSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent t = tm.get(entity);
-        if(!isSetPos){
-            t.pos.set(camera.position.x, camera.position.y, 10.0f);
-            isSetPos = true;
-        }
     }
 
     public OrthographicCamera getCamera() {

@@ -2,17 +2,17 @@ package com.mygdx.game.analytics;
 
 public class EmptyAnalytics implements Analytic {
     @Override
-    public void gameOver() {
+    public void gameOver(int level) {
 
     }
 
     @Override
-    public void startLevel() {
+    public void startLevel(int level) {
 
     }
 
     @Override
-    public void nextLevel() {
+    public void nextLevel(int level) {
 
     }
 }

@@ -144,7 +144,7 @@ public class GameScreen extends ScreenAdapter {
             levelMax = max(levelMax, actualLevel);
             Settings.save();
             Pixmap nextLevel = Assets.getLevel(actualLevel);
-            analytic.nextLevel();
+            analytic.nextLevel(actualLevel);
             game.setScreen(new GameScreen(game, nextLevel, adInterface, analytic));
         }
 
@@ -199,7 +199,7 @@ public class GameScreen extends ScreenAdapter {
     private void updateGameOver () {
         if (Gdx.input.justTouched()) {
             adInterface.showAd();
-            analytic.gameOver();
+            analytic.gameOver(actualLevel);
             game.setScreen(new GameScreen(game, level, adInterface, analytic));
         }
     }

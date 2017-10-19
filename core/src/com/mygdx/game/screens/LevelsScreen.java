@@ -83,7 +83,7 @@ public class LevelsScreen extends ScreenAdapter {
                 public void changed(ChangeEvent event, Actor actor) {
                     if(levelMax >= level) {
                         Settings.actualLevel = level;
-                        analytic.startLevel();
+                        analytic.startLevel(level);
                         game.setScreen(new GameScreen(game, Assets.getLevel(level), adInterface, analytic));
                     }
                 }

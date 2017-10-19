@@ -1,6 +1,7 @@
 android {
     buildToolsVersion '25.0.2'
     compileSdkVersion 25
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -14,7 +15,17 @@ android {
 
         instrumentTest.setRoot('tests')
     }
+
+    productFlavors {
+        cube {
+            applicationId "game.addictive.hard.cube"
+            def facebookAppId = "156496048280442"
+
+            manifestPlaceholders = [manifestApplicationId          : applicationId]
+        }
+    }
 }
+
 
 // called every time gradle gets executed, takes the native dependencies of
 // the natives configuration, and extracts them to the proper libs/ folders

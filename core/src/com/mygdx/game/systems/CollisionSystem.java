@@ -24,9 +24,7 @@ import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class CollisionSystem extends EntitySystem {
     private ComponentMapper<BoundsComponent> bm;
-    private ComponentMapper<MovementComponent> mm;
     private ComponentMapper<StateComponent> sm;
-    private ComponentMapper<TransformComponent> tm;
 
     public interface CollisionListener {
         void dead();
@@ -47,9 +45,7 @@ public class CollisionSystem extends EntitySystem {
         this.listener = listener;
 
         bm = ComponentMapper.getFor(BoundsComponent.class);
-        mm = ComponentMapper.getFor(MovementComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
-        tm = ComponentMapper.getFor(TransformComponent.class);
     }
 
     @Override
@@ -155,10 +151,6 @@ public class CollisionSystem extends EntitySystem {
 
     public Array<Entity> getEnemiesCol() {
         return enemiesCol;
-    }
-
-    public void setEnemiesCol(Array<Entity> enemiesCol) {
-        this.enemiesCol = enemiesCol;
     }
 
     public int totalCoins(){

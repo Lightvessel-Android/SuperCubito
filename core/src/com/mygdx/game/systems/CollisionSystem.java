@@ -28,15 +28,14 @@ public class CollisionSystem extends EntitySystem {
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TransformComponent> tm;
 
-    public static interface CollisionListener {
-        public void dead ();
-        public void coin ();
+    public interface CollisionListener {
+        void dead();
+        void coin();
     }
 
     private Engine engine;
     private World world;
     private CollisionListener listener;
-    private Vector2 vector;
 
     private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
 
@@ -51,7 +50,6 @@ public class CollisionSystem extends EntitySystem {
         mm = ComponentMapper.getFor(MovementComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tm = ComponentMapper.getFor(TransformComponent.class);
-        vector = new Vector2(0, 0);
     }
 
     @Override
@@ -94,9 +92,8 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkExitsCollision(Entity player) {
-        for (int j = 0; j < exits.size(); ++j) {
-            Entity exit = exits.get(j);
 
+        for(Entity exit : exits){
             if (isCollide(exit, player) && coins.size() == 0) {
                 world.state = WORLD_STATE_NEXT_LEVEL;
             }
@@ -104,17 +101,14 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkBlocksCollision(PlayerSystem playerSystem, Entity player, float deltaTime) {
-        for (int j = 0; j < blocks.size(); ++j) {
-            Entity block = blocks.get(j);
 
+        for(Entity block : blocks){
 
             if (isCollide(block, player)) {
                 playerSystem.hitBlock(player);
             }
 
-            for (int k = 0; k < enemies.size(); ++k) {
-                Entity enemy = enemies.get(k);
-
+            for(Entity enemy : enemies){
                 if (isNextPositionColide(enemy, block, deltaTime)) {
                     if(!enemiesCol.contains(enemy, false)) {
                         enemiesCol.add(enemy);
@@ -125,9 +119,7 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkCoinsCollision(Entity player) {
-        for (int j = 0; j < coins.size(); ++j) {
-            Entity coin = coins.get(j);
-
+        for(Entity coin : coins){
             if (isCollide(coin, player)) {
                 engine.removeEntity(coin);
                 listener.coin();
@@ -136,9 +128,7 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkEnemiesCollision(PlayerSystem playerSystem, Entity player) {
-        for (int j = 0; j < enemies.size(); ++j) {
-            Entity enemy = enemies.get(j);
-
+        for (Entity enemy : enemies){
             if (isCollide(enemy, player)) {
                 playerSystem.dead(player);
                 listener.dead();
@@ -151,12 +141,7 @@ public class CollisionSystem extends EntitySystem {
         BoundsComponent bounds2 = bm.get(enemy);
         MovementSystem movementSystem = engine.getSystem(MovementSystem.class);
 
-        Vector2 initialPos = movementSystem.nextPosition(enemy, delta);
-
-
-        bounds2.bounds.setPosition(initialPos);
-
-
+        bounds2.bounds.setPosition(movementSystem.nextPosition(enemy, delta));
 
         return bounds1.bounds.overlaps(bounds2.bounds);
     }

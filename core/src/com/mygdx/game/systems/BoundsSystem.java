@@ -12,21 +12,18 @@ public class BoundsSystem extends IteratingSystem {
 
     private ComponentMapper<TransformComponent> tm;
     private ComponentMapper<BoundsComponent> bm;
-    private ComponentMapper<TextureComponent> tx;
 
     public BoundsSystem() {
         super(Family.all(BoundsComponent.class, TransformComponent.class).get());
 
         tm = ComponentMapper.getFor(TransformComponent.class);
         bm = ComponentMapper.getFor(BoundsComponent.class);
-        tx = ComponentMapper.getFor(TextureComponent.class);
     }
 
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         TransformComponent pos = tm.get(entity);
         BoundsComponent bounds = bm.get(entity);
-        TextureComponent texture = tx.get(entity);
 
         bounds.bounds.x = pos.pos.x - bounds.bounds.width * 0.5f;
 

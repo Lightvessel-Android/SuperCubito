@@ -35,7 +35,7 @@ public class MovementSystem extends IteratingSystem {
         pos.pos.add(tmp.x, tmp.y, 0.0f);
     }
 
-    public Vector2 nextPosition(Entity entity, float delta) {
+    Vector2 nextPosition(Entity entity, float delta) {
         TransformComponent pos = tm.get(entity);
         MovementComponent mov = mm.get(entity);
 

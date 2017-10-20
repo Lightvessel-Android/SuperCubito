@@ -56,7 +56,6 @@ public class RenderingSystem extends IteratingSystem {
     public void update(float deltaTime) {
         super.update(deltaTime);
 
-        renderQueue.sort(comparator);
         cam.update();
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
@@ -90,6 +89,7 @@ public class RenderingSystem extends IteratingSystem {
     @Override
     public void processEntity(Entity entity, float deltaTime) {
         renderQueue.add(entity);
+        renderQueue.sort(comparator);
     }
 
     public void resize(int deviceWidth, int deviceHeight) {

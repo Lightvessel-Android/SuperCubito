@@ -236,9 +236,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void renderMissingCoins() {
         int count = engine.getSystem(CollisionSystem.class).totalCoins();
-
         Assets.yellowFont.draw(game.batcher, "Missing coins: " + count, 0, 460);
-
     }
 
     private void presentPaused () {

@@ -1,0 +1,16 @@
+package com.mygdx.game.utils.QuadTree;
+
+public class QuadNode<T> {
+    QuadRectangle r;
+    T element;
+
+    QuadNode(QuadRectangle r, T element) {
+        this.r = r;
+        this.element = element;
+    }
+
+    @Override
+    public String toString() {
+        return r.toString();
+    }
+}

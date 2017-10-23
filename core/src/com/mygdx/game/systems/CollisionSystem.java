@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BoundsComponent;
@@ -16,6 +17,9 @@ import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.enums.TagEntity;
+import com.mygdx.game.utils.QuadTree.QuadRectangle;
+
+import java.util.ArrayList;
 
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_NEXT_LEVEL;
@@ -34,9 +38,10 @@ public class CollisionSystem extends EntitySystem {
     private World world;
     private CollisionListener listener;
     private QuadTreeSystem quadTreeSystem;
-    private Array<Entity> auxList;
+    private ArrayList<Entity> auxList;
+    private QuadRectangle rectangleAux;
 
-    private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
+    private ImmutableArray<Entity> enemies, players, coins;
 
     private Array<Entity> enemiesCol;
 
@@ -48,8 +53,8 @@ public class CollisionSystem extends EntitySystem {
         bm = ComponentMapper.getFor(BoundsComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tagMapper = ComponentMapper.getFor(TagComponent.class);
-
-        auxList = new Array<>();
+        rectangleAux = new QuadRectangle(0, 0 ,0 ,0);
+        auxList = new ArrayList<>();
     }
 
     @Override
@@ -132,17 +137,29 @@ public class CollisionSystem extends EntitySystem {
 
     private boolean existsCollision(Entity entity, TagEntity tag){
         auxList.clear();
-        quadTreeSystem.getQuadTree().retrieve(auxList, entity.getComponent(BoundsComponent.class).bounds);
+
+        setupRectangle(entity);
+        quadTreeSystem.getQuadTree().getElements(auxList, rectangleAux);
         return anyHaveTag(auxList, tag);
     }
 
-    private boolean anyHaveTag(Array<Entity> auxList, TagEntity tag) {
+
+    private boolean anyHaveTag(ArrayList<Entity> auxList, TagEntity tag) {
         for (Entity entity : auxList){
             if(tagMapper.get(entity).tag.equals(tag)){
                 return true;
             }
         }
         return false;
+    }
+
+    private void setupRectangle(Entity entity) {
+        Rectangle rectangle = entity.getComponent(BoundsComponent.class).bounds;
+
+        rectangleAux.height = rectangle.getHeight();
+        rectangleAux.width = rectangle.getWidth();
+        rectangleAux.x = rectangle.getX();
+        rectangleAux.y = rectangle.getY();
     }
 
     public Array<Entity> getEnemiesCol() {

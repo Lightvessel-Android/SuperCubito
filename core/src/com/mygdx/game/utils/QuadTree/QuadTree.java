@@ -7,8 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoundsComponent;
 
 public class QuadTree {
-    private static final int MAX_OBJECTS = 1;
-    private static final int MAX_LEVELS = 3;
+    private static final int MAX_OBJECTS = 10;
+    private static final int MAX_LEVELS = 5;
 
     private int level;
     private Rectangle bounds;
@@ -44,23 +44,22 @@ public class QuadTree {
     }
 
     private void split() {
-        final float x = bounds.x;
-        final float y = bounds.y;
-        final float w = bounds.width / 2f;
-        final float h = bounds.height / 2f;
-        final int level = this.level++;
+        final int x = (int) bounds.getX();
+        final int y = (int) bounds.getY();
+        final int w = (int) (bounds.getWidth() / 2);
+        final int h = (int) (bounds.getHeight() / 2);
 
-        nodes[0] = new QuadTree(level, new Rectangle(x + w, y, w, h));
-        nodes[1] = new QuadTree(level, new Rectangle(x, y, w, h));
-        nodes[2] = new QuadTree(level, new Rectangle(x, y + h, w, h));
-        nodes[3] = new QuadTree(level, new Rectangle(x + w, y + h, w, h));
+        nodes[0] = new QuadTree(level+1, new Rectangle(x + w, y, w, h));
+        nodes[1] = new QuadTree(level+1, new Rectangle(x, y, w, h));
+        nodes[2] = new QuadTree(level+1, new Rectangle(x, y + h, w, h));
+        nodes[3] = new QuadTree(level+1, new Rectangle(x + w, y + h, w, h));
     }
 
     private int getIndex(Rectangle r) {
         int index = -1;
 
-        float verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2f);
-        float horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2f);
+        float verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
+        float horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
 
         boolean topQuadrant = r.getY() < horizontalMidpoint && r.getY() + r.getHeight() < horizontalMidpoint;
         boolean bottomQuadrant = r.getY() > horizontalMidpoint;
@@ -111,6 +110,7 @@ public class QuadTree {
     }
 
     public void retrieve(Array<Entity> entities, Rectangle r) {
+
         if (nodes[0] != null) {
             final int index = getIndex(r);
             if (index != -1) {

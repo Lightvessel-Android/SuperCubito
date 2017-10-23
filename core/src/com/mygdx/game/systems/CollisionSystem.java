@@ -61,12 +61,12 @@ public class CollisionSystem extends EntitySystem {
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
-        blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
-        exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
+        //blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
+        //exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
 
         quadTreeSystem = engine.getSystem(QuadTreeSystem.class);
 
-        enemiesCol = new Array<Entity>();
+        enemiesCol = new Array<>();
     }
 
     @Override
@@ -128,7 +128,6 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkEnemiesCollision(PlayerSystem playerSystem, Entity player) {
-
         if (existsCollision(player, TagEntity.ENEMY)){
             playerSystem.dead(player);
             listener.dead();

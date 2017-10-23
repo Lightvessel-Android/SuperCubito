@@ -1,13 +1,11 @@
 package com.mygdx.game.systems;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.utils.QuadTree.QuadTree;
 
 public class QuadTreeSystem extends EntitySystem {
@@ -32,13 +30,15 @@ public class QuadTreeSystem extends EntitySystem {
     @Override
     public void update(float deltaTime) {
         // habria que ver como solo sacar y volver a agregar las entidades que se movieron
-        quadTree.clear();
+       quadTree.clear();
        for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
             quadTree.insert(entity);
         }
     }
 
-
+    public QuadTree getQuadTree(){
+        return quadTree;
+    }
 
 
 

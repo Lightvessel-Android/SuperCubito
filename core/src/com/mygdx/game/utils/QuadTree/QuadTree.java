@@ -18,12 +18,12 @@ public class QuadTree {
     public QuadTree(int level, Rectangle bounds) {
         this.level = level;
         this.bounds = bounds;
-        this.entities = new Array<Entity>();
+        this.entities = new Array<>();
         this.nodes = new QuadTree[4];
     }
 
     public void draw(ShapeRenderer shapes) {
-        shapes.setColor(Color.MAGENTA);
+        shapes.setColor(Color.RED);
         shapes.rect(bounds.x, bounds.y, bounds.width, bounds.height);
         for (int i = 0; i < nodes.length; i++) {
             QuadTree node = nodes[i];

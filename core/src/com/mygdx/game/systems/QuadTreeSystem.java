@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
@@ -15,15 +15,18 @@ public class QuadTreeSystem extends EntitySystem {
 
     private Engine engine;
     private QuadTree quadTree;
+    private ShapeRenderer shapeRenderer;
 
-    public QuadTreeSystem(){
-        quadTree = new QuadTree(0, new Rectangle(0,0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
+    public QuadTreeSystem(float width,float height){
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.setAutoShapeType(true);
+        quadTree = new QuadTree(0, new Rectangle(0,0, width, height));
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
-
         for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
             quadTree.insert(entity);
         }
@@ -31,9 +34,13 @@ public class QuadTreeSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-       quadTree.clear();
-       for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
-            quadTree.insert(entity);
+//        shapeRenderer.begin();
+//        quadTree.draw(shapeRenderer);
+//        shapeRenderer.end();
+
+        quadTree.clear();
+        for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
+                quadTree.insert(entity);
         }
     }
 

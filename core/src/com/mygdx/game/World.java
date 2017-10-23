@@ -119,4 +119,8 @@ public class World {
     public void setPlayer(Entity player) {
         this.player = player;
     }
+
+    public Pixmap getLevel(){
+        return level;
+    }
 }

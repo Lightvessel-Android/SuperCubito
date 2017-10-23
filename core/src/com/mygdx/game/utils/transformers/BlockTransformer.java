@@ -40,6 +40,7 @@ public class BlockTransformer extends EntityTransformer {
         bounds.bounds.width = BlockComponent.WIDTH;
         bounds.bounds.height = BlockComponent.HEIGHT;
 
+        bounds.bounds.setPosition(posX,posY);
 
         position.pos.set(posX, posY, 3.0f);
 

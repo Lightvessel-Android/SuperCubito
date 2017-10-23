@@ -36,6 +36,7 @@ public class CoinTransformer extends EntityTransformer {
         bounds.bounds.width = CoinComponent.WIDTH;
         bounds.bounds.height = CoinComponent.HEIGHT;
 
+        bounds.bounds.setPosition(posX,posY);
         position.pos.set(posX, posY, 3.0f);
 
         state.set(CoinComponent.STATE_NORMAL);

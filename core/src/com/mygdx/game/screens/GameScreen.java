@@ -85,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new InputSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
-        engine.addSystem(new QuadTreeSystem());
+        engine.addSystem(new QuadTreeSystem(level.getWidth(), level.getHeight()));
         engine.addSystem(new CollisionSystem(world, collisionListener));
         engine.addSystem(new PlayerSystem());
         renderingSystem = new RenderingSystem(game.batcher);

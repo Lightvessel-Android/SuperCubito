@@ -8,7 +8,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
-import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CoinComponent;
 import com.mygdx.game.components.EnemyComponent;
@@ -16,7 +15,6 @@ import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
-import com.mygdx.game.components.WinComponent;
 import com.mygdx.game.enums.TagEntity;
 
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_GAME_OVER;
@@ -51,7 +49,7 @@ public class CollisionSystem extends EntitySystem {
         sm = ComponentMapper.getFor(StateComponent.class);
         tagMapper = ComponentMapper.getFor(TagComponent.class);
 
-        auxList = new Array<Entity>();
+        auxList = new Array<>();
     }
 
     @Override
@@ -61,8 +59,6 @@ public class CollisionSystem extends EntitySystem {
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
-        //blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
-        //exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
 
         quadTreeSystem = engine.getSystem(QuadTreeSystem.class);
 

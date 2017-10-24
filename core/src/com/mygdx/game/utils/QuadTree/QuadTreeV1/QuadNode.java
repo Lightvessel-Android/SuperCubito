@@ -1,4 +1,4 @@
-package com.mygdx.game.utils.QuadTree;
+package com.mygdx.game.utils.QuadTree.QuadTreeV1;
 
 import com.badlogic.gdx.math.Rectangle;
 

@@ -6,18 +6,16 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.utils.QuadTree.QuadTree;
-
-import java.util.ArrayList;
+import com.mygdx.game.utils.QuadTree.QuadTreeV2.QuadTreeNode;
 
 public class QuadTreeSystem extends EntitySystem {
 
 
     private Engine engine;
-    private QuadTree quadTree;
+    private QuadTreeNode quadTree;
 
     public QuadTreeSystem(float width,float height){
-        quadTree = new QuadTree(new Rectangle(0, 0, width ,height), 0);
+        quadTree = new QuadTreeNode(0, new Rectangle(0, 0, width ,height));
     }
 
     @Override
@@ -27,17 +25,17 @@ public class QuadTreeSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        quadTree = new QuadTree(quadTree.getZone(), 0);
+        quadTree.clear();
         addAll(engine);
     }
 
     private void addAll(Engine engine) {
         for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
-            quadTree.insert(entity.getComponent(BoundsComponent.class).bounds, entity);
+            quadTree.insert(entity);
         }
     }
 
-    public QuadTree getQuadTree(){
+    public QuadTreeNode getQuadTree(){
         return quadTree;
     }
 

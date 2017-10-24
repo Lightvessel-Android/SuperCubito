@@ -2,7 +2,7 @@ package test;
 
 
 import com.badlogic.gdx.math.Rectangle;
-import com.mygdx.game.utils.QuadTree.QuadTree;
+import com.mygdx.game.utils.QuadTree.QuadTreeV1.QuadTree;
 
 import org.junit.Before;
 import org.junit.Test;

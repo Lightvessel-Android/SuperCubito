@@ -35,7 +35,7 @@ public class CollisionSystem extends EntitySystem {
     private World world;
     private CollisionListener listener;
     private QuadTreeSystem quadTreeSystem;
-    private ArrayList<Entity> auxList;
+    private Array<Entity> auxList;
     private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
 
@@ -46,7 +46,7 @@ public class CollisionSystem extends EntitySystem {
 
         sm = ComponentMapper.getFor(StateComponent.class);
         tagMapper = ComponentMapper.getFor(TagComponent.class);
-        auxList = new ArrayList<>();
+        auxList = new Array<>();
     }
 
     @Override
@@ -130,13 +130,13 @@ public class CollisionSystem extends EntitySystem {
     private boolean existsCollision(Entity entity, TagEntity tag){
         auxList.clear();
 
-        quadTreeSystem.getQuadTree().getElements(auxList, entity.getComponent(BoundsComponent.class).bounds);
-
-        return anyHaveTag(auxList, tag);
+        quadTreeSystem.getQuadTree().retrieve(auxList, entity);
+        return anyHaveTag(tag);
     }
 
 
-    private boolean anyHaveTag(ArrayList<Entity> auxList, TagEntity tag) {
+    private boolean anyHaveTag(TagEntity tag) {
+
         for (Entity entity : auxList){
             if(tagMapper.get(entity).tag.equals(tag)){
                 return true;

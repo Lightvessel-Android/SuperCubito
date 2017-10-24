@@ -40,7 +40,6 @@ public class WinTransformer extends EntityTransformer {
         bounds.bounds.width = WinComponent.WIDTH;
         bounds.bounds.height = WinComponent.HEIGHT;
 
-        bounds.bounds.setPosition(posX,posY);
         position.pos.set(posX, posY, 3.0f);
 
         entity.add(tag);

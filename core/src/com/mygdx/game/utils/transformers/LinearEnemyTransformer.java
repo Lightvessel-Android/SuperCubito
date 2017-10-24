@@ -40,7 +40,6 @@ public class LinearEnemyTransformer extends EntityTransformer {
         bounds.bounds.width = EnemyComponent.WIDTH;
         bounds.bounds.height = EnemyComponent.HEIGHT;
 
-        bounds.bounds.setPosition(posX,posY);
         position.pos.set(posX, posY, 3.0f);
 
         entity.add(tag);

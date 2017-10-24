@@ -133,6 +133,7 @@ public class CollisionSystem extends EntitySystem {
         auxList.clear();
 
         quadTreeSystem.getQuadTree().getElements(auxList, entity.getComponent(BoundsComponent.class).bounds);
+
         return anyHaveTag(auxList, tag);
     }
 

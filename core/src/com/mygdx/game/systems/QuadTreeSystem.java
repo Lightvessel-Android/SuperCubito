@@ -21,21 +21,18 @@ public class QuadTreeSystem extends EntitySystem {
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
-        for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
-            quadTree.insert(entity.getComponent(BoundsComponent.class).bounds, entity);
-        }
+        addAll(engine);
     }
 
     @Override
     public void update(float deltaTime) {
-
         quadTree = new QuadTree(quadTree.getZone(), 0);
+        addAll(engine);
+    }
 
+    private void addAll(Engine engine) {
         for (Entity entity : engine.getEntitiesFor(Family.all(BoundsComponent.class).get())) {
-                //System.out.println("TAG : " + entity.getComponent(TagComponent.class).tag);
-                //System.out.println("BOUND : " + entity.getComponent(BoundsComponent.class).bounds);
-
-                quadTree.insert(entity.getComponent(BoundsComponent.class).bounds, entity);
+            quadTree.insert(entity.getComponent(BoundsComponent.class).bounds, entity);
         }
     }
 

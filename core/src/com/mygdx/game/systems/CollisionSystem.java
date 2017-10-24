@@ -36,9 +36,7 @@ public class CollisionSystem extends EntitySystem {
     private CollisionListener listener;
     private QuadTreeSystem quadTreeSystem;
     private ArrayList<Entity> auxList;
-
     private ImmutableArray<Entity> enemies, players, coins;
-
     private Array<Entity> enemiesCol;
 
 

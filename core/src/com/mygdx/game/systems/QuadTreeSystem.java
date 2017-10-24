@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.utils.QuadTree.QuadTree;
 
+import java.util.ArrayList;
+
 public class QuadTreeSystem extends EntitySystem {
 
 
@@ -21,7 +23,6 @@ public class QuadTreeSystem extends EntitySystem {
     @Override
     public void addedToEngine(Engine engine) {
         this.engine = engine;
-        addAll(engine);
     }
 
     @Override

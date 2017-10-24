@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BoundsComponent;
@@ -17,7 +16,6 @@ import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.enums.TagEntity;
-import com.mygdx.game.utils.QuadTree.QuadRectangle;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,6 @@ import static com.mygdx.game.enums.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class CollisionSystem extends EntitySystem {
-    private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<StateComponent> sm;
     private ComponentMapper<TagComponent> tagMapper;
 
@@ -39,7 +36,6 @@ public class CollisionSystem extends EntitySystem {
     private CollisionListener listener;
     private QuadTreeSystem quadTreeSystem;
     private ArrayList<Entity> auxList;
-    private QuadRectangle rectangleAux;
 
     private ImmutableArray<Entity> enemies, players, coins;
 
@@ -50,10 +46,8 @@ public class CollisionSystem extends EntitySystem {
         this.world = world;
         this.listener = listener;
 
-        bm = ComponentMapper.getFor(BoundsComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
         tagMapper = ComponentMapper.getFor(TagComponent.class);
-        rectangleAux = new QuadRectangle(0, 0 ,0 ,0);
         auxList = new ArrayList<>();
     }
 
@@ -91,7 +85,7 @@ public class CollisionSystem extends EntitySystem {
 
             checkCoinsCollision();
 
-            checkBlocksCollision(playerSystem, player, deltaTime);
+            checkBlocksCollision(playerSystem, player);
 
             checkExitsCollision(player);
         }
@@ -104,7 +98,7 @@ public class CollisionSystem extends EntitySystem {
         }
     }
 
-    private void checkBlocksCollision(PlayerSystem playerSystem, Entity player, float deltaTime) {
+    private void checkBlocksCollision(PlayerSystem playerSystem, Entity player) {
         if(existsCollision(player, TagEntity.BLOCK)) {
             playerSystem.hitBlock(player);
         }
@@ -138,8 +132,7 @@ public class CollisionSystem extends EntitySystem {
     private boolean existsCollision(Entity entity, TagEntity tag){
         auxList.clear();
 
-        setupRectangle(entity);
-        quadTreeSystem.getQuadTree().getElements(auxList, rectangleAux);
+        quadTreeSystem.getQuadTree().getElements(auxList, entity.getComponent(BoundsComponent.class).bounds);
         return anyHaveTag(auxList, tag);
     }
 
@@ -153,14 +146,6 @@ public class CollisionSystem extends EntitySystem {
         return false;
     }
 
-    private void setupRectangle(Entity entity) {
-        Rectangle rectangle = entity.getComponent(BoundsComponent.class).bounds;
-
-        rectangleAux.height = rectangle.getHeight();
-        rectangleAux.width = rectangle.getWidth();
-        rectangleAux.x = rectangle.getX();
-        rectangleAux.y = rectangle.getY();
-    }
 
     public Array<Entity> getEnemiesCol() {
         return enemiesCol;

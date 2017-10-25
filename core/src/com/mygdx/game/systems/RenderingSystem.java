@@ -1,10 +1,15 @@
 package com.mygdx.game.systems;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -12,37 +17,39 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
 
-public class RenderingSystem extends IteratingSystem {
+public class RenderingSystem extends EntitySystem {
     public static final float FRUSTUM_SIDE = 15;
     public static final float FRUSTUM_HEIGHT = 15;
     public static final float PIXELS_TO_METERS = 1.0f / 32.0f;
     public static final float CELL_TO_METERS = 1.0f;
 
     private SpriteBatch batch;
-    private Array<Entity> renderQueue;
-    private Comparator<Entity> comparator;
     private OrthographicCamera cam;
 
     private ComponentMapper<TextureComponent> textureM;
     private ComponentMapper<TransformComponent> transformM;
 
+    private PriorityQueue<Entity> renderQueue;
+
     public RenderingSystem(SpriteBatch batch) {
-        super(Family.all(TransformComponent.class, TextureComponent.class).get());
+        super();
 
         textureM = ComponentMapper.getFor(TextureComponent.class);
         transformM = ComponentMapper.getFor(TransformComponent.class);
 
-        renderQueue = new Array<Entity>();
-
-        comparator = new Comparator<Entity>() {
+        renderQueue = new PriorityQueue<Entity>(512, new Comparator<Entity>() {
             @Override
             public int compare(Entity entityA, Entity entityB) {
                 return (int)Math.signum(transformM.get(entityB).pos.z -
                         transformM.get(entityA).pos.z);
             }
-        };
+        });
 
         this.batch = batch;
 
@@ -50,6 +57,26 @@ public class RenderingSystem extends IteratingSystem {
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         cam.position.set(FRUSTUM_SIDE / 2, FRUSTUM_HEIGHT / 2, 0);
+
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+        engine.addEntityListener(
+                Family.all(TransformComponent.class, TextureComponent.class).get(),
+                new EntityListener() {
+                    @Override
+                    public void entityAdded(Entity entity) {
+                        renderQueue.add(entity);
+                    }
+
+                    @Override
+                    public void entityRemoved(Entity entity) {
+                        renderQueue.remove(entity);
+                    }
+                }
+        );
     }
 
     @Override
@@ -61,38 +88,39 @@ public class RenderingSystem extends IteratingSystem {
         batch.begin();
 
         for (Entity entity : renderQueue) {
-            TextureComponent tex = textureM.get(entity);
-
-            if (tex.region == null) {
-                continue;
-            }
-
-            TransformComponent t = transformM.get(entity);
-
-            float width = tex.region.getRegionWidth();
-            float height = tex.region.getRegionHeight();
-            float originX = width * 0.5f;
-            float originY = height * 0.5f;
-
-            batch.draw(tex.region,
-                t.pos.x - originX, t.pos.y - originY,
-                originX, originY,
-                width, height,
-                t.scale.x * PIXELS_TO_METERS, t.scale.y * PIXELS_TO_METERS,
-                MathUtils.radiansToDegrees * t.rotation);
+            renderEntity(entity);
         }
 
         batch.end();
-        renderQueue.clear();
     }
 
-    @Override
-    public void processEntity(Entity entity, float deltaTime) {
-        renderQueue.add(entity);
-        renderQueue.sort(comparator);
+    private void renderEntity(Entity entity) {
+        TextureComponent tex = textureM.get(entity);
+
+        if (tex.region == null) {
+            return;
+        }
+
+        TransformComponent t = transformM.get(entity);
+
+        float width = tex.region.getRegionWidth();
+        float height = tex.region.getRegionHeight();
+        float originX = width * 0.5f;
+        float originY = height * 0.5f;
+
+        batch.draw(tex.region,
+            t.pos.x - originX, t.pos.y - originY,
+            originX, originY,
+            width, height,
+            t.scale.x * PIXELS_TO_METERS, t.scale.y * PIXELS_TO_METERS,
+            MathUtils.radiansToDegrees * t.rotation);
     }
 
     public void resize(int deviceWidth, int deviceHeight) {
+        resize(cam, deviceWidth, deviceHeight);
+    }
+
+    public static void resize(OrthographicCamera cam, int deviceWidth, int deviceHeight) {
 
         float width =  deviceWidth / Gdx.graphics.getDensity();
         float height = deviceHeight / Gdx.graphics.getDensity();

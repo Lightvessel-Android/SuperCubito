@@ -58,6 +58,12 @@ public class InputSystem extends EntitySystem {
             cameraSystem.addZoom(-0.1f);
         }
 
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+            DebugSystem debugSystem = getEngine().getSystem(DebugSystem.class);
+            debugSystem.activated = !debugSystem.activated;
+        }
+
         if(Gdx.input.isTouched()) {
 
             cameraSystem.unproject(touch.set(Gdx.input.getX(), Gdx.input.getY(), 0));

@@ -16,6 +16,7 @@ import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
 import com.mygdx.game.systems.CameraSystem;
 import com.mygdx.game.systems.CollisionSystem;
+import com.mygdx.game.systems.DebugSystem;
 import com.mygdx.game.systems.EnemySystem;
 import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.systems.MovementSystem;
@@ -39,6 +40,8 @@ import static java.lang.StrictMath.max;
 public class GameScreen extends ScreenAdapter {
 
     private final RenderingSystem renderingSystem;
+    private final DebugSystem debugSystem;
+
     SuperCubito game;
 
     OrthographicCamera guiCam;
@@ -92,6 +95,9 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(renderingSystem);
         engine.addSystem(new EnemySystem());
         engine.addSystem(new TransformerEntitiesSystem());
+
+        debugSystem = new DebugSystem();
+        engine.addSystem(debugSystem);
 
         engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 

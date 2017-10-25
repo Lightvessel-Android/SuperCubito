@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoundsComponent;
 
 public class QuadTree {
-    private static final int MAX_OBJECTS = 1;
+    private static final int MAX_OBJECTS = 10;
     private static final int MAX_LEVELS = 3;
 
     private int level;
@@ -25,6 +25,13 @@ public class QuadTree {
     public void draw(ShapeRenderer shapes) {
         shapes.setColor(Color.MAGENTA);
         shapes.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+//        shapes.setColor(Color.YELLOW);
+//        for (Entity c : entities) {
+//            Rectangle entityBounds = c.getComponent(BoundsComponent.class).bounds;
+//            shapes.rect(entityBounds.x, entityBounds.y, entityBounds.width, entityBounds.height);
+//        }
+
         for (int i = 0; i < nodes.length; i++) {
             QuadTree node = nodes[i];
             if (node != null) {
@@ -83,8 +90,10 @@ public class QuadTree {
     }
 
     public void insert(Entity entity) {
+        BoundsComponent boundsComponent = entity.getComponent(BoundsComponent.class);
+
         if (nodes[0] != null) {
-            final int index = getIndex(entity.getComponent(BoundsComponent.class).bounds);
+            final int index = getIndex(boundsComponent.bounds);
             if (index != -1) {
                 nodes[index].insert(entity);
                 return;
@@ -100,7 +109,7 @@ public class QuadTree {
 
             int i = 0;
             while (i < entities.size) {
-                final int index = getIndex(entity.getComponent(BoundsComponent.class).bounds);
+                final int index = getIndex(boundsComponent.bounds);
                 if (index != -1) {
                     nodes[index].insert(entities.removeIndex(i));
                 } else {

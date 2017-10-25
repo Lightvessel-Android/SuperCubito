@@ -6,15 +6,15 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.utils.QuadTree.QuadTree;
+import com.mygdx.game.utils.QuadTree.QuadTreeNode;
 
 public class QuadTreeSystem extends EntitySystem {
 
-    QuadTree quadTree;
+    QuadTreeNode quadTree;
     private final Family boundables = Family.all(BoundsComponent.class).get();
 
     public QuadTreeSystem(){
-        quadTree = new QuadTree(1, new Rectangle(0, 0, 64, 64));
+        quadTree = new QuadTreeNode(1, new Rectangle(0, 0, 64, 64));
     }
 
     @Override

@@ -36,7 +36,7 @@ public class DebugSystem extends EntitySystem {
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            getEngine().getSystem(QuadTreeSystem.class).quadTree.draw(shapeRenderer);
+            getEngine().getSystem(QuadTreeSystem.class).quadTree.render(shapeRenderer);
 
             shapeRenderer.setColor(Color.GREEN);
 

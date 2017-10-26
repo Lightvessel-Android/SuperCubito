@@ -1,4 +1,4 @@
-package com.mygdx.game.utils.QuadTree;
+package com.mygdx.game.utils.CollisionStructure;
 
 
 import com.badlogic.ashley.core.Entity;
@@ -190,6 +190,11 @@ public class QuadTreeNode implements CollisionStructure {
                 }
             }
         }
+    }
+
+    @Override
+    public void update(Entity entity) {
+
     }
 
     /**

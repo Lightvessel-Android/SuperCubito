@@ -12,4 +12,6 @@ public interface CollisionStructure {
     void update(Entity entity);
 
     Array<Entity> retrieve(Array<Entity> entitiesToReturn, Entity entity);
+
+    int totalCount();
 }

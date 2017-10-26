@@ -70,7 +70,7 @@ public class Grid implements CollisionStructure {
     private void removeEntityWithReq(Rectangle req, Entity entity) {
         Pair<Integer, Integer> pos = calculatePosition(req);
 
-        grid[pos.getFirst()][pos.getSecond()].removeValue(entity, false);
+        grid[pos.getFirst()][pos.getSecond()].removeValue(entity, true);
     }
 
 
@@ -89,13 +89,14 @@ public class Grid implements CollisionStructure {
             Entity rc = cell.get(i);
             // Avoid duplicate entries
             // No se si va false
-            if (!retrieveList.contains(rc, false))
+            if (!retrieveList.contains(rc, true))
                 retrieveList.add(rc);
         }
         return retrieveList;
     }
 
     private Pair<Integer, Integer> calculatePosition(Rectangle rec){
+
         int topLeftX = (int) Math.max(0, rec.x / cellSize);
         int topLeftY = (int) Math.max(0, rec.y / cellSize);
         int bottomRightX = (int) Math.min(cols-1, (rec.x + rec.width -1) / cellSize);
@@ -156,5 +157,19 @@ public class Grid implements CollisionStructure {
                 grid[x][y].clear();
             }
         }
+    }
+
+    @Override
+    public int totalCount() {
+        int res = 0;
+
+        for (int x=0; x<cols; x++)
+        {
+            for (int y=0; y<rows; y++)
+            {
+                res += grid[x][y].size;
+            }
+        }
+        return res;
     }
 }

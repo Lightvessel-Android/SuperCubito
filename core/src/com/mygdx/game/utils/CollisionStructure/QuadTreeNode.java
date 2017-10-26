@@ -222,6 +222,12 @@ public class QuadTreeNode implements CollisionStructure {
         return entitiesToReturn;
     }
 
+    @Override
+    public int totalCount() {
+        // falta implementar.
+        return -1;
+    }
+
     /**
      * Renders the boundaries of all the quad tree nodes in postorder depth traversal fashion recursively
      *

@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.PlayerComponent;
 
 
 public class DebugSystem extends EntitySystem {
@@ -36,7 +35,7 @@ public class DebugSystem extends EntitySystem {
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            getEngine().getSystem(QuadTreeSystem.class).quadTree.render(shapeRenderer);
+            //getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
 
             shapeRenderer.setColor(Color.GREEN);
 

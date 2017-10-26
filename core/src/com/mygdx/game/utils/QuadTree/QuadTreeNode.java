@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoundsComponent;
 
-public class QuadTreeNode {
+public class QuadTreeNode implements CollisionStructure {
     // Max number to store in this quad before subdividing
-    public static final int MAX_ENTITIES = 4;
+    public static final int MAX_ENTITIES = 10;
     private static final int MAX_LEVELS = 5;
 
     // Spatial bounds of this node
@@ -257,5 +257,13 @@ public class QuadTreeNode {
 
         // Render the rect
         shapeRenderer.rect(boundary.x, boundary.y, boundary.width, boundary.height);
+
+
+//         Render Bounds
+        for (Entity entity : entities){
+            shapeRenderer.setColor(Color.GREEN);
+            Rectangle r = entity.getComponent(BoundsComponent.class).bounds;
+            shapeRenderer.rect(r.x, r.y, r.width, r.height);
+        }
     }
 }

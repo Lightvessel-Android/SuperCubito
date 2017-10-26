@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BoundsComponent;
@@ -22,7 +23,6 @@ import static com.mygdx.game.enums.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class CollisionSystem extends EntitySystem {
     private ComponentMapper<StateComponent> sm;
-    private ComponentMapper<TagComponent> tagMapper;
 
     public interface CollisionListener {
         void dead();
@@ -32,10 +32,11 @@ public class CollisionSystem extends EntitySystem {
     private Engine engine;
     private World world;
     private CollisionListener listener;
-    private QuadTreeSystem quadTreeSystem;
+    private CollisionStructureSystem collisionStructureSystem;
     private Array<Entity> auxList;
     private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
+    private Array<Entity> res;
 
 
     public CollisionSystem(World world, CollisionListener listener) {
@@ -43,8 +44,8 @@ public class CollisionSystem extends EntitySystem {
         this.listener = listener;
 
         sm = ComponentMapper.getFor(StateComponent.class);
-        tagMapper = ComponentMapper.getFor(TagComponent.class);
         auxList = new Array<>();
+        res = new Array<>();
     }
 
     @Override
@@ -55,7 +56,7 @@ public class CollisionSystem extends EntitySystem {
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
 
-        quadTreeSystem = engine.getSystem(QuadTreeSystem.class);
+        collisionStructureSystem = engine.getSystem(CollisionStructureSystem.class);
 
         enemiesCol = new Array<>();
     }
@@ -127,22 +128,30 @@ public class CollisionSystem extends EntitySystem {
 
     private boolean existsCollision(Entity entity, TagEntity tag){
         auxList.clear();
+        res.clear();
+        collisionStructureSystem.collisionStructure.retrieve(auxList, entity);
 
-        quadTreeSystem.quadTree.retrieve(auxList, entity);
+
+        for (Entity entity2 : auxList){
+            Rectangle r = entity2.getComponent(BoundsComponent.class).bounds;
+            if(r.contains(entity.getComponent(BoundsComponent.class).bounds)){
+                res.add(entity2);
+            }
+        }
+
+
         return anyHaveTag(tag);
     }
 
 
     private boolean anyHaveTag(TagEntity tag) {
-
-        for (Entity entity : auxList){
-            if(tagMapper.get(entity).tag.equals(tag)){
+        for (Entity entity : res){
+            if(entity.getComponent(TagComponent.class).tag == tag){
                 return true;
             }
         }
         return false;
     }
-
 
     public Array<Entity> getEnemiesCol() {
         return enemiesCol;

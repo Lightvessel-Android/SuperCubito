@@ -21,7 +21,7 @@ import com.mygdx.game.systems.EnemySystem;
 import com.mygdx.game.systems.InputSystem;
 import com.mygdx.game.systems.MovementSystem;
 import com.mygdx.game.systems.PlayerSystem;
-import com.mygdx.game.systems.QuadTreeSystem;
+import com.mygdx.game.systems.CollisionStructureSystem;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.systems.TransformerEntitiesSystem;
 import com.mygdx.game.utils.Assets;
@@ -88,7 +88,7 @@ public class GameScreen extends ScreenAdapter {
         engine.addSystem(new InputSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
-        engine.addSystem(new QuadTreeSystem());
+        engine.addSystem(new CollisionStructureSystem(level));
         engine.addSystem(new CollisionSystem(world, collisionListener));
         engine.addSystem(new PlayerSystem());
         renderingSystem = new RenderingSystem(game.batcher);
@@ -257,7 +257,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void pauseSystems() {
         engine.getSystem(PlayerSystem.class).setProcessing(false);
-        engine.getSystem(QuadTreeSystem.class).setProcessing(false);
+        engine.getSystem(CollisionStructureSystem.class).setProcessing(false);
         engine.getSystem(CollisionSystem.class).setProcessing(false);
         engine.getSystem(MovementSystem.class).setProcessing(false);
         engine.getSystem(BoundsSystem.class).setProcessing(false);
@@ -269,7 +269,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void resumeSystems() {
         engine.getSystem(PlayerSystem.class).setProcessing(true);
-        engine.getSystem(QuadTreeSystem.class).setProcessing(true);
+        engine.getSystem(CollisionStructureSystem.class).setProcessing(true);
         engine.getSystem(CollisionSystem.class).setProcessing(true);
         engine.getSystem(MovementSystem.class).setProcessing(true);
         engine.getSystem(BoundsSystem.class).setProcessing(true);

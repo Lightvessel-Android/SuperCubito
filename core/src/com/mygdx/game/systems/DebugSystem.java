@@ -42,7 +42,7 @@ public class DebugSystem extends EntitySystem {
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            //getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
+            getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
 
 //            shapeRenderer.setColor(Color.BLUE);
 //

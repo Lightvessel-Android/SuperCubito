@@ -36,8 +36,6 @@ public class CollisionSystem extends EntitySystem {
     private Array<Entity> auxList;
     private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
-    private Array<Entity> res;
-    private DebugSystem debugSystem;
 
 
     public CollisionSystem(World world, CollisionListener listener) {
@@ -46,7 +44,6 @@ public class CollisionSystem extends EntitySystem {
 
         sm = ComponentMapper.getFor(StateComponent.class);
         auxList = new Array<>();
-        res = new Array<>();
     }
 
     @Override
@@ -128,28 +125,15 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private boolean existsCollision(Entity entity, TagEntity tag){
-
-        debugSystem = engine.getSystem(DebugSystem.class);
-        debugSystem.renderEntity(entity);
-
         auxList.clear();
-        res.clear();
         collisionStructureSystem.collisionStructure.retrieve(auxList, entity);
-
-
-        for (Entity entity2 : auxList){
-            Rectangle r = entity2.getComponent(BoundsComponent.class).bounds;
-            if(r.contains(entity.getComponent(BoundsComponent.class).bounds)){
-                res.add(entity2);
-            }
-        }
 
         return anyHaveTag(tag);
     }
 
 
     private boolean anyHaveTag(TagEntity tag) {
-        for (Entity entity : res){
+        for (Entity entity : auxList){
             if(entity.getComponent(TagComponent.class).tag == tag){
                 return true;
             }

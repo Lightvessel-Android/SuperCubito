@@ -37,6 +37,7 @@ public class CollisionSystem extends EntitySystem {
     private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
     private Array<Entity> res;
+    private DebugSystem debugSystem;
 
 
     public CollisionSystem(World world, CollisionListener listener) {
@@ -127,6 +128,10 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private boolean existsCollision(Entity entity, TagEntity tag){
+
+        debugSystem = engine.getSystem(DebugSystem.class);
+        debugSystem.renderEntity(entity);
+
         auxList.clear();
         res.clear();
         collisionStructureSystem.collisionStructure.retrieve(auxList, entity);
@@ -138,7 +143,6 @@ public class CollisionSystem extends EntitySystem {
                 res.add(entity2);
             }
         }
-
 
         return anyHaveTag(tag);
     }

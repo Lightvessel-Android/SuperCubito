@@ -1,6 +1,8 @@
 package com.mygdx.game.utils.CollisionStructure;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -78,20 +80,17 @@ public class Grid implements CollisionStructure {
     {
         retrieveList.clear();
         Rectangle r = e.getComponent(BoundsComponent.class).bounds;
-
         Pair<Integer, Integer> pos = calculatePosition(r);
 
         Array<Entity> cell = grid[pos.getFirst()][pos.getSecond()];
 
         // Add every entity in the cell to the list
-        for (int i=0; i<cell.size; i++)
-        {
-            Entity rc = cell.get(i);
-            // Avoid duplicate entries
-            // No se si va false
-            if (!retrieveList.contains(rc, true))
-                retrieveList.add(rc);
+
+        for (Entity entity: cell) {
+            if (!retrieveList.contains(entity, true))
+                retrieveList.add(entity);
         }
+
         return retrieveList;
     }
 
@@ -171,5 +170,20 @@ public class Grid implements CollisionStructure {
             }
         }
         return res;
+    }
+
+    @Override
+    public void render(ShapeRenderer shapeRenderer) {
+        shapeRenderer.setColor(Color.GREEN);
+        for (int x=0; x<cols; x++)
+        {
+            for (int y=0; y<rows; y++)
+            {
+                for (Entity entity: grid[x][y]) {
+                    Rectangle r = entity.getComponent(BoundsComponent.class).bounds;
+                    shapeRenderer.rect(r.x, r.y, r.width, r.height);
+                }
+            }
+        }
     }
 }

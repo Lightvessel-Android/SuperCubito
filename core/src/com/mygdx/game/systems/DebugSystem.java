@@ -35,15 +35,15 @@ public class DebugSystem extends EntitySystem {
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            //getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
+            getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
 
-            shapeRenderer.setColor(Color.GREEN);
+            //shapeRenderer.setColor(Color.GREEN);
 
-            ImmutableArray<Entity> boundableEntities = getEngine().getEntitiesFor(boundables);
-            for (Entity c : boundableEntities) {
-                Rectangle bounds = boundableComponent.get(c).bounds;
-                shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-            }
+//            ImmutableArray<Entity> boundableEntities = getEngine().getEntitiesFor(boundables);
+//            for (Entity c : boundableEntities) {
+//                Rectangle bounds = boundableComponent.get(c).bounds;
+//                shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+//            }
 
             shapeRenderer.end();
         }

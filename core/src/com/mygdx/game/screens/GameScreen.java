@@ -248,27 +248,29 @@ public class GameScreen extends ScreenAdapter {
         game.batcher.draw(Assets.gameOver, 160 - 160 / 2, 240 - 96 / 2, 160, 96);
     }
 
-    private void pauseSystems() {
-        engine.getSystem(PlayerSystem.class).setProcessing(false);
-        engine.getSystem(QuadTreeSystem.class).setProcessing(false);
-        engine.getSystem(CollisionSystem.class).setProcessing(false);
-        engine.getSystem(MovementSystem.class).setProcessing(false);
-        engine.getSystem(BoundsSystem.class).setProcessing(false);
-        engine.getSystem(EnemySystem.class).setProcessing(false);
-        engine.getSystem(InputSystem.class).setProcessing(false);
-        engine.getSystem(TransformerEntitiesSystem.class).setProcessing(false);
+    private static final Class[] PAUSABLE_SYSTEMS = new Class[] {
+            PlayerSystem.class,
+            QuadTreeSystem.class,
+            CollisionSystem.class,
+            MovementSystem.class,
+            BoundsSystem.class,
+            EnemySystem.class,
+            InputSystem.class,
+            TransformerEntitiesSystem.class
+    };
 
+    private void setPausableSystemsProcessing(final boolean shouldKeepProcessing) {
+        for (Class system : PAUSABLE_SYSTEMS) {
+            engine.getSystem(system).setProcessing(shouldKeepProcessing);
+        }
+    }
+
+    private void pauseSystems() {
+        setPausableSystemsProcessing(false);
     }
 
     private void resumeSystems() {
-        engine.getSystem(PlayerSystem.class).setProcessing(true);
-        engine.getSystem(QuadTreeSystem.class).setProcessing(true);
-        engine.getSystem(CollisionSystem.class).setProcessing(true);
-        engine.getSystem(MovementSystem.class).setProcessing(true);
-        engine.getSystem(BoundsSystem.class).setProcessing(true);
-        engine.getSystem(EnemySystem.class).setProcessing(true);
-        engine.getSystem(InputSystem.class).setProcessing(true);
-        engine.getSystem(TransformerEntitiesSystem.class).setProcessing(true);
+        setPausableSystemsProcessing(true);
     }
 
     @Override

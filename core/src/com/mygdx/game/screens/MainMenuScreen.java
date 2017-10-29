@@ -74,11 +74,6 @@ public class MainMenuScreen extends ScreenAdapter {
         guiCam.update();
         game.batcher.setProjectionMatrix(guiCam.combined);
 
-        game.batcher.disableBlending();
-        game.batcher.begin();
-        game.batcher.end();
-
-        game.batcher.enableBlending();
         game.batcher.begin();
         game.batcher.draw(Assets.mainMenu, 0, 0, 320, 480);
         game.batcher.draw(Assets.playGame, 60, 50, 200, 200);

@@ -7,21 +7,12 @@ import com.mygdx.game.components.BackgroundComponent;
 import com.mygdx.game.components.CameraComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
+import com.mygdx.game.levels.LevelLoader;
 import com.mygdx.game.states.WorldState;
 import com.mygdx.game.systems.RenderingSystem;
 import com.mygdx.game.utils.Assets;
-import com.mygdx.game.utils.transformers.BlockTransformer;
-import com.mygdx.game.utils.transformers.CoinTransformer;
-import com.mygdx.game.utils.transformers.DiagonalEnemyTransformer;
-import com.mygdx.game.utils.transformers.EntityTransformer;
-import com.mygdx.game.utils.transformers.ExpandEnemyTransformer;
-import com.mygdx.game.utils.transformers.HorizontalEnemyTransformer;
-import com.mygdx.game.utils.transformers.PlayerTransformer;
-import com.mygdx.game.utils.transformers.VerticalEnemyTransformer;
-import com.mygdx.game.utils.transformers.WinTransformer;
 
 import static com.mygdx.game.states.WorldState.WORLD_STATE_RUNNING;
-import static com.mygdx.game.systems.RenderingSystem.CELL_TO_METERS;
 import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
 
 public class World {
@@ -29,31 +20,23 @@ public class World {
 
     private PooledEngine engine;
 
-    private Pixmap level;
+    private LevelLoader levelLoader;
 
     private Entity player;
 
-    private EntityTransformer firstTransformer;
+    private int width;
+    private int height;
 
     public World (PooledEngine engine, Pixmap pixmap) {
         this.engine = engine;
-        level = pixmap;
-
-        BlockTransformer blockTransformer = new BlockTransformer(engine, null);
-        HorizontalEnemyTransformer horizontalEnemyTransformer = new HorizontalEnemyTransformer(engine, blockTransformer);
-        VerticalEnemyTransformer verticalEnemyTransformer = new VerticalEnemyTransformer(engine, horizontalEnemyTransformer);
-        DiagonalEnemyTransformer diagonalEnemyTransformer = new DiagonalEnemyTransformer(engine, verticalEnemyTransformer);
-        CoinTransformer coinTransformer = new CoinTransformer(engine, diagonalEnemyTransformer);
-        WinTransformer winTransformer = new WinTransformer(engine, coinTransformer);
-
-        ExpandEnemyTransformer expandEnemyTransformer = new ExpandEnemyTransformer(engine, winTransformer);
-
-        firstTransformer = new PlayerTransformer(engine, this, expandEnemyTransformer);
+        levelLoader = new LevelLoader(pixmap, engine, this);
+        width = pixmap.getWidth();
+        height = pixmap.getHeight();
     }
 
     public void create() {
         createBackground();
-        generateLevel(level.getWidth(), level.getHeight());
+        levelLoader.generateLevel();
 
         createCamera(player);
 
@@ -81,30 +64,15 @@ public class World {
 
         texture.region = Assets.background;
 
-        texture.region.setRegionWidth((int) (level.getWidth() / PIXELS_TO_METERS) * 2);
-        texture.region.setRegionHeight((int) (level.getHeight()  / PIXELS_TO_METERS) * 2);
-        position.pos.set(level.getWidth() /2, level.getHeight()/2, 10 );
-
+        texture.region.setRegionWidth((int) (width / PIXELS_TO_METERS) * 2);
+        texture.region.setRegionHeight((int) (height  / PIXELS_TO_METERS) * 2);
+        position.pos.set(width /2, height/2, 10 );
 
         entity.add(background);
         entity.add(position);
         entity.add(texture);
 
         engine.addEntity(entity);
-    }
-
-
-    private void generateLevel(int width, int height) {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-
-                int pixel = level.getPixel(x, y);
-                float posX = x * CELL_TO_METERS;
-                float posY = y * CELL_TO_METERS;
-
-                firstTransformer.create(posX, posY, pixel);
-            }
-        }
     }
 
     public void setPlayer(Entity player) {

@@ -1,4 +1,4 @@
-package com.mygdx.game.utils.transformers;
+package com.mygdx.game.levels.transformers;
 
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Vector2;
@@ -6,7 +6,7 @@ import com.mygdx.game.components.EnemyComponent;
 
 public class VerticalEnemyTransformer extends LinearEnemyTransformer {
 
-    public VerticalEnemyTransformer(PooledEngine engine, EntityTransformer next) {
+    public VerticalEnemyTransformer(PooledEngine engine, com.mygdx.game.levels.transformers.EntityTransformer next) {
         super(engine, next);
         color = -175308801;
     }

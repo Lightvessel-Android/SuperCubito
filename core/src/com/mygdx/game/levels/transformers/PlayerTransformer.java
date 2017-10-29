@@ -1,46 +1,55 @@
-package com.mygdx.game.utils.transformers;
+package com.mygdx.game.levels.transformers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.mygdx.game.World;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.CoinComponent;
+import com.mygdx.game.components.MovementComponent;
+import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.utils.Assets;
 
-public class CoinTransformer extends EntityTransformer {
+public class PlayerTransformer extends EntityTransformer {
 
-    public CoinTransformer(PooledEngine engine, EntityTransformer next) {
+    private World world;
+
+    public PlayerTransformer(PooledEngine engine, World world, EntityTransformer next) {
         super(engine, next);
-        color = -420001025;
+        this.world = world;
+        color = 279280639;
     }
 
     @Override
     public void createEntity(float posX, float posY) {
 
         Entity entity = engine.createEntity();
-        CoinComponent coin = engine.createComponent(CoinComponent.class);
+
+        PlayerComponent player = engine.createComponent(PlayerComponent.class);
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        MovementComponent movement = engine.createComponent(MovementComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         StateComponent state = engine.createComponent(StateComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-        texture.region = Assets.coin;
+        texture.region = Assets.player;
 
-        bounds.bounds.width = CoinComponent.WIDTH;
-        bounds.bounds.height = CoinComponent.HEIGHT;
+        bounds.bounds.width = PlayerComponent.WIDTH;
+        bounds.bounds.height = PlayerComponent.HEIGHT;
 
-        position.pos.set(posX, posY, 3.0f);
+        position.pos.set(posX, posY, 0.0f);
 
-        state.set(CoinComponent.STATE_NORMAL);
+        state.set(PlayerComponent.STATE_ALIVE);
 
-        entity.add(coin);
+        entity.add(player);
         entity.add(bounds);
+        entity.add(movement);
         entity.add(position);
-        entity.add(texture);
         entity.add(state);
+        entity.add(texture);
 
         engine.addEntity(entity);
+        world.setPlayer(entity);
     }
 }

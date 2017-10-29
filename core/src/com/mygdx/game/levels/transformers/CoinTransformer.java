@@ -1,46 +1,45 @@
-package com.mygdx.game.utils.transformers;
+package com.mygdx.game.levels.transformers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.mygdx.game.components.BoundsComponent;
+import com.mygdx.game.components.CoinComponent;
+import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
-import com.mygdx.game.components.WinComponent;
 import com.mygdx.game.utils.Assets;
 
-import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
+public class CoinTransformer extends EntityTransformer {
 
-public class WinTransformer extends EntityTransformer {
-
-    public WinTransformer(PooledEngine engine, EntityTransformer next) {
+    public CoinTransformer(PooledEngine engine, EntityTransformer next) {
         super(engine, next);
-        color = -140769025;
+        color = -420001025;
     }
 
     @Override
     public void createEntity(float posX, float posY) {
 
         Entity entity = engine.createEntity();
-        WinComponent winBlock = engine.createComponent(WinComponent.class);
+        CoinComponent coin = engine.createComponent(CoinComponent.class);
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
+        StateComponent state = engine.createComponent(StateComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
 
-        texture.region = Assets.winBlock;
+        texture.region = Assets.coin;
 
-        texture.region.setRegionWidth((int) (WinComponent.WIDTH / PIXELS_TO_METERS));
-
-        texture.region.setRegionHeight((int) (WinComponent.HEIGHT / PIXELS_TO_METERS));
-
-        bounds.bounds.width = WinComponent.WIDTH;
-        bounds.bounds.height = WinComponent.HEIGHT;
+        bounds.bounds.width = CoinComponent.WIDTH;
+        bounds.bounds.height = CoinComponent.HEIGHT;
 
         position.pos.set(posX, posY, 3.0f);
 
-        entity.add(winBlock);
+        state.set(CoinComponent.STATE_NORMAL);
+
+        entity.add(coin);
         entity.add(bounds);
         entity.add(position);
         entity.add(texture);
+        entity.add(state);
 
         engine.addEntity(entity);
     }

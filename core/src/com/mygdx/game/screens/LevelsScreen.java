@@ -4,23 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.SuperCubito;
-import com.mygdx.game.ads.AdInterface;
-import com.mygdx.game.analytics.Analytic;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
 
@@ -35,12 +28,10 @@ public class LevelsScreen extends ScreenAdapter {
     private Table main;
 
     private ScrollPane scroll;
-    private AdInterface adInterface;
-    private Analytic analytic;
 
     private OrthographicCamera guiCam;
 
-    public LevelsScreen(final SuperCubito gameE, AdInterface adInterface, Analytic analytic) {
+    public LevelsScreen(final SuperCubito gameE) {
         game = gameE;
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
@@ -62,9 +53,6 @@ public class LevelsScreen extends ScreenAdapter {
         scroll.setOverscroll(false, false);
 
         stage.addActor(scroll);
-
-        this.adInterface = adInterface;
-        this.analytic = analytic;
     }
 
     private void generateLevels() {
@@ -83,8 +71,8 @@ public class LevelsScreen extends ScreenAdapter {
                 public void changed(ChangeEvent event, Actor actor) {
                     if(levelMax >= level) {
                         Settings.actualLevel = level;
-                        analytic.startLevel(level);
-                        game.setScreen(new GameScreen(game, Assets.getLevel(level), adInterface, analytic));
+                        game.analytic.startLevel(level);
+                        game.setScreen(new GameScreen(game, Assets.getLevel(level)));
                     }
                 }
             });

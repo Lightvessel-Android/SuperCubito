@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.ads.AdInterface;
-import com.mygdx.game.analytics.Analytic;
+import com.mygdx.game.SuperCubito;
 import com.mygdx.game.utils.Assets;
 import com.mygdx.game.utils.Settings;
-import com.mygdx.game.SuperCubito;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -18,21 +16,16 @@ public class MainMenuScreen extends ScreenAdapter {
     private OrthographicCamera guiCam;
     private Vector3 touchPoint;
 
-
-    private AdInterface adInterface;
-    private Analytic analytic;
     private Rectangle playBounds;
     private Rectangle soundBounds;
 
-    public MainMenuScreen(SuperCubito gameC, AdInterface adInterface, Analytic analytic) {
+    public MainMenuScreen(SuperCubito gameC) {
         game = gameC;
         guiCam = new OrthographicCamera(320, 480);
         guiCam.position.set(320 / 2, 480 / 2, 0);
         playBounds = new Rectangle(60, 50, 200, 200);
         soundBounds = new Rectangle(0, 0, 64, 64);
         touchPoint = new Vector3();
-        this.adInterface = adInterface;
-        this.analytic = analytic;
     }
 
     @Override
@@ -70,7 +63,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private void checkPlayButton() {
         if (playBounds.contains(touchPoint.x, touchPoint.y)) {
             Assets.playSound(Assets.clickSound);
-            game.setScreen(new LevelsScreen(game, adInterface, analytic));
+            game.setScreen(new LevelsScreen(game));
         }
     }
 

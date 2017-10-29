@@ -12,8 +12,8 @@ import com.mygdx.game.utils.Settings;
 public class SuperCubito extends Game {
 
 	public SpriteBatch batcher;
-	private AdInterface adInterface;
-	private Analytic analytic;
+	public final AdInterface adInterface;
+	public final Analytic analytic;
 
 	public SuperCubito(AdInterface adInterface, Analytic analytic){
 		this.adInterface = adInterface;
@@ -25,7 +25,7 @@ public class SuperCubito extends Game {
 		batcher = new SpriteBatch();
 		Settings.load();
 		com.mygdx.game.utils.Assets.load();
-		setScreen(new MainMenuScreen(this, adInterface, analytic));
+		setScreen(new MainMenuScreen(this));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.ads.AdInterface;
@@ -14,10 +15,12 @@ public class SuperCubito extends Game {
 	public SpriteBatch batcher;
 	private AdInterface adInterface;
 	private Analytic analytic;
+	private FPSLogger logger;
 
 	public SuperCubito(AdInterface adInterface, Analytic analytic){
 		this.adInterface = adInterface;
 		this.analytic = analytic;
+		logger = new FPSLogger();
 	}
 
 	@Override
@@ -33,6 +36,7 @@ public class SuperCubito extends Game {
 		GL20 gl = Gdx.gl;
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 		gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		logger.log();
 		super.render();
 	}
 }

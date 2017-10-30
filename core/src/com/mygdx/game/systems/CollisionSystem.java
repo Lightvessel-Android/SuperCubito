@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BoundsComponent;
@@ -17,6 +17,8 @@ import com.mygdx.game.components.StateComponent;
 import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.enums.TagEntity;
+import com.mygdx.game.utils.CollisionStructure.CollisionStructure;
+import com.mygdx.game.utils.CollisionStructure.Grid;
 
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_GAME_OVER;
 import static com.mygdx.game.enums.WorldState.WORLD_STATE_NEXT_LEVEL;
@@ -29,22 +31,23 @@ public class CollisionSystem extends EntitySystem {
         void coin();
     }
 
+    CollisionStructure collisionStructure;
     private Engine engine;
     private World world;
     private CollisionListener listener;
-    private CollisionStructureSystem collisionStructureSystem;
     private Array<Entity> auxList;
     private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
+    private final Family boundables = Family.all(BoundsComponent.class).get();
 
 
-    public CollisionSystem(World world, CollisionListener listener) {
+    public CollisionSystem(World world, CollisionListener listener, Pixmap pixmap) {
         this.world = world;
         this.listener = listener;
 
         sm = ComponentMapper.getFor(StateComponent.class);
         auxList = new Array<>();
-    }
+        collisionStructure = new Grid(pixmap.getWidth(),pixmap.getHeight(), 5);    }
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -53,8 +56,6 @@ public class CollisionSystem extends EntitySystem {
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
-
-        collisionStructureSystem = engine.getSystem(CollisionStructureSystem.class);
 
         enemiesCol = new Array<>();
     }
@@ -65,6 +66,12 @@ public class CollisionSystem extends EntitySystem {
 
 
         enemiesCol.clear();
+        collisionStructure.clear();
+
+        ImmutableArray<Entity> entities = getEngine().getEntitiesFor(boundables);
+        for (int i = 0; i < entities.size(); i++) {
+            collisionStructure.insert(entities.get(i));
+        }
 
         for (int i = 0; i < players.size(); ++i) {
             Entity player = players.get(i);
@@ -126,20 +133,18 @@ public class CollisionSystem extends EntitySystem {
 
     private boolean existsCollision(Entity entity, TagEntity tag){
         auxList.clear();
-        collisionStructureSystem.collisionStructure.retrieve(auxList, entity);
+        collisionStructure.retrieve(auxList, entity);
 
-        return anyHaveTag(tag);
-    }
-
-
-    private boolean anyHaveTag(TagEntity tag) {
-        for (Entity entity : auxList){
-            if(entity.getComponent(TagComponent.class).tag == tag){
+        for (Entity col : auxList){
+            boolean overlap = entity.getComponent(BoundsComponent.class).bounds.overlaps(col.getComponent(BoundsComponent.class).bounds);
+            if(overlap && col.getComponent(TagComponent.class).tag == tag){
                 return true;
             }
         }
+
         return false;
     }
+
 
     public Array<Entity> getEnemiesCol() {
         return enemiesCol;

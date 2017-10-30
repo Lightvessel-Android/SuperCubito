@@ -171,19 +171,4 @@ public class Grid implements CollisionStructure {
         }
         return res;
     }
-
-    @Override
-    public void render(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.GREEN);
-        for (int x=0; x<cols; x++)
-        {
-            for (int y=0; y<rows; y++)
-            {
-                for (Entity entity: grid[x][y]) {
-                    Rectangle r = entity.getComponent(BoundsComponent.class).bounds;
-                    shapeRenderer.rect(r.x, r.y, r.width, r.height);
-                }
-            }
-        }
-    }
 }

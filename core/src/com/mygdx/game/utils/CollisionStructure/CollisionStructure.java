@@ -15,6 +15,4 @@ public interface CollisionStructure {
     Array<Entity> retrieve(Array<Entity> entitiesToReturn, Entity entity);
 
     int totalCount();
-
-    void render(ShapeRenderer shapeRenderer);
 }

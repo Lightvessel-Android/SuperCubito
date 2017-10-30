@@ -10,21 +10,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoundsComponent;
+import com.mygdx.game.components.PlayerComponent;
 
 
 public class DebugSystem extends EntitySystem {
 
     ShapeRenderer shapeRenderer;
     private Engine engine;
-    private final Family boundables = Family.all(BoundsComponent.class).get();
     private final ComponentMapper<BoundsComponent> boundableComponent = ComponentMapper.getFor(BoundsComponent.class);
+    private final Family players = Family.all(PlayerComponent.class).get();
+    private Array<Entity> auxList;
 
     public boolean activated = false;
 
     public DebugSystem() {
         super(10);
         shapeRenderer = new ShapeRenderer();
+        auxList = new Array<>();
     }
 
     @Override
@@ -42,31 +46,19 @@ public class DebugSystem extends EntitySystem {
 
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            getEngine().getSystem(CollisionStructureSystem.class).collisionStructure.render(shapeRenderer);
 
-//            shapeRenderer.setColor(Color.BLUE);
-//
-//            ImmutableArray<Entity> boundableEntities = getEngine().getEntitiesFor(boundables);
-//            for (Entity c : boundableEntities) {
-//                Rectangle bounds = boundableComponent.get(c).bounds;
-//                shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-//            }
+
+            getEngine().getSystem(CollisionSystem.class).collisionStructure.retrieve(auxList, engine.getEntitiesFor(players).first());
+
+            shapeRenderer.setColor(Color.RED);
+
+            for (Entity c : auxList) {
+                if (boundableComponent.get(c) == null) continue;
+                Rectangle bounds = boundableComponent.get(c).bounds;
+                shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+            }
 
             shapeRenderer.end();
         }
-    }
-
-    public void renderEntity(Entity entity){
-        OrthographicCamera camera = getEngine().getSystem(RenderingSystem.class).getCamera();
-        camera.translate(0f,0f);
-
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.GREEN);
-
-        Rectangle bounds = entity.getComponent(BoundsComponent.class).bounds;
-        shapeRenderer.rect(bounds.x, bounds.y, bounds.width, bounds.height);
-
-        shapeRenderer.end();
     }
 }

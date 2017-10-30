@@ -1,5 +1,6 @@
 package com.mygdx.game.systems;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -15,10 +16,8 @@ import com.mygdx.game.components.CoinComponent;
 import com.mygdx.game.components.EnemyComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
-import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.components.WinComponent;
-import com.mygdx.game.enums.TagEntity;
 import com.mygdx.game.utils.CollisionStructure.CollisionStructure;
 import com.mygdx.game.utils.CollisionStructure.Grid;
 
@@ -104,19 +103,19 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkExitsCollision(Entity player) {
-        if(coins.size() == 0 && existsCollision(player, TagEntity.EXIT)) {
+        if(coins.size() == 0 && existsCollision(player, WinComponent.class)) {
             world.state = WORLD_STATE_NEXT_LEVEL;
         }
     }
 
     private void checkBlocksCollision(PlayerSystem playerSystem, Entity player) {
 
-        if(existsCollision(player, TagEntity.BLOCK)) {
+        if(existsCollision(player, BlockComponent.class)) {
             playerSystem.hitBlock(player);
         }
 
         for(Entity enemy : enemies){
-            if(existsCollision(enemy, TagEntity.BLOCK)) {
+            if(existsCollision(enemy, BlockComponent.class)) {
                 if(!enemiesCol.contains(enemy, false)) {
                     enemiesCol.add(enemy);
                 }
@@ -146,12 +145,12 @@ public class CollisionSystem extends EntitySystem {
         }
     }
 
-    private boolean existsCollision(Entity entity, TagEntity tag){
+    private boolean existsCollision(Entity entity, Class<? extends  Component> component){
         auxList.clear();
         collisionStructure.retrieve(auxList, entity);
 
         for (Entity col : auxList){
-            if(overlaps(entity, col) && col.getComponent(TagComponent.class).tag == tag){
+            if(overlaps(entity, col) && col.getComponent(component) != null){
                 return true;
             }
         }

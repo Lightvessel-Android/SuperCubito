@@ -3,11 +3,9 @@ package com.mygdx.game.levels.transformers;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 import com.mygdx.game.components.WinComponent;
-import com.mygdx.game.enums.TagEntity;
 import com.mygdx.game.utils.Assets;
 
 import static com.mygdx.game.systems.RenderingSystem.PIXELS_TO_METERS;
@@ -27,11 +25,8 @@ public class WinTransformer extends EntityTransformer {
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         TransformComponent position = engine.createComponent(TransformComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
-        TagComponent tag = engine.createComponent(TagComponent.class);
 
         texture.region = Assets.winBlock;
-
-        tag.tag = TagEntity.EXIT;
 
         texture.region.setRegionWidth((int) (WinComponent.WIDTH / PIXELS_TO_METERS));
 
@@ -42,7 +37,6 @@ public class WinTransformer extends EntityTransformer {
 
         position.pos.set(posX, posY, 3.0f);
 
-        entity.add(tag);
         entity.add(winBlock);
         entity.add(bounds);
         entity.add(position);

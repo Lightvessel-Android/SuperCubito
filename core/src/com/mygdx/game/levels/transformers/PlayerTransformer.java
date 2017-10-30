@@ -7,8 +7,10 @@ import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
+import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
+import com.mygdx.game.enums.TagEntity;
 import com.mygdx.game.utils.Assets;
 
 public class PlayerTransformer extends EntityTransformer {
@@ -32,7 +34,9 @@ public class PlayerTransformer extends EntityTransformer {
         TransformComponent position = engine.createComponent(TransformComponent.class);
         StateComponent state = engine.createComponent(StateComponent.class);
         TextureComponent texture = engine.createComponent(TextureComponent.class);
+        TagComponent tag = engine.createComponent(TagComponent.class);
 
+        tag.tag = TagEntity.PLAYER;
         texture.region = Assets.player;
 
         bounds.bounds.width = PlayerComponent.WIDTH;
@@ -42,6 +46,7 @@ public class PlayerTransformer extends EntityTransformer {
 
         state.set(PlayerComponent.STATE_ALIVE);
 
+        entity.add(tag);
         entity.add(player);
         entity.add(bounds);
         entity.add(movement);

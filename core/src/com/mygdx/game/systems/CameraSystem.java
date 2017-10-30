@@ -48,4 +48,8 @@ public class CameraSystem extends IteratingSystem {
     public void addZoom(float delta) {
         cameraComponent.camera.zoom +=delta;
     }
+
+    public CameraComponent getCameraComponent() {
+        return cameraComponent;
+    }
 }

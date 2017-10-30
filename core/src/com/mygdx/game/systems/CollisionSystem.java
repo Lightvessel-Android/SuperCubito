@@ -6,24 +6,24 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
-import com.mygdx.game.components.BlockComponent;
 import com.mygdx.game.components.BoundsComponent;
 import com.mygdx.game.components.CoinComponent;
 import com.mygdx.game.components.EnemyComponent;
-import com.mygdx.game.components.MovementComponent;
 import com.mygdx.game.components.PlayerComponent;
 import com.mygdx.game.components.StateComponent;
+import com.mygdx.game.components.TagComponent;
 import com.mygdx.game.components.TransformComponent;
-import com.mygdx.game.components.WinComponent;
+import com.mygdx.game.enums.TagEntity;
+import com.mygdx.game.utils.CollisionStructure.CollisionStructure;
+import com.mygdx.game.utils.CollisionStructure.Grid;
 
-import static com.mygdx.game.states.WorldState.WORLD_STATE_GAME_OVER;
-import static com.mygdx.game.states.WorldState.WORLD_STATE_NEXT_LEVEL;
+import static com.mygdx.game.enums.WorldState.WORLD_STATE_GAME_OVER;
+import static com.mygdx.game.enums.WorldState.WORLD_STATE_NEXT_LEVEL;
 
 public class CollisionSystem extends EntitySystem {
-    private ComponentMapper<BoundsComponent> bm;
     private ComponentMapper<StateComponent> sm;
 
     public interface CollisionListener {
@@ -31,22 +31,23 @@ public class CollisionSystem extends EntitySystem {
         void coin();
     }
 
+    CollisionStructure collisionStructure;
     private Engine engine;
     private World world;
     private CollisionListener listener;
-
-    private ImmutableArray<Entity> exits, enemies, players, coins, blocks;
-
+    private Array<Entity> auxList;
+    private ImmutableArray<Entity> enemies, players, coins;
     private Array<Entity> enemiesCol;
+    private final Family boundables = Family.all(BoundsComponent.class).get();
 
 
-    public CollisionSystem(World world, CollisionListener listener) {
+    public CollisionSystem(World world, CollisionListener listener, Pixmap pixmap) {
         this.world = world;
         this.listener = listener;
 
-        bm = ComponentMapper.getFor(BoundsComponent.class);
         sm = ComponentMapper.getFor(StateComponent.class);
-    }
+        auxList = new Array<>();
+        collisionStructure = new Grid(pixmap.getWidth(),pixmap.getHeight(), 5);    }
 
     @Override
     public void addedToEngine(Engine engine) {
@@ -55,17 +56,22 @@ public class CollisionSystem extends EntitySystem {
         players = engine.getEntitiesFor(Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class, StateComponent.class).get());
         coins = engine.getEntitiesFor(Family.all(CoinComponent.class, BoundsComponent.class).get());
         enemies = engine.getEntitiesFor(Family.all(EnemyComponent.class, BoundsComponent.class, TransformComponent.class).get());
-        blocks = engine.getEntitiesFor(Family.all(BlockComponent.class, BoundsComponent.class).get());
-        exits = engine.getEntitiesFor(Family.all(WinComponent.class, BoundsComponent.class, TransformComponent.class).get());
 
-        enemiesCol = new Array<Entity>();
+        enemiesCol = new Array<>();
     }
 
     @Override
     public void update(float deltaTime) {
         PlayerSystem playerSystem = engine.getSystem(PlayerSystem.class);
 
+
         enemiesCol.clear();
+        collisionStructure.clear();
+
+        ImmutableArray<Entity> entities = getEngine().getEntitiesFor(boundables);
+        for (int i = 0; i < entities.size(); i++) {
+            collisionStructure.insert(entities.get(i));
+        }
 
         for (int i = 0; i < players.size(); ++i) {
             Entity player = players.get(i);
@@ -79,9 +85,9 @@ public class CollisionSystem extends EntitySystem {
 
             checkEnemiesCollision(playerSystem, player);
 
-            checkCoinsCollision(player);
+            checkCoinsCollision();
 
-            checkBlocksCollision(playerSystem, player, deltaTime);
+            checkBlocksCollision(playerSystem, player);
 
             checkExitsCollision(player);
         }
@@ -89,34 +95,29 @@ public class CollisionSystem extends EntitySystem {
 
     private void checkExitsCollision(Entity player) {
 
-        for(Entity exit : exits){
-            if (isCollide(exit, player) && coins.size() == 0) {
-                world.state = WORLD_STATE_NEXT_LEVEL;
-            }
+        if(coins.size() == 0 && existsCollision(player, TagEntity.EXIT)) {
+            world.state = WORLD_STATE_NEXT_LEVEL;
         }
     }
 
-    private void checkBlocksCollision(PlayerSystem playerSystem, Entity player, float deltaTime) {
+    private void checkBlocksCollision(PlayerSystem playerSystem, Entity player) {
+        if(existsCollision(player, TagEntity.BLOCK)) {
+            playerSystem.hitBlock(player);
+        }
 
-        for(Entity block : blocks){
-
-            if (isCollide(block, player)) {
-                playerSystem.hitBlock(player);
-            }
-
-            for(Entity enemy : enemies){
-                if (isNextPositionColide(enemy, block, deltaTime)) {
-                    if(!enemiesCol.contains(enemy, false)) {
-                        enemiesCol.add(enemy);
-                    }
+        for(Entity enemy : enemies){
+            if(existsCollision(enemy, TagEntity.BLOCK)) {
+                if(!enemiesCol.contains(enemy, false)) {
+                    enemiesCol.add(enemy);
                 }
             }
         }
     }
 
-    private void checkCoinsCollision(Entity player) {
-        for(Entity coin : coins){
-            if (isCollide(coin, player)) {
+    private void checkCoinsCollision() {
+
+        for (Entity coin : coins){
+            if (existsCollision(coin, TagEntity.PLAYER)){
                 engine.removeEntity(coin);
                 listener.coin();
             }
@@ -124,30 +125,26 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkEnemiesCollision(PlayerSystem playerSystem, Entity player) {
-        for (Entity enemy : enemies){
-            if (isCollide(enemy, player)) {
-                playerSystem.dead(player);
-                listener.dead();
-            }
+        if (existsCollision(player, TagEntity.ENEMY)){
+            playerSystem.dead(player);
+            listener.dead();
         }
     }
 
-    private boolean isNextPositionColide(Entity enemy, Entity block, float delta) {
-        BoundsComponent bounds1 = bm.get(block);
-        BoundsComponent bounds2 = bm.get(enemy);
-        MovementSystem movementSystem = engine.getSystem(MovementSystem.class);
+    private boolean existsCollision(Entity entity, TagEntity tag){
+        auxList.clear();
+        collisionStructure.retrieve(auxList, entity);
 
-        bounds2.bounds.setPosition(movementSystem.nextPosition(enemy, delta));
+        for (Entity col : auxList){
+            boolean overlap = entity.getComponent(BoundsComponent.class).bounds.overlaps(col.getComponent(BoundsComponent.class).bounds);
+            if(overlap && col.getComponent(TagComponent.class).tag == tag){
+                return true;
+            }
+        }
 
-        return bounds1.bounds.overlaps(bounds2.bounds);
+        return false;
     }
 
-    private boolean isCollide(Entity entity1, Entity entity2) {
-        BoundsComponent bounds1 = bm.get(entity1);
-        BoundsComponent bounds2 = bm.get(entity2);
-
-        return bounds1.bounds.overlaps(bounds2.bounds);
-    }
 
     public Array<Entity> getEnemiesCol() {
         return enemiesCol;

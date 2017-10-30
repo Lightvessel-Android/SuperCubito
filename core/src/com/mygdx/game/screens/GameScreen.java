@@ -248,7 +248,6 @@ public class GameScreen extends ScreenAdapter {
 
     private static final Class[] PAUSABLE_SYSTEMS = new Class[] {
             PlayerSystem.class,
-            QuadTreeSystem.class,
             CollisionSystem.class,
             MovementSystem.class,
             BoundsSystem.class,

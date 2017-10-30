@@ -73,9 +73,9 @@ public class World {
 
         tag.tag = TagEntity.BACKGROUND;
 
-        texture.region.setRegionWidth((int) (level.getWidth() / PIXELS_TO_METERS) * 2);
-        texture.region.setRegionHeight((int) (level.getHeight()  / PIXELS_TO_METERS) * 2);
-        position.pos.set(level.getWidth() /2, level.getHeight()/2, 10 );
+        texture.region.setRegionWidth((int) (width / PIXELS_TO_METERS) * 2);
+        texture.region.setRegionHeight((int) (height  / PIXELS_TO_METERS) * 2);
+        position.pos.set(width /2, height/2, 10 );
 
 
         entity.add(tag);

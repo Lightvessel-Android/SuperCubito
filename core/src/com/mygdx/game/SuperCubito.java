@@ -13,8 +13,8 @@ import com.mygdx.game.utils.Settings;
 public class SuperCubito extends Game {
 
 	public SpriteBatch batcher;
-	private AdInterface adInterface;
-	private Analytic analytic;
+	public final AdInterface adInterface;
+	public final Analytic analytic;
 	private FPSLogger logger;
 
 	public SuperCubito(AdInterface adInterface, Analytic analytic){

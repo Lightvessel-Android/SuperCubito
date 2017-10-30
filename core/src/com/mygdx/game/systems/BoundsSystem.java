@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.TextureComponent;
 import com.mygdx.game.components.TransformComponent;
 
 public class BoundsSystem extends IteratingSystem {

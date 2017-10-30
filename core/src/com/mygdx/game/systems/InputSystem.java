@@ -50,19 +50,19 @@ public class InputSystem extends EntitySystem {
 
         TransformComponent pos = tr.get(player);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-            cameraSystem.addZoom(0.1f);
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.N)) {
-            cameraSystem.addZoom(-0.1f);
-        }
-
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-            DebugSystem debugSystem = getEngine().getSystem(DebugSystem.class);
-            debugSystem.activated = !debugSystem.activated;
-        }
+//        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+//            cameraSystem.addZoom(0.1f);
+//        }
+//
+//        if (Gdx.input.isKeyPressed(Input.Keys.N)) {
+//            cameraSystem.addZoom(-0.1f);
+//        }
+//
+//
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+//            DebugSystem debugSystem = getEngine().getSystem(DebugSystem.class);
+//            debugSystem.activated = !debugSystem.activated;
+//        }
 
         if(Gdx.input.isTouched()) {
 

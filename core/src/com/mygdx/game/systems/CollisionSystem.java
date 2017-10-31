@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.World;
 import com.mygdx.game.components.BlockComponent;
@@ -41,6 +42,8 @@ public class CollisionSystem extends EntitySystem {
     private Array<Entity> enemiesCol;
     private boolean isFirstCycle;
 
+    private Rectangle reqAux1, reqAux2;
+
     public CollisionSystem(World world, CollisionListener listener, Pixmap pixmap) {
         this.world = world;
         this.listener = listener;
@@ -48,6 +51,8 @@ public class CollisionSystem extends EntitySystem {
         sm = ComponentMapper.getFor(StateComponent.class);
         auxList = new Array<>();
         collisionStructure = new Grid(pixmap.getWidth(),pixmap.getHeight(), 5);
+        reqAux1 = new Rectangle(0,0,0,0);
+        reqAux2 = new Rectangle(0,0,0,0);
     }
 
     @Override
@@ -125,20 +130,33 @@ public class CollisionSystem extends EntitySystem {
 
     private void checkCoinsCollision(Entity player) {
         for (Entity coin : coins){
-            if (overlaps(coin, player)){
+            if (overlaps(player, coin)){
                 engine.removeEntity(coin);
                 listener.coin();
             }
         }
     }
 
-    private boolean overlaps(Entity entity1, Entity player2) {
-        return entity1.getComponent(BoundsComponent.class).bounds.overlaps(player2.getComponent(BoundsComponent.class).bounds);
+    private boolean overlaps(Entity entity1, Entity entity2){
+        return entity1.getComponent(BoundsComponent.class).bounds.overlaps(entity2.getComponent(BoundsComponent.class).bounds);
+    }
+
+    private boolean nextPositionOverlaps(Entity entity1, Entity entity2) {
+        TransformComponent entityTransform1 = entity1.getComponent(TransformComponent.class);
+        TransformComponent entityTransform2 = entity2.getComponent(TransformComponent.class);
+
+        reqAux1 = entity1.getComponent(BoundsComponent.class).bounds;
+        reqAux1.setPosition(entityTransform1.nextPosition);
+
+        reqAux2 = entity2.getComponent(BoundsComponent.class).bounds;
+        reqAux2.setPosition(entityTransform2.nextPosition);
+
+        return reqAux1.overlaps(reqAux2);
     }
 
     private void checkEnemiesCollision(PlayerSystem playerSystem, Entity player) {
         for (Entity enemy: enemies) {
-            if(overlaps(enemy, player)){
+            if(overlaps(player, enemy)){
                 playerSystem.dead(player);
                 listener.dead();
             }
@@ -150,7 +168,7 @@ public class CollisionSystem extends EntitySystem {
         collisionStructure.retrieve(auxList, entity);
 
         for (Entity col : auxList){
-            if(overlaps(entity, col) && col.getComponent(component) != null){
+            if(nextPositionOverlaps(entity, col) && col.getComponent(component) != null){
                 return true;
             }
         }

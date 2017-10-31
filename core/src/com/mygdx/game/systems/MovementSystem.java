@@ -15,7 +15,7 @@ public class MovementSystem extends IteratingSystem {
     private ComponentMapper<MovementComponent> mm;
 
     public MovementSystem() {
-        super(Family.all(TransformComponent.class, MovementComponent.class).get());
+        super(Family.all(TransformComponent.class, MovementComponent.class).get(), 1);
 
         tm = ComponentMapper.getFor(TransformComponent.class);
         mm = ComponentMapper.getFor(MovementComponent.class);
@@ -25,21 +25,12 @@ public class MovementSystem extends IteratingSystem {
     public void processEntity(Entity entity, float deltaTime) {
         TransformComponent pos = tm.get(entity);
         MovementComponent mov = mm.get(entity);;
-
-        pos.lastPosition.set(pos.pos.x, pos.pos.y);
-
+        
         tmp.set(mov.accel).scl(deltaTime);
         mov.velocity.add(tmp);
 
         tmp.set(mov.velocity).scl(deltaTime);
-        pos.pos.add(tmp.x, tmp.y, 0.0f);
-    }
-
-    Vector2 nextPosition(Entity entity, float delta) {
-        TransformComponent pos = tm.get(entity);
-        MovementComponent mov = mm.get(entity);
-
-        return tmp.set(pos.pos.x, pos.pos.y).add(mov.velocity.x * delta, mov.velocity.y * delta);
+        pos.nextPosition.add(tmp.x, tmp.y);
     }
 }
 

@@ -39,6 +39,7 @@ public class PlayerTransformer extends EntityTransformer {
         bounds.bounds.height = PlayerComponent.HEIGHT;
 
         position.pos.set(posX, posY, 0.0f);
+        position.nextPosition.set(posX, posY);
 
         state.set(PlayerComponent.STATE_ALIVE);
 

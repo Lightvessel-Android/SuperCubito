@@ -37,6 +37,7 @@ public class BlockTransformer extends EntityTransformer {
 
 
         position.pos.set(posX, posY, 3.0f);
+        position.nextPosition.set(posX, posY);
 
         entity.add(block);
         entity.add(bounds);

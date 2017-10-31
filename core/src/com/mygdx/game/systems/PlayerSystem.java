@@ -48,10 +48,8 @@ public class PlayerSystem extends IteratingSystem {
     }
 
     public void hitBlock(Entity entity) {
-        //StateComponent state = sm.get(entity);
         TransformComponent tr = tm.get(entity);
 
-        //state.set(PlayerComponent.STATE_HIT);
-        tr.pos.set(tr.lastPosition, 0);
+        tr.nextPosition.set(tr.pos.x, tr.pos.y);
     }
 }

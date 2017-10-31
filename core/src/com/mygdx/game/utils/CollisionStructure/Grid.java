@@ -1,13 +1,9 @@
 package com.mygdx.game.utils.CollisionStructure;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.components.BoundsComponent;
-import com.mygdx.game.components.TransformComponent;
 
 import kotlin.Pair;
 
@@ -49,19 +45,8 @@ public class Grid implements CollisionStructure {
 
     @Override
     public void update(Entity entity) {
-        removeOld(entity);
-        insert(entity);
     }
 
-    private void removeOld(Entity entity) {
-
-        Rectangle req = entity.getComponent(BoundsComponent.class).bounds;
-        Vector2 lastPos = entity.getComponent(TransformComponent.class).lastPosition;
-
-        rAux.set(lastPos.x, lastPos.y, req.width, req.height);
-
-        removeEntityWithReq(rAux, entity);
-    }
 
     public void remove(Entity entity) {
         Rectangle req = entity.getComponent(BoundsComponent.class).bounds;

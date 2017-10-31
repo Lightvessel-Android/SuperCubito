@@ -61,11 +61,6 @@ public class LevelsScreen extends ScreenAdapter {
 
             final Button button = new TextButton("" + (level + 1), Assets.skin);
 
-            if(level > levelMax){
-                button.setStyle(Assets.lockedStyle);
-            } else button.setStyle(Assets.unLockedStyle);
-
-
             button.addCaptureListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {

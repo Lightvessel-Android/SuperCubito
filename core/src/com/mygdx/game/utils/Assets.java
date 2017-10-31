@@ -3,12 +3,10 @@ package com.mygdx.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -63,15 +61,6 @@ public class Assets {
         gameOver = new TextureRegion(loadTexture("data/gameover.png"));
         pause = new TextureRegion(items, 64, 64, 64, 64);
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 18;
-        parameter.color = Color.WHITE;
-        font = generator.generateFont(parameter);
-        parameter.color = Color.NAVY;
-        yellowFont = generator.generateFont(parameter);
-        generator.dispose();
-
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("data/music.mp3"));
@@ -93,7 +82,6 @@ public class Assets {
         lockedStyle.over = new TextureRegionDrawable(lockedLevel);
         lockedStyle.pressedOffsetX = 1;
         lockedStyle.pressedOffsetY = -1;
-        lockedStyle.font = font;
 
         unLockedStyle = new TextButton.TextButtonStyle();
         unLockedStyle.up = new TextureRegionDrawable(unLockedLevel);
@@ -101,7 +89,6 @@ public class Assets {
         unLockedStyle.over = new TextureRegionDrawable(unLockedLevel);
         unLockedStyle.pressedOffsetX = 1;
         unLockedStyle.pressedOffsetY = -1;
-        unLockedStyle.font = font;
 
 
         //Levels:

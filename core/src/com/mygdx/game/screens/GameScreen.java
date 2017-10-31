@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.SuperCubito;
 import com.mygdx.game.World;
 import com.mygdx.game.enums.GameState;
-import com.mygdx.game.systems.BackgroundSystem;
 import com.mygdx.game.systems.BoundsSystem;
 import com.mygdx.game.systems.CameraSystem;
 import com.mygdx.game.systems.CollisionSystem;
@@ -79,7 +78,6 @@ public class GameScreen extends ScreenAdapter {
         world = new World(engine, pixmap);
 
         engine.addSystem(new CameraSystem());
-        engine.addSystem(new BackgroundSystem());
         engine.addSystem(new InputSystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new BoundsSystem());
@@ -92,8 +90,6 @@ public class GameScreen extends ScreenAdapter {
 
         debugSystem = new DebugSystem();
         engine.addSystem(debugSystem);
-
-        engine.getSystem(BackgroundSystem.class).setCamera(engine.getSystem(RenderingSystem.class).getCamera());
 
         world.create();
 
@@ -235,7 +231,6 @@ public class GameScreen extends ScreenAdapter {
 
     private void renderMissingCoins() {
         int count = engine.getSystem(CollisionSystem.class).totalCoins();
-        Assets.yellowFont.draw(game.batcher, "Missing coins: " + count, 0, 460);
     }
 
     private void presentPaused () {

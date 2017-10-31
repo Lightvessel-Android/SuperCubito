@@ -168,7 +168,7 @@ public class CollisionSystem extends EntitySystem {
         collisionStructure.retrieve(auxList, entity);
 
         for (Entity col : auxList){
-            if(nextPositionOverlaps(entity, col) && col.getComponent(component) != null){
+            if(overlaps(entity, col) && col.getComponent(component) != null){
                 return true;
             }
         }

@@ -96,7 +96,7 @@ public class RenderingSystem extends EntitySystem {
 
         TransformComponent t = transformM.get(entity);
 
-        t.pos.set(t.nextPosition, 0);
+        t.pos.set(t.nextPosition, t.pos.z);
 
         float width = tex.region.getRegionWidth();
         float height = tex.region.getRegionHeight();

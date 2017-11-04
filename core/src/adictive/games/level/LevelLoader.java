@@ -20,6 +20,11 @@ public class LevelLoader {
     public static void load(SquareWorld world, Engine engine) {
         loadPlayer(world, engine);
         loadBlock(world, engine, 4, 4);
+        loadBlock(world, engine, 4, 3);
+        loadBlock(world, engine, 4, 0);
+        loadBlock(world, engine, 2, 2);
+        loadBlock(world, engine, 3, 2);
+        loadBlock(world, engine, 4, 2);
     }
 
     public static void loadPlayer(SquareWorld world, Engine engine) {

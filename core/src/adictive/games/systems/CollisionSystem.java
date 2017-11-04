@@ -51,46 +51,44 @@ public class CollisionSystem extends EntitySystem {
     }
 
     private void checkVertexAndRespond(TransformComponent playerTr, BoundsComponent playerBc, float deltaX, float deltaY) {
-        if (Math.abs(playerTr.lastPos.x - playerTr.pos.x) > Math.abs(playerTr.lastPos.y - playerTr.pos.y)) {
-            checkCollisionAxisX(playerTr, playerBc, deltaX, deltaY);
-            checkCollisionAxisY(playerTr, playerBc, deltaX, deltaY);
+        float changeX = checkCollisionAxisX(playerTr, playerBc, deltaX, deltaY);
+        float changeY = checkCollisionAxisY(playerTr, playerBc, deltaX, deltaY);
+
+        if (Math.abs(changeX - playerTr.lastPos.x) < Math.abs(changeY - playerTr.lastPos.y)) {
+            playerTr.pos.x = changeX;
+            playerTr.pos.y = checkCollisionAxisY(playerTr, playerBc, deltaX, deltaY);
         } else {
-            checkCollisionAxisY(playerTr, playerBc, deltaX, deltaY);
-            checkCollisionAxisX(playerTr, playerBc, deltaX, deltaY);
+            playerTr.pos.y = changeY;
+            playerTr.pos.x = checkCollisionAxisX(playerTr, playerBc, deltaX, deltaY);
         }
     }
 
-    private void checkCollisionAxisX(TransformComponent playerTr, BoundsComponent playerBc, float deltaX, float deltaY) {
-        int cellX = (int) (playerTr.pos.x + deltaX);
-        int cellY = (int) (playerTr.pos.y + deltaY);
+    private float checkCollisionAxisX(TransformComponent playerTr, BoundsComponent playerBc, float deltaX, float deltaY) {
+        final int cellX = (int) (playerTr.pos.x + deltaX);
+        final int cellY = (int) (playerTr.pos.y + deltaY);
 
-        if (collisionMap[cellX][cellY] == WALL) {
-
-            if ((int) (playerTr.lastPos.x + deltaX) != cellX) {
-                if (playerTr.lastPos.x < playerTr.pos.x) {
-                    playerTr.pos.x = cellX - playerBc.bounds.width - PADDING;
-                } else if (playerTr.lastPos.x > playerTr.pos.x) {
-                    playerTr.pos.x = cellX + 1 + PADDING;
-                }
+        if (collisionMap[cellX][cellY] == WALL && (int) (playerTr.lastPos.x + deltaX) != cellX) {
+            if (playerTr.lastPos.x < playerTr.pos.x) {
+                return cellX - playerBc.bounds.width - PADDING;
+            } else if (playerTr.lastPos.x > playerTr.pos.x) {
+                return cellX + 1 + PADDING;
             }
         }
+        return playerTr.pos.x;
     }
 
-    private void checkCollisionAxisY(TransformComponent playerTr, BoundsComponent playerBc, float deltaX, float deltaY) {
-        int cellX;
-        int cellY;
-        cellX = (int) (playerTr.pos.x + deltaX);
-        cellY = (int) (playerTr.pos.y + deltaY);
+    private float checkCollisionAxisY(TransformComponent playerTr, BoundsComponent playerBc, float deltaX, float deltaY) {
+        final int cellX = (int) (playerTr.pos.x + deltaX);
+        final int cellY = (int) (playerTr.pos.y + deltaY);
 
-        if (collisionMap[cellX][cellY] == WALL) {
-            if ((int)(playerTr.lastPos.y + deltaY) != cellY) {
-                if (playerTr.lastPos.y < playerTr.pos.y) {
-                    playerTr.pos.y = cellY - playerBc.bounds.height - PADDING;
-                } else if (playerTr.lastPos.y > playerTr.pos.y) {
-                    playerTr.pos.y = cellY + 1 + PADDING;
-                }
+        if (collisionMap[cellX][cellY] == WALL && (int)(playerTr.lastPos.y + deltaY) != cellY) {
+            if (playerTr.lastPos.y < playerTr.pos.y) {
+                return cellY - playerBc.bounds.height - PADDING;
+            } else if (playerTr.lastPos.y > playerTr.pos.y) {
+                return  cellY + 1 + PADDING;
             }
         }
+        return playerTr.pos.y;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import adictive.games.SquareWorld;
 import adictive.games.level.LevelLoader;
+import adictive.games.systems.CollisionSystem;
 import adictive.games.systems.DebugSystem;
 import adictive.games.systems.FollowCameraSystem;
 import adictive.games.systems.MovementSystem;
@@ -27,6 +28,7 @@ public class PlayScreen extends ScreenAdapter {
 
         engine.addSystem(new PlayerInputSystem());
         engine.addSystem(new MovementSystem());
+        engine.addSystem(new CollisionSystem());
         engine.addSystem(new RenderingSystem(world, batcher));
         engine.addSystem(new DebugSystem(world));
     }

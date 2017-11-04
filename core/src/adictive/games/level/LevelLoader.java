@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.BoundsComponent;
 import adictive.games.components.CameraComponent;
 import adictive.games.components.MovementComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
+import adictive.games.components.WallComponent;
 
 public class LevelLoader {
 
@@ -37,6 +39,10 @@ public class LevelLoader {
         transformComponent.size.set(0.5f, 0.5f);
         player.add(transformComponent);
 
+        BoundsComponent boundsComponent = new BoundsComponent();
+        boundsComponent.bounds.set(0,0,0.5f,0.5f);
+        player.add(boundsComponent);
+
         player.add(new MovementComponent());
 
         engine.addEntity(player);
@@ -53,6 +59,12 @@ public class LevelLoader {
         transformComponent.size.set(1f, 1f);
         transformComponent.pos.set(x,y,0f);
         block.add(transformComponent);
+
+        BoundsComponent boundsComponent = new BoundsComponent();
+        boundsComponent.bounds.set(0,0,1f,1f);
+        block.add(boundsComponent);
+
+        block.add(new WallComponent());
 
         engine.addEntity(block);
     }

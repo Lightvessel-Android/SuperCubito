@@ -27,6 +27,8 @@ public class MovementSystem extends IteratingSystem {
         TransformComponent transformComponent = tm.get(entity);
         MovementComponent movementComponent = mm.get(entity);
 
+        transformComponent.lastPos.set(transformComponent.pos);
+
         tmp.set(movementComponent.accel).scl(deltaTime);
         movementComponent.velocity.add(tmp);
 

@@ -12,17 +12,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
-import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
-import adictive.games.components.WallComponent;
 
 public class DebugSystem extends EntitySystem {
 
     private SquareWorld world;
     private ShapeRenderer shapeRenderer;
 
-    private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
-    private final Family playerFamily = Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class).get();
+    private final Family boundsFamily = Family.all(TransformComponent.class, BoundsComponent.class).get();
 
     public DebugSystem(SquareWorld world) {
         this.world = world;
@@ -43,15 +40,13 @@ public class DebugSystem extends EntitySystem {
         shapeRenderer.setProjectionMatrix(world.getCamera().combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-        ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
+        ImmutableArray<Entity> walls = getEngine().getEntitiesFor(boundsFamily);
 
         shapeRenderer.setColor(Color.GREEN);
 
         for (Entity wall : walls) {
             renderBounds(wall);
         }
-
-        renderBounds(getEngine().getEntitiesFor(playerFamily).first());
 
         shapeRenderer.end();
 

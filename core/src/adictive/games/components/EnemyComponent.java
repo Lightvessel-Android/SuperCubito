@@ -15,6 +15,7 @@ public class EnemyComponent implements Component {
     public final Vector2 direction = new Vector2(3,0);
     public float vel = 5f;
     public float posInLine = 0f;
+    public float initialPosInLine = 0f;
     public final Vector2 start = new Vector2();
     public final Vector2 end = new Vector2();
 

@@ -34,6 +34,7 @@ public class DesignerSystem extends EntitySystem {
 
     private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
     private final Family transformable = Family.all(BoundsComponent.class, TransformComponent.class).get();
+    private final Family enemiesFamily = Family.all(EnemyComponent.class).get();
 
     private final Vector3 lastTouch = new Vector3(0,0,0);
     private final Vector3 touch = new Vector3(0,0,0);
@@ -43,6 +44,7 @@ public class DesignerSystem extends EntitySystem {
     private int editionMode = NAVIGATION_MODE;
 
     public DesignerSystem(SquareWorld world) {
+        super(11);
         this.world = world;
     }
 
@@ -53,6 +55,8 @@ public class DesignerSystem extends EntitySystem {
         drawGrid();
         drawHelpers();
     }
+
+    private static final Color LIGHT_RED = new Color(0xffa3b7ff);
 
     private void drawHelpers() {
         shapeRenderer.setProjectionMatrix(world.getCamera().combined);
@@ -65,6 +69,15 @@ public class DesignerSystem extends EntitySystem {
         } else if (editionMode == ENEMY_STARTING_POSITION_MODE) {
             final EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
             shapeRenderer.line(ec.start.x, ec.start.y, ec.end.x, ec.end.y);
+        }
+
+        ImmutableArray<Entity> enemies = getEngine().getEntitiesFor(enemiesFamily);
+        shapeRenderer.setColor(LIGHT_RED);
+        for (Entity e: enemies) {
+            if (e != enemy) {
+                final EnemyComponent ec = e.getComponent(EnemyComponent.class);
+                shapeRenderer.line(ec.start.x, ec.start.y, ec.end.x, ec.end.y);
+            }
         }
 
         shapeRenderer.end();
@@ -94,19 +107,15 @@ public class DesignerSystem extends EntitySystem {
 
         if(Gdx.input.justTouched()) {
             lastTouch.set(cursor);
-
-            if (editionMode == ENEMY_END_POSITION_MODE) {
-                EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
-                ec.end.set(cursor.x, cursor.y);
-                editionMode = ENEMY_STARTING_POSITION_MODE;
-            }
         }
 
         if (editionMode == NAVIGATION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             createEnemy();
-        }
-
-        if (editionMode == ENEMY_STARTING_POSITION_MODE) {
+        } else if (editionMode == ENEMY_END_POSITION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+            ec.end.set(cursor.x, cursor.y);
+            editionMode = ENEMY_STARTING_POSITION_MODE;
+        } else if (editionMode == ENEMY_STARTING_POSITION_MODE) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
                 ec.resetDirection();
@@ -117,13 +126,11 @@ public class DesignerSystem extends EntitySystem {
                 EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
                 ec.resetDirection();
                 EnemySystem.moveEnemyToPos(enemy, ec, ec.posInLine + 0.5f);
-            }
-
-            if(Gdx.input.justTouched()) {
-                enemy.getComponent(EnemyComponent.class).end.set(cursor.x, cursor.y);
+                ec.initialPosInLine = ec.posInLine + 0.5f;
             }
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                enemy = null;
                 editionMode = NAVIGATION_MODE;
             }
         }
@@ -153,8 +160,7 @@ public class DesignerSystem extends EntitySystem {
         final ImmutableArray<Entity> entities = getEngine().getEntitiesFor(transformable);
         final Rectangle body = new Rectangle();
         for (Entity entity : entities) {
-            BoundsComponent bc = entity.getComponent(BoundsComponent.class);
-            TransformComponent tc = entity.getComponent(TransformComponent.class);
+            final TransformComponent tc = entity.getComponent(TransformComponent.class);
             body.set(tc.pos.x, tc.pos.y, tc.size.x, tc.size.y);
 
             if (body.contains(touch.x, touch.y)) {

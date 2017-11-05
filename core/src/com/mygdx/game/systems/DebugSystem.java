@@ -25,7 +25,7 @@ public class DebugSystem extends EntitySystem {
     public boolean activated = false;
 
     public DebugSystem() {
-        super(10);
+        super(12);
         shapeRenderer = new ShapeRenderer();
         auxList = new Array<>();
     }

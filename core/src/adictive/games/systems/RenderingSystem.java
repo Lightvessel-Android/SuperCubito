@@ -3,38 +3,69 @@ package adictive.games.systems;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
 
-public class RenderingSystem extends IteratingSystem {
+public class RenderingSystem extends EntitySystem {
 
     public static int VIEWPORT_WIDTH_MTS = 15;
     public static int VIEWPORT_HEIGHT_MTS = 15;
+    public static final Family FAMILY = Family.all(TextureComponent.class, TransformComponent.class).get();
+
+    private final PriorityQueue<Entity> renderQueue;
 
     private final ComponentMapper<TransformComponent> transformMapper;
     private final ComponentMapper<TextureComponent> textureMapper;
     private final SquareWorld world;
     private final SpriteBatch batch;
 
+
+
     public RenderingSystem(SquareWorld world, SpriteBatch batch) {
-        super(Family.all(TextureComponent.class, TransformComponent.class).get(), 10);
+        super(10);
         this.world = world;
         this.batch = batch;
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
+
+        renderQueue = new PriorityQueue<>(16, new Comparator<Entity>() {
+            @Override
+            public int compare(Entity entityA, Entity entityB) {
+                return (int) Math.signum(transformMapper.get(entityB).pos.z -
+                        transformMapper.get(entityA).pos.z);
+            }
+        });
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
         resize(world.getCamera(), Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        engine.addEntityListener(
+                FAMILY,
+                new EntityListener() {
+                    @Override
+                    public void entityAdded(Entity entity) {
+                        renderQueue.add(entity);
+                    }
+
+                    @Override
+                    public void entityRemoved(Entity entity) {
+                        renderQueue.remove(entity);
+                    }
+                }
+        );
     }
 
     @Override
@@ -42,12 +73,13 @@ public class RenderingSystem extends IteratingSystem {
         world.getCamera().update();
         batch.setProjectionMatrix(world.getCamera().combined);
         batch.begin();
-        super.update(deltaTime);
+        for (Entity entity : renderQueue) {
+            renderEntity(entity);
+        }
         batch.end();
     }
 
-    @Override
-    protected void processEntity(Entity entity, float deltaTime) {
+    private void renderEntity(Entity entity) {
         final TextureComponent textureComponent = textureMapper.get(entity);
         final TransformComponent transformComponent = transformMapper.get(entity);
 

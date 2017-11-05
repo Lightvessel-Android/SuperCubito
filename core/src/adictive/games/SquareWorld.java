@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class SquareWorld {
-    final int width = 64;
-    final int height = 64;
+    final int width = 32;
+    final int height = 32;
 
     private Viewport viewport;
     private OrthographicCamera camera;
@@ -19,5 +19,13 @@ public class SquareWorld {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 }

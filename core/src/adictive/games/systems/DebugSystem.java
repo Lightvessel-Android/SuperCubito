@@ -20,7 +20,6 @@ public class DebugSystem extends EntitySystem {
 
     private SquareWorld world;
     private ShapeRenderer shapeRenderer;
-    private boolean active = false;
 
     private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
     private final Family playerFamily = Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class).get();
@@ -41,33 +40,26 @@ public class DebugSystem extends EntitySystem {
             world.getCamera().zoom -= 0.1f;
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-            active = !active;
+        shapeRenderer.setProjectionMatrix(world.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
+
+        shapeRenderer.setColor(Color.GREEN);
+
+        for (Entity wall : walls) {
+            renderBounds(wall);
         }
 
-        if (active) {
-            shapeRenderer.setProjectionMatrix(world.getCamera().combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        renderBounds(getEngine().getEntitiesFor(playerFamily).first());
 
-            ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
-
-            shapeRenderer.setColor(Color.GREEN);
-
-            for (Entity wall : walls) {
-                renderBounds(wall);
-            }
-
-            renderBounds(getEngine().getEntitiesFor(playerFamily).first());
-
-            shapeRenderer.end();
-        }
+        shapeRenderer.end();
 
     }
 
     private void renderBounds(Entity entity) {
         TransformComponent tr = entity.getComponent(TransformComponent.class);
         BoundsComponent bc = entity.getComponent(BoundsComponent.class);
-        shapeRenderer.circle(tr.pos.x, tr.pos.y, 0.2f);
         shapeRenderer.rect(tr.pos.x, tr.pos.y, bc.bounds.width, bc.bounds.height);
     }
 }

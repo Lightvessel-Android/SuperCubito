@@ -8,6 +8,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector3;
 
+import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
@@ -15,8 +16,9 @@ import adictive.games.components.WallComponent;
 
 public class CollisionSystem extends EntitySystem {
 
-    private static final byte WALL = 0x01;
-    private static final byte EMPTY = 0x00;
+    private static final byte EMPTY  = 0b00000000;
+    private static final byte WALL   = 0b00000001;
+    private static final byte ENEMY  = 0b00000010;
 
     private static final float PADDING = 0.01f;
 
@@ -27,18 +29,19 @@ public class CollisionSystem extends EntitySystem {
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> boundsMapper = ComponentMapper.getFor(BoundsComponent.class);
 
-    private final byte[][] collisionMap = new byte[64][64];
+    private final byte[][] collisionMap;
 
-    public CollisionSystem() {
+    public CollisionSystem(SquareWorld world) {
         super();
+        collisionMap = new byte[world.getWidth()][world.getHeight()];
     }
 
     @Override
     public void update(float deltaTime) {
-        checkCollisionAndRespond();
+        checkWallCollistionAndRespond();
     }
 
-    private void checkCollisionAndRespond() {
+    private void checkWallCollistionAndRespond() {
         final Entity player = getEngine().getEntitiesFor(playerFamily).first();
         final TransformComponent playerTr = transformMapper.get(player);
         final BoundsComponent playerBc = boundsMapper.get(player);

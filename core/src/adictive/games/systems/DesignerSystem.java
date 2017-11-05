@@ -1,0 +1,201 @@
+package adictive.games.systems;
+
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+
+import adictive.games.SquareWorld;
+import adictive.games.components.BoundsComponent;
+import adictive.games.components.EnemyComponent;
+import adictive.games.components.TransformComponent;
+import adictive.games.components.WallComponent;
+
+public class DesignerSystem extends EntitySystem {
+
+    public static final int NAVIGATION_MODE = 0;
+    public static final int ENEMY_ORIGIN_POSITION_MODE = 1;
+    public static final int ENEMY_END_POSITION_MODE = 2;
+    public static final int ENEMY_STARTING_POSITION_MODE = 3;
+
+    private static final Vector3 UP    = new Vector3( 0f,  1f, 0f);
+    private static final Vector3 DOWN  = new Vector3( 0f, -1f, 0f);
+    private static final Vector3 LEFT  = new Vector3(-1f,  0f, 0f);
+    private static final Vector3 RIGHT = new Vector3( 1f,  0f, 0f);
+
+    private final SquareWorld world;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+
+    private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
+    private final Family transformable = Family.all(BoundsComponent.class, TransformComponent.class).get();
+
+    private final Vector3 lastTouch = new Vector3(0,0,0);
+    private final Vector3 touch = new Vector3(0,0,0);
+    private final Vector3 cursor = new Vector3(0,0,0);
+
+    private Entity enemy;
+    private int editionMode = NAVIGATION_MODE;
+
+    public DesignerSystem(SquareWorld world) {
+        this.world = world;
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        updateCameraPosition();
+        editEntities();
+        drawGrid();
+        drawHelpers();
+    }
+
+    private void drawHelpers() {
+        shapeRenderer.setProjectionMatrix(world.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.FIREBRICK);
+
+        if (editionMode == ENEMY_END_POSITION_MODE) {
+            final EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+            shapeRenderer.line(ec.start.x, ec.start.y, cursor.x, cursor.y);
+        } else if (editionMode == ENEMY_STARTING_POSITION_MODE) {
+            final EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+            shapeRenderer.line(ec.start.x, ec.start.y, ec.end.x, ec.end.y);
+        }
+
+        shapeRenderer.end();
+    }
+
+    private void drawGrid() {
+
+        shapeRenderer.setProjectionMatrix(world.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(Color.LIGHT_GRAY);
+
+        for (int x = 0; x < world.getWidth(); x++) {
+            shapeRenderer.line(x, 0, x, world.getHeight());
+        }
+
+        for (int y = 0; y < world.getHeight(); y++) {
+            shapeRenderer.line(0, y, world.getWidth(), y);
+        }
+
+        shapeRenderer.end();
+    }
+
+    private void editEntities() {
+
+        cursor.set(Gdx.input.getX(), Gdx.input.getY(), 0f);
+        world.getCamera().unproject(cursor);
+
+        if(Gdx.input.justTouched()) {
+            lastTouch.set(cursor);
+
+            if (editionMode == ENEMY_END_POSITION_MODE) {
+                EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+                ec.end.set(cursor.x, cursor.y);
+                editionMode = ENEMY_STARTING_POSITION_MODE;
+            }
+        }
+
+        if (editionMode == NAVIGATION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            createEnemy();
+        }
+
+        if (editionMode == ENEMY_STARTING_POSITION_MODE) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+                EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+                ec.resetDirection();
+                EnemySystem.moveEnemyToPos(enemy, ec, ec.posInLine - 0.5f);
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+                EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+                ec.resetDirection();
+                EnemySystem.moveEnemyToPos(enemy, ec, ec.posInLine + 0.5f);
+            }
+
+            if(Gdx.input.justTouched()) {
+                enemy.getComponent(EnemyComponent.class).end.set(cursor.x, cursor.y);
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                editionMode = NAVIGATION_MODE;
+            }
+        }
+
+        if(Gdx.input.isTouched()) {
+            touch.set(cursor);
+
+            if (editionMode == NAVIGATION_MODE) {
+                if (Gdx.input.isKeyPressed(Input.Keys.B)) {
+                    createWall();
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                    removeEntity();
+                }
+            }
+        }
+    }
+
+    private void createEnemy() {
+        this.enemy = EnemyComponent.createEnemy(world, getEngine(), cursor.x, cursor.y);
+        enemy.getComponent(EnemyComponent.class).start.set(cursor.x, cursor.y);
+        editionMode = ENEMY_END_POSITION_MODE;
+    }
+
+    private void removeEntity() {
+        final ImmutableArray<Entity> entities = getEngine().getEntitiesFor(transformable);
+        final Rectangle body = new Rectangle();
+        for (Entity entity : entities) {
+            BoundsComponent bc = entity.getComponent(BoundsComponent.class);
+            TransformComponent tc = entity.getComponent(TransformComponent.class);
+            body.set(tc.pos.x, tc.pos.y, tc.size.x, tc.size.y);
+
+            if (body.contains(touch.x, touch.y)) {
+                getEngine().removeEntity(entity);
+            }
+        }
+    }
+
+    private void createWall() {
+
+        final int x = (int)touch.x;
+        final int y = (int)touch.y;
+        final ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
+
+        for (Entity wall : walls) {
+            TransformComponent component = wall.getComponent(TransformComponent.class);
+            if (((int)component.pos.x) == x && ((int)component.pos.y) == y) {
+                return;
+            }
+        }
+
+        WallComponent.createBlock(world, getEngine(), x, y);
+    }
+
+
+    private void updateCameraPosition() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            world.getCamera().position.add(UP);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            world.getCamera().position.add(DOWN);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            world.getCamera().position.add(LEFT);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            world.getCamera().position.add(RIGHT);
+        }
+    }
+
+}

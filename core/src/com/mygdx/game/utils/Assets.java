@@ -3,12 +3,10 @@ package com.mygdx.game.utils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -62,15 +60,6 @@ public class Assets {
         ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = new TextureRegion(loadTexture("data/gameover.png"));
         pause = new TextureRegion(items, 64, 64, 64, 64);
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font/Walkway/font.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 18;
-        parameter.color = Color.WHITE;
-        font = generator.generateFont(parameter);
-        parameter.color = Color.NAVY;
-        yellowFont = generator.generateFont(parameter);
-        generator.dispose();
 
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 

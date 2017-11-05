@@ -28,7 +28,7 @@ public class SquareGame extends Game {
         batcher = new SpriteBatch();
         Settings.load();
         com.mygdx.game.utils.Assets.load();
-        setScreen(new PlayScreen());
+        setScreen(new PlayScreen(this));
     }
 
     @Override

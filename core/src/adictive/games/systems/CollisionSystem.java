@@ -8,41 +8,68 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.math.Vector3;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
+import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.play.PlayScreen;
 
 public class CollisionSystem extends EntitySystem {
 
     private static final byte EMPTY  = 0b00000000;
     private static final byte WALL   = 0b00000001;
-    private static final byte ENEMY  = 0b00000010;
 
     private static final float PADDING = 0.01f;
 
 
     private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
-    private final Family playerFamily = Family.all(PlayerComponent.class, BoundsComponent.class, TransformComponent.class).get();
+    private final Family boundsFamily = Family.all(BoundsComponent.class, TransformComponent.class).get();
 
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> boundsMapper = ComponentMapper.getFor(BoundsComponent.class);
 
     private final byte[][] collisionMap;
+    private PlayScreen screen;
+    private final List<Entity> enemies = new ArrayList<>();
+    private Entity player;
 
-    public CollisionSystem(SquareWorld world) {
+    public CollisionSystem(SquareWorld world, PlayScreen screen) {
         super();
         collisionMap = new byte[world.getWidth()][world.getHeight()];
+        this.screen = screen;
     }
 
     @Override
     public void update(float deltaTime) {
-        checkWallCollistionAndRespond();
+        checkWallCollisionAndRespond();
+        checkEnemyCollision();
     }
 
-    private void checkWallCollistionAndRespond() {
-        final Entity player = getEngine().getEntitiesFor(playerFamily).first();
+    private void checkEnemyCollision() {
+        final TransformComponent playerTr = transformMapper.get(player);
+        final BoundsComponent playerBc = boundsMapper.get(player);
+
+        for (Entity enemy : enemies) {
+            final TransformComponent enemyTr = transformMapper.get(enemy);
+            final BoundsComponent enemyBc = boundsMapper.get(enemy);
+
+            if (playerTr.pos.x < enemyTr.pos.x + enemyBc.bounds.width
+                    && playerTr.pos.x + playerBc.bounds.width > enemyTr.pos.x
+                    && playerTr.pos.y < enemyTr.pos.y + enemyBc.bounds.height
+                    && playerTr.pos.y + playerBc.bounds.height > enemyTr.pos.y){
+
+                screen.restart();
+                break;
+            }
+        }
+    }
+
+    private void checkWallCollisionAndRespond() {
         final TransformComponent playerTr = transformMapper.get(player);
         final BoundsComponent playerBc = boundsMapper.get(player);
 
@@ -97,12 +124,20 @@ public class CollisionSystem extends EntitySystem {
     @Override
     public void addedToEngine(final Engine engine) {
         super.addedToEngine(engine);
-        engine.addEntityListener(wallFamily, new EntityListener() {
+        engine.addEntityListener(boundsFamily, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
                 if (entity.getComponent(WallComponent.class) != null) {
                     Vector3 pos = transformMapper.get(entity).pos;
                     collisionMap[(int)pos.x][(int)pos.y] = WALL;
+                }
+
+                if (entity.getComponent(EnemyComponent.class) != null) {
+                    enemies.add(entity);
+                }
+
+                if (entity.getComponent(PlayerComponent.class) != null) {
+                    player = entity;
                 }
             }
 
@@ -111,6 +146,14 @@ public class CollisionSystem extends EntitySystem {
                 if (entity.getComponent(WallComponent.class) != null) {
                     Vector3 pos = transformMapper.get(entity).pos;
                     collisionMap[(int)pos.x][(int)pos.y] = EMPTY;
+                }
+
+                if (entity.getComponent(EnemyComponent.class) != null) {
+                    enemies.remove(entity);
+                }
+
+                if (entity.getComponent(PlayerComponent.class) != null) {
+                    player = null;
                 }
             }
         });

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import adictive.games.SquareGame;
 import adictive.games.SquareWorld;
 import adictive.games.level.LevelLoader;
 import adictive.games.systems.CollisionSystem;
@@ -21,8 +22,14 @@ public class PlayScreen extends ScreenAdapter {
     private final PooledEngine engine = new PooledEngine();
     private final SquareWorld world = new SquareWorld();
     private final SpriteBatch batcher = new SpriteBatch();
+    private SquareGame superCubito;
 
-    public PlayScreen() {
+    public PlayScreen(SquareGame superCubito) {
+        this.superCubito = superCubito;
+        initialize();
+    }
+
+    private void initialize() {
         generateSystems();
         loadLevel();
     }
@@ -33,7 +40,7 @@ public class PlayScreen extends ScreenAdapter {
         engine.addSystem(new PlayerInputSystem());
         engine.addSystem(new EnemySystem());
         engine.addSystem(new MovementSystem());
-        engine.addSystem(new CollisionSystem(world));
+        engine.addSystem(new CollisionSystem(world, this));
         engine.addSystem(new RenderingSystem(world, batcher));
         engine.addSystem(new DebugSystem(world));
         engine.addSystem(new DesignerSystem(world));
@@ -50,6 +57,10 @@ public class PlayScreen extends ScreenAdapter {
     public void render (float delta) {
         updateMode();
         engine.update(delta);
+    }
+
+    public void restart() {
+        superCubito.setScreen(new PlayScreen(superCubito));
     }
 
     @Override

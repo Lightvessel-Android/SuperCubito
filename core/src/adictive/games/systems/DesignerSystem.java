@@ -16,13 +16,13 @@ import adictive.games.components.BoundsComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.level.LevelWriter;
 
 public class DesignerSystem extends EntitySystem {
 
-    public static final int NAVIGATION_MODE = 0;
-    public static final int ENEMY_ORIGIN_POSITION_MODE = 1;
-    public static final int ENEMY_END_POSITION_MODE = 2;
-    public static final int ENEMY_STARTING_POSITION_MODE = 3;
+    private static final int NAVIGATION_MODE = 0;
+    private static final int ENEMY_END_POSITION_MODE = 2;
+    private static final int ENEMY_INITIAL_POSITION_MODE = 3;
 
     private static final Vector3 UP    = new Vector3( 0f,  1f, 0f);
     private static final Vector3 DOWN  = new Vector3( 0f, -1f, 0f);
@@ -54,6 +54,13 @@ public class DesignerSystem extends EntitySystem {
         editEntities();
         drawGrid();
         drawHelpers();
+        saveLevel();
+    }
+
+    private void saveLevel() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            new LevelWriter("level1.txt").write(getEngine());
+        }
     }
 
     private static final Color LIGHT_RED = new Color(0xffa3b7ff);
@@ -66,7 +73,7 @@ public class DesignerSystem extends EntitySystem {
         if (editionMode == ENEMY_END_POSITION_MODE) {
             final EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
             shapeRenderer.line(ec.start.x, ec.start.y, cursor.x, cursor.y);
-        } else if (editionMode == ENEMY_STARTING_POSITION_MODE) {
+        } else if (editionMode == ENEMY_INITIAL_POSITION_MODE) {
             final EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
             shapeRenderer.line(ec.start.x, ec.start.y, ec.end.x, ec.end.y);
         }
@@ -114,8 +121,8 @@ public class DesignerSystem extends EntitySystem {
         } else if (editionMode == ENEMY_END_POSITION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
             ec.end.set(cursor.x, cursor.y);
-            editionMode = ENEMY_STARTING_POSITION_MODE;
-        } else if (editionMode == ENEMY_STARTING_POSITION_MODE) {
+            editionMode = ENEMY_INITIAL_POSITION_MODE;
+        } else if (editionMode == ENEMY_INITIAL_POSITION_MODE) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
                 ec.resetDirection();
@@ -151,7 +158,7 @@ public class DesignerSystem extends EntitySystem {
     }
 
     private void createEnemy() {
-        this.enemy = EnemyComponent.createEnemy(world, getEngine(), cursor.x, cursor.y);
+        this.enemy = EnemyComponent.createEnemy(getEngine(), cursor.x, cursor.y);
         enemy.getComponent(EnemyComponent.class).start.set(cursor.x, cursor.y);
         editionMode = ENEMY_END_POSITION_MODE;
     }

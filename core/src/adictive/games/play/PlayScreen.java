@@ -43,7 +43,7 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     public void loadLevel() {
-        LevelLoader.load(world, engine);
+        new LevelLoader("level1.txt",world, engine).load();
     }
 
     @Override

@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import adictive.games.SquareWorld;
-
 public class EnemyComponent implements Component {
     private static TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/enemy.png")));
     public final Vector2 direction = new Vector2(3,0);
@@ -23,7 +21,7 @@ public class EnemyComponent implements Component {
         direction.set(end.x - start.x, end.y - start.y);
     }
 
-    public static Entity createEnemy(SquareWorld world, Engine engine, float x, float y) {
+    public static Entity createEnemy(Engine engine, float x, float y) {
         Entity block = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -44,5 +42,17 @@ public class EnemyComponent implements Component {
 
         engine.addEntity(block);
         return block;
+    }
+
+    public static Entity createEnemy(Engine engine, float x, float y, float posInLine, float startX, float startY, float endX, float endY) {
+        Entity enemy = createEnemy(engine, x, y);
+        EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
+        ec.initialPosInLine = posInLine;
+        ec.start.x = startX;
+        ec.start.y = startY;
+        ec.end.x = endX;
+        ec.end.y = endY;
+
+        return enemy;
     }
 }

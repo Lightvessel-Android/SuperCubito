@@ -12,12 +12,13 @@ import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.components.WinComponent;
 
 public class LevelWriter {
     private final String fileName;
 
-    public LevelWriter(String fileName) {
-        this.fileName = fileName;
+    public LevelWriter(int level) {
+        this.fileName = "level" + level + ".txt";
     }
 
     public void write(final Engine engine) {
@@ -32,12 +33,19 @@ public class LevelWriter {
                     writer.println(enemyToCSV(e));
                 } else if (e.getComponent(PlayerComponent.class) != null) {
                     writer.println(playerToCSV(e));
+                } else if (e.getComponent(WinComponent.class) != null) {
+                    writer.println(winBlockToCSV(e));
                 }
             }
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    private String winBlockToCSV(Entity e) {
+        TransformComponent tc = e.getComponent(TransformComponent.class);
+        return csv("Win",tc.pos.x, tc.pos.y) ;
     }
 
     public String playerToCSV(Entity e) {

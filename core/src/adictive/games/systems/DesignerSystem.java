@@ -17,7 +17,9 @@ import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.components.WinComponent;
 import adictive.games.level.LevelWriter;
+import adictive.games.play.PlayScreen;
 
 public class DesignerSystem extends EntitySystem {
 
@@ -31,9 +33,11 @@ public class DesignerSystem extends EntitySystem {
     private static final Vector3 RIGHT = new Vector3( 1f,  0f, 0f);
 
     private final SquareWorld world;
+    private PlayScreen screen;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
+    private final Family block = Family.all(WallComponent.class, WinComponent.class, TransformComponent.class).get();
     private final Family transformable = Family.all(BoundsComponent.class, TransformComponent.class).get();
     private final Family enemiesFamily = Family.all(EnemyComponent.class).get();
 
@@ -44,9 +48,10 @@ public class DesignerSystem extends EntitySystem {
     private Entity enemy;
     private int editionMode = NAVIGATION_MODE;
 
-    public DesignerSystem(SquareWorld world) {
+    public DesignerSystem(SquareWorld world, PlayScreen screen) {
         super(11);
         this.world = world;
+        this.screen = screen;
     }
 
     @Override
@@ -60,7 +65,7 @@ public class DesignerSystem extends EntitySystem {
 
     private void saveLevel() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            new LevelWriter("level1.txt").write(getEngine());
+            new LevelWriter(screen.level).write(getEngine());
         }
     }
 
@@ -158,8 +163,22 @@ public class DesignerSystem extends EntitySystem {
                 if (Gdx.input.isKeyPressed(Input.Keys.K)) {
                     removeEntity();
                 }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.G)) {
+                    createWinBlock();
+                }
+
             }
         }
+    }
+
+    private void createWinBlock() {
+        final int x = (int)touch.x;
+        final int y = (int)touch.y;
+
+        if (existsBlockOnPosition(x, y, block)) return;
+
+        WinComponent.createWinComponent(getEngine(), cursor.x, cursor.y);
     }
 
     private void createPlayer() {
@@ -189,16 +208,22 @@ public class DesignerSystem extends EntitySystem {
 
         final int x = (int)touch.x;
         final int y = (int)touch.y;
+
+        if (existsBlockOnPosition(x, y, block)) return;
+
+        WallComponent.createBlock(getEngine(), x, y);
+    }
+
+    private boolean existsBlockOnPosition(int x, int y, Family wallFamily) {
         final ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
 
         for (Entity wall : walls) {
             TransformComponent component = wall.getComponent(TransformComponent.class);
             if (((int)component.pos.x) == x && ((int)component.pos.y) == y) {
-                return;
+                return true;
             }
         }
-
-        WallComponent.createBlock(getEngine(), x, y);
+        return false;
     }
 
 

@@ -8,6 +8,7 @@ import adictive.games.SquareWorld;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.components.WinComponent;
 
 public class LevelLoader {
 
@@ -15,8 +16,8 @@ public class LevelLoader {
     private SquareWorld world;
     private Engine engine;
 
-    public LevelLoader(String fileName, SquareWorld world, Engine engine) {
-        this.fileName = fileName;
+    public LevelLoader(int levelNumber, SquareWorld world, Engine engine) {
+        this.fileName = "level" + levelNumber + ".txt";
         this.world = world;
         this.engine = engine;
     }
@@ -37,8 +38,18 @@ public class LevelLoader {
                 case "Player":
                     parsePlayer(entity);
                     break;
+                case "Win":
+                    parseWin(entity);
+                    break;
             }
         }
+    }
+
+    private void parseWin(String[] line) {
+        WinComponent.createWinComponent(
+                engine,
+                Float.parseFloat(line[1]), Float.parseFloat(line[2])
+        );
     }
 
     private void parsePlayer(String[] line) {
@@ -50,7 +61,7 @@ public class LevelLoader {
 
     private void parseEnemy(String[] line) {
         EnemyComponent.createEnemy(
-                engine, 0,0,
+                engine, 0, 0,
                 Float.parseFloat(line[1]),
                 Float.parseFloat(line[2]),
                 Float.parseFloat(line[3]),
@@ -60,7 +71,7 @@ public class LevelLoader {
     }
 
     private void parseBlock(String[] line) {
-        loadBlock(world,engine,Integer.parseInt(line[1]),Integer.parseInt(line[2]));
+        loadBlock(world, engine, Integer.parseInt(line[1]), Integer.parseInt(line[2]));
     }
 
     private static void loadBlock(SquareWorld world, Engine engine, int x, int y) {

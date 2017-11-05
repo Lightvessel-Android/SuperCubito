@@ -23,9 +23,11 @@ public class PlayScreen extends ScreenAdapter {
     private final SquareWorld world = new SquareWorld();
     private final SpriteBatch batcher = new SpriteBatch();
     private SquareGame superCubito;
+    public final int level;
 
-    public PlayScreen(SquareGame superCubito) {
+    public PlayScreen(SquareGame superCubito, int level) {
         this.superCubito = superCubito;
+        this.level = level;
         initialize();
     }
 
@@ -43,14 +45,14 @@ public class PlayScreen extends ScreenAdapter {
         engine.addSystem(new CollisionSystem(world, this));
         engine.addSystem(new RenderingSystem(world, batcher));
         engine.addSystem(new DebugSystem(world));
-        engine.addSystem(new DesignerSystem(world));
+        engine.addSystem(new DesignerSystem(world, this));
 
         getDesignerSystem().setProcessing(false);
         getDebugSystem().setProcessing(false);
     }
 
     public void loadLevel() {
-        new LevelLoader("level1.txt",world, engine).load();
+        new LevelLoader( level,world, engine).load();
     }
 
     @Override
@@ -60,7 +62,11 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     public void restart() {
-        superCubito.setScreen(new PlayScreen(superCubito));
+        superCubito.setScreen(new PlayScreen(superCubito, level));
+    }
+
+    public void win() {
+        superCubito.goToNextLevel();
     }
 
     @Override

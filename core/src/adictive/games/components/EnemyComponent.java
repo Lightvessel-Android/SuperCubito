@@ -48,6 +48,7 @@ public class EnemyComponent implements Component {
         Entity enemy = createEnemy(engine, x, y);
         EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
         ec.initialPosInLine = posInLine;
+        ec.posInLine = posInLine;
         ec.start.x = startX;
         ec.start.y = startY;
         ec.end.x = endX;

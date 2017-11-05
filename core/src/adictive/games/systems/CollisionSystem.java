@@ -17,12 +17,14 @@ import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
+import adictive.games.components.WinComponent;
 import adictive.games.play.PlayScreen;
 
 public class CollisionSystem extends EntitySystem {
 
     private static final byte EMPTY  = 0b00000000;
     private static final byte WALL   = 0b00000001;
+    private static final byte WIN    = 0b00000010;
 
     private static final float PADDING = 0.01f;
 
@@ -36,6 +38,9 @@ public class CollisionSystem extends EntitySystem {
     private PlayScreen screen;
     private final List<Entity> enemies = new ArrayList<>();
     private Entity player;
+    private TransformComponent playerTr;
+    private BoundsComponent playerBc;
+
 
     public CollisionSystem(SquareWorld world, PlayScreen screen) {
         super();
@@ -47,12 +52,16 @@ public class CollisionSystem extends EntitySystem {
     public void update(float deltaTime) {
         checkWallCollisionAndRespond();
         checkEnemyCollision();
+        checkWinBlockCollision();
+    }
+
+    private void checkWinBlockCollision() {
+        if (collisionMap[(int)(playerTr.pos.x + playerBc.bounds.x/2)][(int)(playerTr.pos.y + playerBc.bounds.y/2)] == WIN) {
+            screen.win();
+        }
     }
 
     private void checkEnemyCollision() {
-        final TransformComponent playerTr = transformMapper.get(player);
-        final BoundsComponent playerBc = boundsMapper.get(player);
-
         for (Entity enemy : enemies) {
             final TransformComponent enemyTr = transformMapper.get(enemy);
             final BoundsComponent enemyBc = boundsMapper.get(enemy);
@@ -137,12 +146,19 @@ public class CollisionSystem extends EntitySystem {
 
                 if (entity.getComponent(PlayerComponent.class) != null) {
                     player = entity;
+                    playerTr = transformMapper.get(player);
+                    playerBc = boundsMapper.get(player);
+                }
+
+                if (entity.getComponent(WinComponent.class) != null) {
+                    Vector3 pos = transformMapper.get(entity).pos;
+                    collisionMap[(int)pos.x][(int)pos.y] = WIN;
                 }
             }
 
             @Override
             public void entityRemoved(Entity entity) {
-                if (entity.getComponent(WallComponent.class) != null) {
+                if (entity.getComponent(WallComponent.class) != null || entity.getComponent(WinComponent.class) != null) {
                     Vector3 pos = transformMapper.get(entity).pos;
                     collisionMap[(int)pos.x][(int)pos.y] = EMPTY;
                 }

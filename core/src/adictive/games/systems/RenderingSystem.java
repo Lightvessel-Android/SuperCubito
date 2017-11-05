@@ -9,9 +9,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.utils.SortedOnInsertList;
 
 import java.util.Comparator;
-import java.util.PriorityQueue;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.TextureComponent;
@@ -23,14 +23,12 @@ public class RenderingSystem extends EntitySystem {
     public static int VIEWPORT_HEIGHT_MTS = 15;
     public static final Family FAMILY = Family.all(TextureComponent.class, TransformComponent.class).get();
 
-    private final PriorityQueue<Entity> renderQueue;
+    private final SortedOnInsertList<Entity> renderQueue;
 
     private final ComponentMapper<TransformComponent> transformMapper;
     private final ComponentMapper<TextureComponent> textureMapper;
     private final SquareWorld world;
     private final SpriteBatch batch;
-
-
 
     public RenderingSystem(SquareWorld world, SpriteBatch batch) {
         super(10);
@@ -39,7 +37,7 @@ public class RenderingSystem extends EntitySystem {
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
-        renderQueue = new PriorityQueue<>(16, new Comparator<Entity>() {
+        renderQueue = new SortedOnInsertList<>(512, new Comparator<Entity>() {
             @Override
             public int compare(Entity entityA, Entity entityB) {
                 return (int) Math.signum(transformMapper.get(entityB).pos.z -

@@ -13,6 +13,8 @@ public class PlayerComponent implements Component {
     public static final float MOVE_VELOCITY = 8;
     public static final float WIDTH = 0.5f;
     public static final float HEIGHT = 0.5f;
+    public static final float LAYER = 3;
+    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/player.png")));
 
     public static void createPlayer(SquareWorld world, Engine engine, float x, float y) {
         Entity player = new Entity();
@@ -24,12 +26,12 @@ public class PlayerComponent implements Component {
         player.add(cameraComponent);
 
         TextureComponent textureComponent = new TextureComponent();
-        textureComponent.region = new TextureRegion(new Texture(Gdx.files.internal("data/player.png")));
+        textureComponent.region = textureRegion;
         player.add(textureComponent);
 
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.size.set(WIDTH, HEIGHT);
-        transformComponent.pos.set(x - transformComponent.size.x/2,y - transformComponent.size.y/2,0f);
+        transformComponent.pos.set(x - transformComponent.size.x/2,y - transformComponent.size.y/2, LAYER);
         player.add(transformComponent);
 
         BoundsComponent boundsComponent = new BoundsComponent();

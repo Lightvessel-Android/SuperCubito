@@ -17,6 +17,8 @@ public class SquareGame extends Game {
     public final Analytic analytic;
     private FPSLogger logger;
 
+    private int level = 0;
+
     public SquareGame(AdInterface adInterface, Analytic analytic){
         this.adInterface = adInterface;
         this.analytic = analytic;
@@ -28,7 +30,7 @@ public class SquareGame extends Game {
         batcher = new SpriteBatch();
         Settings.load();
         com.mygdx.game.utils.Assets.load();
-        setScreen(new PlayScreen(this));
+        goToNextLevel();
     }
 
     @Override
@@ -38,5 +40,10 @@ public class SquareGame extends Game {
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         logger.log();
         super.render();
+    }
+
+    public void goToNextLevel() {
+        this.level++;
+        setScreen(new PlayScreen(this, level));
     }
 }

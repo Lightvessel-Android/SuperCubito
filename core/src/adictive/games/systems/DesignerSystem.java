@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
 import adictive.games.components.EnemyComponent;
+import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
 import adictive.games.level.LevelWriter;
@@ -116,8 +117,12 @@ public class DesignerSystem extends EntitySystem {
             lastTouch.set(cursor);
         }
 
-        if (editionMode == NAVIGATION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            createEnemy();
+        if (editionMode == NAVIGATION_MODE) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                createEnemy();
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)){
+                createPlayer();
+            }
         } else if (editionMode == ENEMY_END_POSITION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
             ec.end.set(cursor.x, cursor.y);
@@ -157,6 +162,10 @@ public class DesignerSystem extends EntitySystem {
         }
     }
 
+    private void createPlayer() {
+        PlayerComponent.createPlayer(world, getEngine(), cursor.x, cursor.y);
+    }
+
     private void createEnemy() {
         this.enemy = EnemyComponent.createEnemy(getEngine(), cursor.x, cursor.y);
         enemy.getComponent(EnemyComponent.class).start.set(cursor.x, cursor.y);
@@ -189,7 +198,7 @@ public class DesignerSystem extends EntitySystem {
             }
         }
 
-        WallComponent.createBlock(world, getEngine(), x, y);
+        WallComponent.createBlock(getEngine(), x, y);
     }
 
 

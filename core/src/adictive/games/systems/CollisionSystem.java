@@ -27,7 +27,6 @@ public class CollisionSystem extends EntitySystem {
     private static final float PADDING = 0.01f;
 
 
-    private final Family wallFamily = Family.all(WallComponent.class, BoundsComponent.class, TransformComponent.class).get();
     private final Family boundsFamily = Family.all(BoundsComponent.class, TransformComponent.class).get();
 
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);

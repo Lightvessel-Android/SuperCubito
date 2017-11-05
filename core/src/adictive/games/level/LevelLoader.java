@@ -1,20 +1,12 @@
 package adictive.games.level;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import adictive.games.SquareWorld;
-import adictive.games.components.BoundsComponent;
-import adictive.games.components.CameraComponent;
 import adictive.games.components.EnemyComponent;
-import adictive.games.components.MovementComponent;
 import adictive.games.components.PlayerComponent;
-import adictive.games.components.TextureComponent;
-import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
 
 public class LevelLoader {
@@ -30,22 +22,33 @@ public class LevelLoader {
     }
 
     public void load() {
-        loadPlayer(world, engine, world.getWidth()/2, world.getHeight()/2);
-
         FileHandle fileHandle = Gdx.files.internal("levels/" + fileName);
         String s = fileHandle.readString();
         String[] lines = s.split("\n");
         for (String line : lines) {
             String[] entity = line.split(",");
-            if (entity[0].equals("Block")) {
-                parseBlock(entity);
-            } else if (entity[0].equals("Enemy")) {
-                parseEnemy(entity);
+            switch (entity[0]) {
+                case "Block":
+                    parseBlock(entity);
+                    break;
+                case "Enemy":
+                    parseEnemy(entity);
+                    break;
+                case "Player":
+                    parsePlayer(entity);
+                    break;
             }
         }
     }
 
-    public void parseEnemy(String[] line) {
+    private void parsePlayer(String[] line) {
+        PlayerComponent.createPlayer(
+                world, engine,
+                Float.parseFloat(line[1]), Float.parseFloat(line[2])
+        );
+    }
+
+    private void parseEnemy(String[] line) {
         EnemyComponent.createEnemy(
                 engine, 0,0,
                 Float.parseFloat(line[1]),
@@ -56,38 +59,11 @@ public class LevelLoader {
         );
     }
 
-    public void parseBlock(String[] line) {
+    private void parseBlock(String[] line) {
         loadBlock(world,engine,Integer.parseInt(line[1]),Integer.parseInt(line[2]));
     }
 
-    public static void loadPlayer(SquareWorld world, Engine engine, int x, int y) {
-        Entity player = new Entity();
-
-        player.add(new PlayerComponent());
-
-        CameraComponent cameraComponent = new CameraComponent();
-        cameraComponent.camera = world.getCamera();
-        player.add(cameraComponent);
-
-        TextureComponent textureComponent = new TextureComponent();
-        textureComponent.region = new TextureRegion(new Texture(Gdx.files.internal("data/player.png")));
-        player.add(textureComponent);
-
-        TransformComponent transformComponent = new TransformComponent();
-        transformComponent.size.set(0.5f, 0.5f);
-        transformComponent.pos.set(x,y,0f);
-        player.add(transformComponent);
-
-        BoundsComponent boundsComponent = new BoundsComponent();
-        boundsComponent.bounds.set(0,0,0.5f,0.5f);
-        player.add(boundsComponent);
-
-        player.add(new MovementComponent());
-
-        engine.addEntity(player);
-    }
-
-    public static void loadBlock(SquareWorld world, Engine engine, int x, int y) {
-        WallComponent.createBlock(world, engine, x, y);
+    private static void loadBlock(SquareWorld world, Engine engine, int x, int y) {
+        WallComponent.createBlock(engine, x, y);
     }
 }

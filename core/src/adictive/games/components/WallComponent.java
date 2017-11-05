@@ -7,14 +7,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import adictive.games.SquareWorld;
-
 public class WallComponent implements Component {
-    public static Entity createBlock(SquareWorld world, Engine engine, int x, int y) {
+
+    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/blackBox.png")));
+
+    public static Entity createBlock(Engine engine, int x, int y) {
         Entity block = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
-        textureComponent.region = new TextureRegion(new Texture(Gdx.files.internal("data/blackBox.png")));
+
+        textureComponent.region = textureRegion;
         block.add(textureComponent);
 
         TransformComponent transformComponent = new TransformComponent();

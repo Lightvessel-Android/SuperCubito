@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
 import adictive.games.components.EnemyComponent;
+import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
 
@@ -29,12 +30,19 @@ public class LevelWriter {
                     writer.println(blockToCSV(e));
                 } else if (e.getComponent(EnemyComponent.class) != null) {
                     writer.println(enemyToCSV(e));
+                } else if (e.getComponent(PlayerComponent.class) != null) {
+                    writer.println(playerToCSV(e));
                 }
             }
             writer.close();
         } catch (FileNotFoundException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    public String playerToCSV(Entity e) {
+        TransformComponent tc = e.getComponent(TransformComponent.class);
+        return csv("Player",tc.pos.x, tc.pos.y) ;
     }
 
     public String enemyToCSV(Entity e) {

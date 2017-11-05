@@ -3,12 +3,9 @@ package adictive.games.level;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
@@ -35,22 +32,16 @@ public class LevelLoader {
     public void load() {
         loadPlayer(world, engine, world.getWidth()/2, world.getHeight()/2);
 
-        BufferedReader br;
-        String line;
-        try {
-            br = new BufferedReader(new FileReader("levels/" + fileName));
-            while ((line = br.readLine()) != null) {
-
-                String[] entity = line.split(",");
-                if (entity[0].equals("Block")) {
-                    parseBlock(entity);
-                } else if (entity[0].equals("Enemy")) {
-                    parseEnemy(entity);
-                }
-
+        FileHandle fileHandle = Gdx.files.internal("levels/" + fileName);
+        String s = fileHandle.readString();
+        String[] lines = s.split("\n");
+        for (String line : lines) {
+            String[] entity = line.split(",");
+            if (entity[0].equals("Block")) {
+                parseBlock(entity);
+            } else if (entity[0].equals("Enemy")) {
+                parseEnemy(entity);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

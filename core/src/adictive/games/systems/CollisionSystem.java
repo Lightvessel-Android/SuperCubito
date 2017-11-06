@@ -23,9 +23,9 @@ import adictive.games.play.PlayScreen;
 
 public class CollisionSystem extends EntitySystem {
 
-    private static final byte WALL  = 0b0000001;
-    private static final byte WIN   = 0b0000010;
-    private static final byte COIN  = 0b0000100;
+    public static final byte WALL  = 0b0000001;
+    public static final byte WIN   = 0b0000010;
+    public static final byte COIN  = 0b0000100;
 
     private static final int MAX_ENTITIES_ON_TILE  = 8;
 
@@ -36,7 +36,7 @@ public class CollisionSystem extends EntitySystem {
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> boundsMapper = ComponentMapper.getFor(BoundsComponent.class);
 
-    private final Entity[][][] entityMap;
+    public final Entity[][][] entityMap;
     private PlayScreen screen;
     private final List<Entity> enemies = new ArrayList<>();
     private Entity player;

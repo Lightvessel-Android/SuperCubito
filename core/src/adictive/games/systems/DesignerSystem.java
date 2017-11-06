@@ -183,7 +183,7 @@ public class DesignerSystem extends EntitySystem {
         final int x = (int)touch.x;
         final int y = (int)touch.y;
 
-        if (existsBlockOnPosition(x, y, block)) return;
+        if (getEngine().getSystem(CollisionSystem.class).entityMap[x][y][CollisionSystem.WIN] != null) return;
 
         WinComponent.createWinComponent(getEngine(), cursor.x, cursor.y);
     }
@@ -216,21 +216,9 @@ public class DesignerSystem extends EntitySystem {
         final int x = (int)touch.x;
         final int y = (int)touch.y;
 
-        if (existsBlockOnPosition(x, y, block)) return;
+        if (getEngine().getSystem(CollisionSystem.class).entityMap[x][y][CollisionSystem.WALL] != null) return;
 
         WallComponent.createBlock(getEngine(), x, y);
-    }
-
-    private boolean existsBlockOnPosition(int x, int y, Family wallFamily) {
-        final ImmutableArray<Entity> walls = getEngine().getEntitiesFor(wallFamily);
-
-        for (Entity wall : walls) {
-            TransformComponent component = wall.getComponent(TransformComponent.class);
-            if (((int)component.pos.x) == x && ((int)component.pos.y) == y) {
-                return true;
-            }
-        }
-        return false;
     }
 
 

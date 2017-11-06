@@ -54,12 +54,8 @@ public class Assets {
         backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         background = new TextureRegion(backgroundTexture);
 
-        items = loadTexture("data/items.png");
         mainMenu = new TextureRegion(loadTexture ("data/menu.jpg"));
-        pauseMenu = new TextureRegion(items, 224, 128, 192, 96);
-        ready = new TextureRegion(items, 320, 224, 192, 32);
         gameOver = new TextureRegion(loadTexture("data/gameover.png"));
-        pause = new TextureRegion(items, 64, 64, 64, 64);
 
         clickSound = Gdx.audio.newSound(Gdx.files.internal("data/click.wav"));
 
@@ -68,11 +64,8 @@ public class Assets {
         music.setVolume(0.5f);
         if (Settings.soundEnabled) music.play();
 
-        soundOff = new TextureRegion(items, 0, 0, 64, 64);
-        soundOn = new TextureRegion(items, 64, 0, 64, 64);
         deadSound = Gdx.audio.newSound(Gdx.files.internal("data/hit.wav"));
         coinSound = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
-
 
 
         //Button styles
@@ -91,48 +84,6 @@ public class Assets {
         unLockedStyle.pressedOffsetX = 1;
         unLockedStyle.pressedOffsetY = -1;
         unLockedStyle.font = font;
-
-
-        //Levels:
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level-2.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level-1.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level0.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level1.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level2.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level3.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level4.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level5.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level6.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level7.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level8.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level9.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level10.bmp")));
-
-
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
-        levels.add(new Pixmap(Gdx.files.internal("bitmaps/level.bmp")));
 
     }
 

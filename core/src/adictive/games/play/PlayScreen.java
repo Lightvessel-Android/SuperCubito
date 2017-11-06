@@ -36,7 +36,9 @@ public class PlayScreen extends ScreenAdapter {
 
     private void initialize() {
         generateSystems();
+        pause(true);
         loadLevel();
+        pause(false);
     }
 
     public void generateSystems() {
@@ -52,6 +54,7 @@ public class PlayScreen extends ScreenAdapter {
 
         getDesignerSystem().setProcessing(false);
         getDebugSystem().setProcessing(false);
+
     }
 
     public void loadLevel() {
@@ -87,15 +90,19 @@ public class PlayScreen extends ScreenAdapter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) {
             DesignerSystem designerSystem = getDesignerSystem();
-            boolean shouldProcess = !designerSystem.checkProcessing();
-            designerSystem.setProcessing(shouldProcess);
-            engine.getSystem(MovementSystem.class).setProcessing(!shouldProcess);
-            engine.getSystem(CollisionSystem.class).setProcessing(!shouldProcess);
-            engine.getSystem(FollowCameraSystem.class).setProcessing(!shouldProcess);
-            engine.getSystem(PlayerInputSystem.class).setProcessing(!shouldProcess);
-            engine.getSystem(EnemySystem.class).setProcessing(!shouldProcess);
+            boolean isDesignerActive = !designerSystem.checkProcessing();
+            designerSystem.setProcessing(isDesignerActive);
+            pause(isDesignerActive);
         }
 
+    }
+
+    private void pause(boolean pause) {
+        engine.getSystem(MovementSystem.class).setProcessing(!pause);
+        engine.getSystem(CollisionSystem.class).setProcessing(!pause);
+        engine.getSystem(FollowCameraSystem.class).setProcessing(!pause);
+        engine.getSystem(PlayerInputSystem.class).setProcessing(!pause);
+        engine.getSystem(EnemySystem.class).setProcessing(!pause);
     }
 
     private DebugSystem getDebugSystem() {

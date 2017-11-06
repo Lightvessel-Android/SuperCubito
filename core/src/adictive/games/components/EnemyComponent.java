@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class EnemyComponent implements Component {
     private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/enemy.png")));
     public final Vector2 direction = new Vector2(3,0);
-    public float vel = 5f;
+    public float vel = 10f;
     public float posInLine = 0f;
     public float initialPosInLine = 0f;
     public final Vector2 start = new Vector2();

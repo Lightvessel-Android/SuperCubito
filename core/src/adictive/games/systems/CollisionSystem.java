@@ -149,28 +149,19 @@ public class CollisionSystem extends EntitySystem {
         engine.addEntityListener(boundsFamily, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
-
                 if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.add(entity);
-                }
-
-                if (entity.getComponent(PlayerComponent.class) != null) {
+                } else if (entity.getComponent(PlayerComponent.class) != null) {
                     player = entity;
                     playerTr = transformMapper.get(player);
                     playerBc = boundsMapper.get(player);
-                }
-
-                if (entity.getComponent(WallComponent.class) != null) {
+                } else if (entity.getComponent(WallComponent.class) != null) {
                     final Vector3 pos = transformMapper.get(entity).pos;
                     entityMap[(int) pos.x][(int) pos.y][WALL] = entity;
-                }
-
-                if (entity.getComponent(WinComponent.class) != null) {
+                } else if (entity.getComponent(WinComponent.class) != null) {
                     final Vector3 pos = transformMapper.get(entity).pos;
                     entityMap[(int) pos.x][(int) pos.y][WIN] = entity;
-                }
-
-                if (entity.getComponent(CoinComponent.class) != null) {
+                } else if (entity.getComponent(CoinComponent.class) != null) {
                     final Vector3 pos = transformMapper.get(entity).pos;
                     entityMap[(int) pos.x][(int) pos.y][COIN] = entity;
                 }

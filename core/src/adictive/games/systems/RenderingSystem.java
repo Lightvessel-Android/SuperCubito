@@ -102,11 +102,11 @@ public class RenderingSystem extends EntitySystem {
         if (width < height) {
             cam.viewportWidth = VIEWPORT_WIDTH_MTS;
             cam.viewportHeight = VIEWPORT_HEIGHT_MTS * ((height)/width);
-            cam.zoom = 480f / height;
+            cam.zoom = 300f / height;
         } else {
             cam.viewportWidth = VIEWPORT_WIDTH_MTS * ((width)/height);
             cam.viewportHeight = VIEWPORT_HEIGHT_MTS;
-            cam.zoom = 640f / width;
+            cam.zoom = 500f / width;
         }
     }
 }

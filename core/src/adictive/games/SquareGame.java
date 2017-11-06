@@ -36,7 +36,7 @@ public class SquareGame extends Game {
     @Override
     public void render() {
         GL20 gl = Gdx.gl;
-        gl.glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
+        gl.glClearColor(0xF4/255f, 0xF2/255f, 0xE6/255f, 1.0f);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         logger.log();
         super.render();

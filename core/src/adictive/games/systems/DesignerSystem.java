@@ -176,7 +176,7 @@ public class DesignerSystem extends EntitySystem {
     }
 
     private void createCoin() {
-        CoinComponent.createCoin(getEngine(), cursor.x, cursor.y);
+        CoinComponent.createCoin(getEngine(), cursor.x - CoinComponent.WIDTH/2, cursor.y - CoinComponent.WIDTH/2);
     }
 
     private void createWinBlock() {
@@ -189,7 +189,7 @@ public class DesignerSystem extends EntitySystem {
     }
 
     private void createPlayer() {
-        PlayerComponent.createPlayer(world, getEngine(), cursor.x, cursor.y);
+        PlayerComponent.createPlayer(world, getEngine(), cursor.x- PlayerComponent.WIDTH/2, cursor.y - PlayerComponent.WIDTH/2);
     }
 
     private void createEnemy() {

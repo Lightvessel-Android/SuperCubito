@@ -31,7 +31,7 @@ public class PlayerComponent implements Component {
 
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.size.set(WIDTH, HEIGHT);
-        transformComponent.pos.set(x - transformComponent.size.x/2,y - transformComponent.size.y/2, LAYER);
+        transformComponent.pos.set(x,y, LAYER);
         player.add(transformComponent);
 
         BoundsComponent boundsComponent = new BoundsComponent();

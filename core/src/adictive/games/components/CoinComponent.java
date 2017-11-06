@@ -23,7 +23,7 @@ public class CoinComponent implements Component {
 
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.size.set(WIDTH, HEIGHT);
-        transformComponent.pos.set(x - transformComponent.size.x/2,y - transformComponent.size.y/2,0f);
+        transformComponent.pos.set(x,y,0f);
         block.add(transformComponent);
 
         block.add(new CoinComponent());

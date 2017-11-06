@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class EnemyComponent implements Component {
-    private static TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/enemy.png")));
+    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/enemy.png")));
     public final Vector2 direction = new Vector2(3,0);
     public float vel = 5f;
     public float posInLine = 0f;

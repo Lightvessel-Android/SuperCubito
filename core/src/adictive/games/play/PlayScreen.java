@@ -1,5 +1,6 @@
 package adictive.games.play;
 
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import adictive.games.SquareGame;
 import adictive.games.SquareWorld;
+import adictive.games.components.CoinComponent;
 import adictive.games.level.LevelLoader;
 import adictive.games.systems.CollisionSystem;
 import adictive.games.systems.DebugSystem;
@@ -19,10 +21,11 @@ import adictive.games.systems.PlayerInputSystem;
 import adictive.games.systems.RenderingSystem;
 
 public class PlayScreen extends ScreenAdapter {
+    private static final Family COINS_FAMILY = Family.all(CoinComponent.class).get();
     private final PooledEngine engine = new PooledEngine();
     private final SquareWorld world = new SquareWorld();
     private final SpriteBatch batcher = new SpriteBatch();
-    private SquareGame superCubito;
+    private final SquareGame superCubito;
     public final int level;
 
     public PlayScreen(SquareGame superCubito, int level) {
@@ -66,7 +69,9 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     public void win() {
-        superCubito.goToNextLevel();
+        if (engine.getEntitiesFor(COINS_FAMILY).size() == 0 ) {
+            superCubito.goToNextLevel();
+        }
     }
 
     @Override

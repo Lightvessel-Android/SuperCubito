@@ -13,6 +13,7 @@ import java.util.List;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
+import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
@@ -22,29 +23,29 @@ import adictive.games.play.PlayScreen;
 
 public class CollisionSystem extends EntitySystem {
 
-    private static final byte EMPTY  = 0b00000000;
-    private static final byte WALL   = 0b00000001;
-    private static final byte WIN    = 0b00000010;
+    private static final byte WALL  = 0b0000001;
+    private static final byte WIN   = 0b0000010;
+    private static final byte COIN  = 0b0000100;
+
+    private static final int MAX_ENTITIES_ON_TILE  = 8;
 
     private static final float PADDING = 0.01f;
-
 
     private final Family boundsFamily = Family.all(BoundsComponent.class, TransformComponent.class).get();
 
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> boundsMapper = ComponentMapper.getFor(BoundsComponent.class);
 
-    private final byte[][] collisionMap;
+    private final Entity[][][] entityMap;
     private PlayScreen screen;
     private final List<Entity> enemies = new ArrayList<>();
     private Entity player;
     private TransformComponent playerTr;
     private BoundsComponent playerBc;
 
-
     public CollisionSystem(SquareWorld world, PlayScreen screen) {
         super();
-        collisionMap = new byte[world.getWidth()][world.getHeight()];
+        entityMap = new Entity[world.getWidth()][world.getHeight()][MAX_ENTITIES_ON_TILE];
         this.screen = screen;
     }
 
@@ -53,10 +54,20 @@ public class CollisionSystem extends EntitySystem {
         checkWallCollisionAndRespond();
         checkEnemyCollision();
         checkWinBlockCollision();
+        checkCoinCollision();
+    }
+
+    private void checkCoinCollision() {
+        final int x = (int) (playerTr.pos.x + playerBc.bounds.x / 2);
+        final int y = (int) (playerTr.pos.y + playerBc.bounds.y / 2);
+        final Entity coin = entityMap[x][y][COIN];
+        if (coin != null && playerOverlaps(coin.getComponent(TransformComponent.class), coin.getComponent(BoundsComponent.class))) {
+            getEngine().removeEntity(coin);
+        }
     }
 
     private void checkWinBlockCollision() {
-        if (collisionMap[(int)(playerTr.pos.x + playerBc.bounds.x/2)][(int)(playerTr.pos.y + playerBc.bounds.y/2)] == WIN) {
+        if (entityMap[(int) (playerTr.pos.x + playerBc.bounds.x / 2)][(int) (playerTr.pos.y + playerBc.bounds.y / 2)][WIN] != null) {
             screen.win();
         }
     }
@@ -66,24 +77,27 @@ public class CollisionSystem extends EntitySystem {
             final TransformComponent enemyTr = transformMapper.get(enemy);
             final BoundsComponent enemyBc = boundsMapper.get(enemy);
 
-            if (playerTr.pos.x < enemyTr.pos.x + enemyBc.bounds.width
-                    && playerTr.pos.x + playerBc.bounds.width > enemyTr.pos.x
-                    && playerTr.pos.y < enemyTr.pos.y + enemyBc.bounds.height
-                    && playerTr.pos.y + playerBc.bounds.height > enemyTr.pos.y){
-
+            if (playerOverlaps(enemyTr, enemyBc)) {
                 screen.restart();
                 break;
             }
         }
     }
 
+    private boolean playerOverlaps(TransformComponent enemyTr, BoundsComponent enemyBc) {
+        return playerTr.pos.x < enemyTr.pos.x + enemyBc.bounds.width
+                && playerTr.pos.x + playerBc.bounds.width > enemyTr.pos.x
+                && playerTr.pos.y < enemyTr.pos.y + enemyBc.bounds.height
+                && playerTr.pos.y + playerBc.bounds.height > enemyTr.pos.y;
+    }
+
     private void checkWallCollisionAndRespond() {
         final TransformComponent playerTr = transformMapper.get(player);
         final BoundsComponent playerBc = boundsMapper.get(player);
 
-        checkVertexAndRespond(playerTr, playerBc,  0,  0);
-        checkVertexAndRespond(playerTr, playerBc, playerBc.bounds.width,  0);
-        checkVertexAndRespond(playerTr, playerBc,  0, playerBc.bounds.height);
+        checkVertexAndRespond(playerTr, playerBc, 0, 0);
+        checkVertexAndRespond(playerTr, playerBc, playerBc.bounds.width, 0);
+        checkVertexAndRespond(playerTr, playerBc, 0, playerBc.bounds.height);
         checkVertexAndRespond(playerTr, playerBc, playerBc.bounds.width, playerBc.bounds.height);
 
     }
@@ -105,7 +119,7 @@ public class CollisionSystem extends EntitySystem {
         final int cellX = (int) (playerTr.pos.x + deltaX);
         final int cellY = (int) (playerTr.pos.y + deltaY);
 
-        if (collisionMap[cellX][cellY] == WALL && (int) (playerTr.lastPos.x + deltaX) != cellX) {
+        if (entityMap[cellX][cellY][WALL] != null && (int) (playerTr.lastPos.x + deltaX) != cellX) {
             if (playerTr.lastPos.x < playerTr.pos.x) {
                 return cellX - playerBc.bounds.width - PADDING;
             } else if (playerTr.lastPos.x > playerTr.pos.x) {
@@ -119,11 +133,11 @@ public class CollisionSystem extends EntitySystem {
         final int cellX = (int) (playerTr.pos.x + deltaX);
         final int cellY = (int) (playerTr.pos.y + deltaY);
 
-        if (collisionMap[cellX][cellY] == WALL && (int)(playerTr.lastPos.y + deltaY) != cellY) {
+        if (entityMap[cellX][cellY][WALL] != null && (int) (playerTr.lastPos.y + deltaY) != cellY) {
             if (playerTr.lastPos.y < playerTr.pos.y) {
                 return cellY - playerBc.bounds.height - PADDING;
             } else if (playerTr.lastPos.y > playerTr.pos.y) {
-                return  cellY + 1 + PADDING;
+                return cellY + 1 + PADDING;
             }
         }
         return playerTr.pos.y;
@@ -135,10 +149,6 @@ public class CollisionSystem extends EntitySystem {
         engine.addEntityListener(boundsFamily, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
-                if (entity.getComponent(WallComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    collisionMap[(int)pos.x][(int)pos.y] = WALL;
-                }
 
                 if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.add(entity);
@@ -150,24 +160,36 @@ public class CollisionSystem extends EntitySystem {
                     playerBc = boundsMapper.get(player);
                 }
 
+                if (entity.getComponent(WallComponent.class) != null) {
+                    final Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][WALL] = entity;
+                }
+
                 if (entity.getComponent(WinComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    collisionMap[(int)pos.x][(int)pos.y] = WIN;
+                    final Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][WIN] = entity;
+                }
+
+                if (entity.getComponent(CoinComponent.class) != null) {
+                    final Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][COIN] = entity;
                 }
             }
 
             @Override
             public void entityRemoved(Entity entity) {
-                if (entity.getComponent(WallComponent.class) != null || entity.getComponent(WinComponent.class) != null) {
+                if (entity.getComponent(WallComponent.class) != null) {
                     Vector3 pos = transformMapper.get(entity).pos;
-                    collisionMap[(int)pos.x][(int)pos.y] = EMPTY;
-                }
-
-                if (entity.getComponent(EnemyComponent.class) != null) {
+                    entityMap[(int) pos.x][(int) pos.y][WALL] = null;
+                } else if (entity.getComponent(WinComponent.class) != null) {
+                    Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][WIN] = null;
+                } else if (entity.getComponent(CoinComponent.class) != null) {
+                    Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][COIN] = null;
+                } else if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.remove(entity);
-                }
-
-                if (entity.getComponent(PlayerComponent.class) != null) {
+                } else if (entity.getComponent(PlayerComponent.class) != null) {
                     player = null;
                 }
             }

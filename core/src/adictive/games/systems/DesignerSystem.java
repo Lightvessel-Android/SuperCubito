@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
+import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
@@ -127,6 +128,8 @@ public class DesignerSystem extends EntitySystem {
                 createEnemy();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.P)){
                 createPlayer();
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.C)){
+                createCoin();
             }
         } else if (editionMode == ENEMY_END_POSITION_MODE && Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             EnemyComponent ec = enemy.getComponent(EnemyComponent.class);
@@ -170,6 +173,10 @@ public class DesignerSystem extends EntitySystem {
 
             }
         }
+    }
+
+    private void createCoin() {
+        CoinComponent.createCoin(getEngine(), cursor.x, cursor.y);
     }
 
     private void createWinBlock() {

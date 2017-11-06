@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.WallComponent;
@@ -41,8 +42,18 @@ public class LevelLoader {
                 case "Win":
                     parseWin(entity);
                     break;
+                case "Coin":
+                    parseCoin(entity);
+                    break;
             }
         }
+    }
+
+    private void parseCoin(String[] line) {
+        CoinComponent.createCoin(
+                engine,
+                Float.parseFloat(line[1]), Float.parseFloat(line[2])
+        );
     }
 
     private void parseWin(String[] line) {

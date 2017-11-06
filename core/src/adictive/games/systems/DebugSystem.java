@@ -13,16 +13,19 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import adictive.games.SquareWorld;
 import adictive.games.components.BoundsComponent;
 import adictive.games.components.TransformComponent;
+import adictive.games.play.PlayScreen;
 
 public class DebugSystem extends EntitySystem {
 
     private SquareWorld world;
+    private PlayScreen screen;
     private ShapeRenderer shapeRenderer;
 
     private final Family boundsFamily = Family.all(TransformComponent.class, BoundsComponent.class).get();
 
-    public DebugSystem(SquareWorld world) {
+    public DebugSystem(SquareWorld world, PlayScreen screen) {
         this.world = world;
+        this.screen = screen;
         this.shapeRenderer = new ShapeRenderer();
     }
 
@@ -35,6 +38,14 @@ public class DebugSystem extends EntitySystem {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
             world.getCamera().zoom -= 0.1f;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            screen.superCubito.goToPrevLevel();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) && Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            screen.superCubito.goToNextLevel();
         }
 
         shapeRenderer.setProjectionMatrix(world.getCamera().combined);

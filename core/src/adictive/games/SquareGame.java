@@ -19,14 +19,14 @@ public class SquareGame extends Game {
 
     private int level = 0;
 
-    public SquareGame(AdInterface adInterface, Analytic analytic){
+    public SquareGame(AdInterface adInterface, Analytic analytic) {
         this.adInterface = adInterface;
         this.analytic = analytic;
         logger = new FPSLogger();
     }
 
     @Override
-    public void create () {
+    public void create() {
         batcher = new SpriteBatch();
         Settings.load();
         com.mygdx.game.utils.Assets.load();
@@ -42,8 +42,16 @@ public class SquareGame extends Game {
         super.render();
     }
 
-    public void goToNextLevel() {
-        this.level++;
+    public void goToLevel(int level) {
+        this.level = level;
         setScreen(new PlayScreen(this, level));
+    }
+
+    public void goToNextLevel() {
+        goToLevel(++level);
+    }
+
+    public void goToPrevLevel() {
+        if (level > 1) goToLevel(--level);
     }
 }

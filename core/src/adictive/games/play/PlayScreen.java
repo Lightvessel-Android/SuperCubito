@@ -25,7 +25,7 @@ public class PlayScreen extends ScreenAdapter {
     private final PooledEngine engine = new PooledEngine();
     private final SquareWorld world = new SquareWorld();
     private final SpriteBatch batcher = new SpriteBatch();
-    private final SquareGame superCubito;
+    public final SquareGame superCubito;
     public final int level;
 
     public PlayScreen(SquareGame superCubito, int level) {
@@ -49,7 +49,7 @@ public class PlayScreen extends ScreenAdapter {
         engine.addSystem(new MovementSystem());
         engine.addSystem(new CollisionSystem(world, this));
         engine.addSystem(new RenderingSystem(world, batcher));
-        engine.addSystem(new DebugSystem(world));
+        engine.addSystem(new DebugSystem(world, this));
         engine.addSystem(new DesignerSystem(world, this));
 
         getDesignerSystem().setProcessing(false);

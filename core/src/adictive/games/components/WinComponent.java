@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -29,6 +30,12 @@ public class WinComponent implements Component {
         BoundsComponent boundsComponent = new BoundsComponent();
         boundsComponent.bounds.set(0,0,WIDTH,HEIGHT);
         block.add(boundsComponent);
+
+        LightComponent lightComponent = new LightComponent();
+        lightComponent.color = new Color(0,1f,0,0.4f);
+        lightComponent.shape = LightComponent.CIRCULAR;
+        lightComponent.radius = 4f;
+        block.add(lightComponent);
 
         block.add(new WinComponent());
 

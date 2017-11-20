@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import adictive.games.SquareGame;
 import adictive.games.SquareWorld;
@@ -16,6 +15,7 @@ import adictive.games.systems.DebugSystem;
 import adictive.games.systems.DesignerSystem;
 import adictive.games.systems.EnemySystem;
 import adictive.games.systems.FollowCameraSystem;
+import adictive.games.systems.LightSystem;
 import adictive.games.systems.MovementSystem;
 import adictive.games.systems.PlayerInputSystem;
 import adictive.games.systems.RenderingSystem;
@@ -24,7 +24,6 @@ public class PlayScreen extends ScreenAdapter {
     private static final Family COINS_FAMILY = Family.all(CoinComponent.class).get();
     private final PooledEngine engine = new PooledEngine();
     private final SquareWorld world = new SquareWorld();
-    private final SpriteBatch batcher = new SpriteBatch();
     public final SquareGame superCubito;
     public final int level;
 
@@ -48,7 +47,8 @@ public class PlayScreen extends ScreenAdapter {
         engine.addSystem(new EnemySystem());
         engine.addSystem(new MovementSystem());
         engine.addSystem(new CollisionSystem(world, this));
-        engine.addSystem(new RenderingSystem(world, batcher));
+        engine.addSystem(new RenderingSystem(world));
+        engine.addSystem(new LightSystem(world));
         engine.addSystem(new DebugSystem(world, this));
         engine.addSystem(new DesignerSystem(world, this));
 
@@ -59,12 +59,6 @@ public class PlayScreen extends ScreenAdapter {
 
     public void loadLevel() {
         new LevelLoader( level,world, engine).load();
-    }
-
-    @Override
-    public void render (float delta) {
-        updateMode();
-        engine.update(delta);
     }
 
     public void restart() {
@@ -81,6 +75,7 @@ public class PlayScreen extends ScreenAdapter {
     public void resize(int width, int height) {
         super.resize(width, height);
         engine.getSystem(RenderingSystem.class).resize(width,height);
+        engine.getSystem(LightSystem.class).resize(width,height);
     }
 
     public void updateMode() {
@@ -94,7 +89,6 @@ public class PlayScreen extends ScreenAdapter {
             designerSystem.setProcessing(isDesignerActive);
             pause(isDesignerActive);
         }
-
     }
 
     private void pause(boolean pause) {
@@ -103,15 +97,21 @@ public class PlayScreen extends ScreenAdapter {
         engine.getSystem(FollowCameraSystem.class).setProcessing(!pause);
         engine.getSystem(PlayerInputSystem.class).setProcessing(!pause);
         engine.getSystem(EnemySystem.class).setProcessing(!pause);
+        engine.getSystem(LightSystem.class).setProcessing(!pause);
     }
 
     private DebugSystem getDebugSystem() {
         return engine.getSystem(DebugSystem.class);
     }
 
-
     private DesignerSystem getDesignerSystem() {
         return engine.getSystem(DesignerSystem.class);
+    }
+
+    @Override
+    public void render (float delta) {
+        updateMode();
+        engine.update(delta);
     }
 
 

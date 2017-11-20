@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -27,6 +28,7 @@ public class PlayerComponent implements Component {
 
         TextureComponent textureComponent = new TextureComponent();
         textureComponent.region = textureRegion;
+//        textureRegion.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         player.add(textureComponent);
 
         TransformComponent transformComponent = new TransformComponent();
@@ -37,6 +39,11 @@ public class PlayerComponent implements Component {
         BoundsComponent boundsComponent = new BoundsComponent();
         boundsComponent.bounds.set(0,0,0.5f,0.5f);
         player.add(boundsComponent);
+
+        LightComponent lightComponent = new LightComponent();
+        lightComponent.color = new Color(1f,0,0,0.4f);
+        lightComponent.radius = 2f;
+        player.add(lightComponent);
 
         player.add(new MovementComponent());
 

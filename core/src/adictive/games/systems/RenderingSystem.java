@@ -14,14 +14,17 @@ import com.mygdx.game.utils.SortedOnInsertList;
 import java.util.Comparator;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.EnemyComponent;
+import adictive.games.components.PlayerComponent;
 import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
 
 public class RenderingSystem extends EntitySystem {
 
-    public static int VIEWPORT_WIDTH_MTS = 15;
-    public static int VIEWPORT_HEIGHT_MTS = 15;
+    public static final int VIEWPORT_WIDTH_MTS = 15;
+    public static final int VIEWPORT_HEIGHT_MTS = 15;
     public static final Family FAMILY = Family.all(TextureComponent.class, TransformComponent.class).get();
+    public static final Family MOVING_THINGS = Family.one(PlayerComponent.class, EnemyComponent.class).get();
 
     private final SortedOnInsertList<Entity> renderQueue;
 
@@ -30,10 +33,10 @@ public class RenderingSystem extends EntitySystem {
     private final SquareWorld world;
     private final SpriteBatch batch;
 
-    public RenderingSystem(SquareWorld world, SpriteBatch batch) {
+    public RenderingSystem(SquareWorld world) {
         super(10);
         this.world = world;
-        this.batch = batch;
+        this.batch = new SpriteBatch();
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
@@ -68,13 +71,7 @@ public class RenderingSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime) {
-        world.getCamera().update();
-        batch.setProjectionMatrix(world.getCamera().combined);
-        batch.begin();
-        for (Entity entity : renderQueue) {
-            renderEntity(entity);
-        }
-        batch.end();
+        renderEntities();
     }
 
     private void renderEntity(Entity entity) {
@@ -108,5 +105,17 @@ public class RenderingSystem extends EntitySystem {
             cam.viewportHeight = VIEWPORT_HEIGHT_MTS;
             cam.zoom = 500f / width;
         }
+    }
+
+    private void renderEntities() {
+        world.getCamera().update();
+        batch.setProjectionMatrix(world.getCamera().combined);
+
+        batch.begin();
+        for (Entity entity : renderQueue) {
+            renderEntity(entity);
+        }
+
+        batch.end();
     }
 }

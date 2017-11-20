@@ -32,13 +32,13 @@ public class Assets {
     public static Sound deadSound;
     public static Sound coinSound;
     public static Sound clickSound;
+    public static TextureRegion light;
 
     public static Texture loadTexture (String file) {
         return new Texture(Gdx.files.internal(file));
     }
 
     public static void load () {
-
 
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"));
         lockedLevel = new TextureRegion(loadTexture("data/buttonLocked.png"));

@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import adictive.games.SquareWorld;
 
 public class PlayerComponent implements Component {
-    public static final float MOVE_VELOCITY = 8;
+    public static final float MAX_VELOCITY = 8;
+    public static final float ACCEL = 2;
     public static final float WIDTH = 0.5f;
     public static final float HEIGHT = 0.5f;
     public static final float LAYER = 3;

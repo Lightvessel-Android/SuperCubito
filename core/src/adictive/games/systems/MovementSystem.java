@@ -7,6 +7,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 
 import adictive.games.components.MovementComponent;
+import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 
 public class MovementSystem extends IteratingSystem {
@@ -29,10 +30,15 @@ public class MovementSystem extends IteratingSystem {
 
         transformComponent.lastPos.set(transformComponent.pos);
 
-        tmp.set(movementComponent.accel).scl(deltaTime);
-        movementComponent.velocity.add(tmp);
+        movementComponent.velocity.add(movementComponent.accel);
 
-        tmp.set(movementComponent.velocity).scl(deltaTime);
+        tmp.set(movementComponent.velocity);
+
+        if (movementComponent.velocity.len() > PlayerComponent.MAX_VELOCITY) {
+            tmp.nor().scl(PlayerComponent.MAX_VELOCITY);
+            movementComponent.velocity.nor().scl(PlayerComponent.MAX_VELOCITY);
+        }
+        tmp.scl(deltaTime);
         transformComponent.pos.add(tmp.x, tmp.y, 0.0f);
     }
 }

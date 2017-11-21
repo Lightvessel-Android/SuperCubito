@@ -33,9 +33,10 @@ public class PlayerInputSystem extends EntitySystem {
 
             touch.sub(touchOrigin.x, touchOrigin.y, 0).nor();
 
-            movementComponent.velocity.set(touch.x, -touch.y).scl(PlayerComponent.MOVE_VELOCITY);
+            movementComponent.accel.set(touch.x, -touch.y).nor().scl(PlayerComponent.ACCEL);
         } else {
             movementComponent.velocity.set(0,0);
+            movementComponent.accel.set(0,0);
         }
 
     }

@@ -10,11 +10,18 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class WinComponent implements Component {
 
-    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/winBox.png")));
+    public static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/winBox.png")));
     public static final float WIDTH = 1f;
     public static final float HEIGHT = 1f;
 
-    public static Entity createWinComponent(Engine engine, float x, float y) {
+    public static Entity addNew(Engine engine, float x, float y) {
+        Entity block = create((int) x, (int) y);
+
+        engine.addEntity(block);
+        return block;
+    }
+
+    public static Entity create(int x, int y) {
         Entity block = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -24,7 +31,7 @@ public class WinComponent implements Component {
 
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.size.set(WIDTH, HEIGHT);
-        transformComponent.pos.set((int)x,(int)y,99f);
+        transformComponent.pos.set(x, y,99f);
         block.add(transformComponent);
 
         BoundsComponent boundsComponent = new BoundsComponent();
@@ -38,8 +45,6 @@ public class WinComponent implements Component {
         block.add(lightComponent);
 
         block.add(new WinComponent());
-
-        engine.addEntity(block);
         return block;
     }
 

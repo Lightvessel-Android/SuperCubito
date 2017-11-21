@@ -13,9 +13,16 @@ public class CoinComponent implements Component {
     public static final float WIDTH = 0.5f;
     public static final float HEIGHT = 0.5f;
 
-    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/coin.png")));
+    public static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/coin.png")));
 
-    public static Entity createCoin(Engine engine, float x, float y) {
+    public static Entity addNew(Engine engine, float x, float y) {
+        Entity block = create(x, y);
+
+        engine.addEntity(block);
+        return block;
+    }
+
+    public static Entity create(float x, float y) {
         Entity block = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -36,8 +43,6 @@ public class CoinComponent implements Component {
         LightComponent lightComponent = new LightComponent();
         lightComponent.color = new Color(1f,1f,0f,0.4f);
         block.add(lightComponent);
-
-        engine.addEntity(block);
         return block;
     }
 }

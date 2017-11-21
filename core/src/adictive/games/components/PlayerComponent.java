@@ -17,7 +17,12 @@ public class PlayerComponent implements Component {
     public static final float LAYER = 3;
     private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/player.png")));
 
-    public static void createPlayer(SquareWorld world, Engine engine, float x, float y) {
+    public static void addNew(SquareWorld world, Engine engine, float x, float y) {
+        Entity player = create(world, x, y);
+        engine.addEntity(player);
+    }
+
+    public static Entity create(SquareWorld world, float x, float y) {
         Entity player = new Entity();
 
         player.add(new PlayerComponent());
@@ -46,7 +51,6 @@ public class PlayerComponent implements Component {
         player.add(lightComponent);
 
         player.add(new MovementComponent());
-
-        engine.addEntity(player);
+        return player;
     }
 }

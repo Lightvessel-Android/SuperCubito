@@ -50,28 +50,28 @@ public class LevelLoader {
     }
 
     private void parseCoin(String[] line) {
-        CoinComponent.createCoin(
+        CoinComponent.addNew(
                 engine,
                 Float.parseFloat(line[1]), Float.parseFloat(line[2])
         );
     }
 
     private void parseWin(String[] line) {
-        WinComponent.createWinComponent(
+        WinComponent.addNew(
                 engine,
                 Float.parseFloat(line[1]), Float.parseFloat(line[2])
         );
     }
 
     private void parsePlayer(String[] line) {
-        PlayerComponent.createPlayer(
+        PlayerComponent.addNew(
                 world, engine,
                 Float.parseFloat(line[1]), Float.parseFloat(line[2])
         );
     }
 
     private void parseEnemy(String[] line) {
-        EnemyComponent.createEnemy(
+        EnemyComponent.addNew(
                 engine, 0, 0,
                 Float.parseFloat(line[1]),
                 Float.parseFloat(line[2]),
@@ -86,6 +86,6 @@ public class LevelLoader {
     }
 
     private static void loadBlock(SquareWorld world, Engine engine, int x, int y) {
-        WallComponent.createBlock(engine, x, y);
+        WallComponent.addNew(engine, x, y);
     }
 }

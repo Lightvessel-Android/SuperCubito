@@ -9,9 +9,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class WallComponent implements Component {
 
-    private static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/blackBox.png")));
+    public static final TextureRegion textureRegion = new TextureRegion(new Texture(Gdx.files.internal("data/blackBox.png")));
 
-    public static Entity createBlock(Engine engine, int x, int y) {
+    public static Entity addNew(Engine engine, int x, int y) {
+        Entity block = create(x, y);
+
+        engine.addEntity(block);
+        return block;
+    }
+
+    public static Entity create(int x, int y) {
         Entity block = new Entity();
 
         TextureComponent textureComponent = new TextureComponent();
@@ -29,8 +36,6 @@ public class WallComponent implements Component {
         block.add(boundsComponent);
 
         block.add(new WallComponent());
-
-        engine.addEntity(block);
         return block;
     }
 }

@@ -82,8 +82,13 @@ public class RenderingSystem extends EntitySystem {
             textureComponent.region,
             transformComponent.pos.x,
             transformComponent.pos.y,
+                transformComponent.size.x/2,
+                transformComponent.size.y/2,
             transformComponent.size.x,
-            transformComponent.size.y
+            transformComponent.size.y,
+            transformComponent.scale.x,
+            transformComponent.scale.y,
+            transformComponent.rotation
         );
     }
 

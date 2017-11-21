@@ -16,6 +16,7 @@ import adictive.games.components.BoundsComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
+import adictive.games.components.SpikeComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
@@ -23,9 +24,10 @@ import adictive.games.play.PlayScreen;
 
 public class CollisionSystem extends EntitySystem {
 
-    public static final byte WALL  = 0b0000001;
-    public static final byte WIN   = 0b0000010;
-    public static final byte COIN  = 0b0000100;
+    public static final byte WALL  = 1;
+    public static final byte WIN   = 2;
+    public static final byte COIN  = 3;
+    public static final byte SPIKE = 4;
 
     private static final int MAX_ENTITIES_ON_TILE  = 8;
 
@@ -164,6 +166,9 @@ public class CollisionSystem extends EntitySystem {
                 } else if (entity.getComponent(CoinComponent.class) != null) {
                     final Vector3 pos = transformMapper.get(entity).pos;
                     entityMap[(int) pos.x][(int) pos.y][COIN] = entity;
+                } else if (entity.getComponent(SpikeComponent.class) != null) {
+                    final Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][SPIKE] = entity;
                 }
             }
 
@@ -178,6 +183,9 @@ public class CollisionSystem extends EntitySystem {
                 } else if (entity.getComponent(CoinComponent.class) != null) {
                     Vector3 pos = transformMapper.get(entity).pos;
                     entityMap[(int) pos.x][(int) pos.y][COIN] = null;
+                } else if (entity.getComponent(SpikeComponent.class) != null) {
+                    Vector3 pos = transformMapper.get(entity).pos;
+                    entityMap[(int) pos.x][(int) pos.y][SPIKE] = null;
                 } else if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.remove(entity);
                 } else if (entity.getComponent(PlayerComponent.class) != null) {

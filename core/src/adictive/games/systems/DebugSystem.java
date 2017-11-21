@@ -66,6 +66,6 @@ public class DebugSystem extends EntitySystem {
     private void renderBounds(Entity entity) {
         TransformComponent tr = entity.getComponent(TransformComponent.class);
         BoundsComponent bc = entity.getComponent(BoundsComponent.class);
-        shapeRenderer.rect(tr.pos.x, tr.pos.y, bc.bounds.width, bc.bounds.height);
+        shapeRenderer.rect(tr.pos.x + bc.bounds.x, tr.pos.y+ bc.bounds.y, bc.bounds.width, bc.bounds.height);
     }
 }

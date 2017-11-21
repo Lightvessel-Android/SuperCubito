@@ -8,6 +8,7 @@ import adictive.games.SquareWorld;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
+import adictive.games.components.SpikeComponent;
 import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
 
@@ -45,8 +46,20 @@ public class LevelLoader {
                 case "Coin":
                     parseCoin(entity);
                     break;
+                case "Spike":
+                    parseSpike(entity);
+                    break;
             }
         }
+    }
+
+    private void parseSpike(String[] line) {
+        SpikeComponent.addNew(
+                engine,
+                Integer.parseInt(line[1]), //x
+                Integer.parseInt(line[2]), //y
+                Float.parseFloat(line[3])  //rotation
+        );
     }
 
     private void parseCoin(String[] line) {

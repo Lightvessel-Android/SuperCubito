@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
+import adictive.games.components.SpikeComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
@@ -47,7 +48,14 @@ public class LevelWriter {
             writer.println(winBlockToCSV(e));
         } else if (e.getComponent(CoinComponent.class) != null) {
             writer.println(coinToCSV(e));
+        } else if (e.getComponent(SpikeComponent.class) != null) {
+            writer.println(spikeToCSV(e));
         }
+    }
+
+    private String spikeToCSV(Entity e) {
+        TransformComponent tc = e.getComponent(TransformComponent.class);
+        return csv("Spike",tc.pos.x, tc.pos.y, tc.rotation);
     }
 
     private String coinToCSV(Entity e) {

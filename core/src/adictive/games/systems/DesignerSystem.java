@@ -18,6 +18,7 @@ import adictive.games.components.BoundsComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
+import adictive.games.components.SpikeComponent;
 import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.components.WallComponent;
@@ -59,6 +60,10 @@ public class DesignerSystem extends EntitySystem {
                 new WinBrush(0,0),
                 new EnemyBrush(0,0),
                 new CoinBrush(0,0),
+                new SpikeBrush(0,0, 0f),
+                new SpikeBrush(0,0, 90f),
+                new SpikeBrush(0,0, 180f),
+                new SpikeBrush(0,0, 270f),
                 new PlayerBrush(world, 0,0)
         };
     }
@@ -164,12 +169,19 @@ public class DesignerSystem extends EntitySystem {
         batch.setColor(1f,1f,1f, 0.5f);
 
         TransformComponent tc = brush.getSize();
-        batch.draw(brush.getTextureRegion(),
+        batch.draw(
+                brush.getTextureRegion(),
                 cursor.x - tc.size.x/2,
                 cursor.y - tc.size.y/2,
+                tc.size.x/2,
+                tc.size.y/2,
                 tc.size.x,
-                tc.size.y
+                tc.size.y,
+                tc.scale.x,
+                tc.scale.y,
+                tc.rotation
         );
+
         batch.end();
     }
 
@@ -377,6 +389,25 @@ public class DesignerSystem extends EntitySystem {
         @Override
         public void paint() {
             PlayerComponent.addNew(world, getEngine(), cursor.x- PlayerComponent.WIDTH/2, cursor.y - PlayerComponent.WIDTH/2);
+        }
+    }
+
+    class SpikeBrush extends Brush {
+        private float rotation;
+
+        SpikeBrush(int x, int y, float rotation) {
+            super(SpikeComponent.create(x, y, rotation));
+            this.rotation = rotation;
+        }
+
+        @Override
+        public void paint() {
+            final int x = (int)cursor.x;
+            final int y = (int)cursor.y;
+
+            if (getEngine().getSystem(CollisionSystem.class).entityMap[x][y][CollisionSystem.SPIKE] != null) return;
+
+            SpikeComponent.addNew(getEngine(), x, y, rotation);
         }
     }
 

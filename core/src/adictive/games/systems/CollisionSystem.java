@@ -55,6 +55,7 @@ public class CollisionSystem extends EntitySystem {
     public void update(float deltaTime) {
         checkWallCollisionAndRespond();
         checkEnemyCollision();
+        checkSpikeCollision();
         checkWinBlockCollision();
         checkCoinCollision();
     }
@@ -86,11 +87,27 @@ public class CollisionSystem extends EntitySystem {
         }
     }
 
+    private void checkSpikeCollision() {
+        checkSpikeVertexCollision((int)playerTr.pos.x, (int)playerTr.pos.y);
+        checkSpikeVertexCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)playerTr.pos.y);
+        checkSpikeVertexCollision((int)playerTr.pos.x, (int)(playerTr.pos.y + playerBc.bounds.height ));
+        checkSpikeVertexCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)(playerTr.pos.y + playerBc.bounds.height));
+    }
+
+    private void checkSpikeVertexCollision(int x, int y) {
+        Entity spike = entityMap[x][y][SPIKE];
+        if (spike != null && playerOverlaps(spike.getComponent(TransformComponent.class), spike.getComponent(BoundsComponent.class))) {
+            screen.restart();
+        }
+    }
+
     private boolean playerOverlaps(TransformComponent enemyTr, BoundsComponent enemyBc) {
-        return playerTr.pos.x < enemyTr.pos.x + enemyBc.bounds.width
-                && playerTr.pos.x + playerBc.bounds.width > enemyTr.pos.x
-                && playerTr.pos.y < enemyTr.pos.y + enemyBc.bounds.height
-                && playerTr.pos.y + playerBc.bounds.height > enemyTr.pos.y;
+        final float enemyX = enemyTr.pos.x + enemyBc.bounds.x;
+        final float enemyY = enemyTr.pos.y + enemyBc.bounds.y;
+        return     playerTr.pos.x < enemyX + enemyBc.bounds.width
+                && playerTr.pos.x + playerBc.bounds.width > enemyX
+                && playerTr.pos.y < enemyY + enemyBc.bounds.height
+                && playerTr.pos.y + playerBc.bounds.height > enemyY;
     }
 
     private void checkWallCollisionAndRespond() {

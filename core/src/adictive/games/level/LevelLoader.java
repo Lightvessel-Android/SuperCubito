@@ -56,8 +56,8 @@ public class LevelLoader {
     private void parseSpike(String[] line) {
         SpikeComponent.addNew(
                 engine,
-                Integer.parseInt(line[1]), //x
-                Integer.parseInt(line[2]), //y
+                (int)Float.parseFloat(line[1]), //x
+                (int)Float.parseFloat(line[2]), //y
                 Float.parseFloat(line[3])  //rotation
         );
     }

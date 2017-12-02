@@ -34,11 +34,16 @@ public class MovementSystem extends IteratingSystem {
 
         tmp.set(movementComponent.velocity);
 
-        if (movementComponent.velocity.len() > PlayerComponent.MAX_VELOCITY) {
+        float velLen = movementComponent.velocity.len();
+        if (velLen > PlayerComponent.MAX_VELOCITY) {
             tmp.nor().scl(PlayerComponent.MAX_VELOCITY);
             movementComponent.velocity.nor().scl(PlayerComponent.MAX_VELOCITY);
         }
         tmp.scl(deltaTime);
         transformComponent.pos.add(tmp.x, tmp.y, 0.0f);
+
+        if (velLen > 0) {
+            transformComponent.rotation = movementComponent.velocity.angle();
+        }
     }
 }

@@ -48,7 +48,7 @@ public class PlayerComponent implements Component {
 
         LightComponent lightComponent = new LightComponent();
         lightComponent.color = new Color(1f,0,0,0.4f);
-        lightComponent.radius = 2f;
+        lightComponent.radius = 1.5f;
         player.add(lightComponent);
 
         player.add(new MovementComponent());

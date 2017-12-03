@@ -11,7 +11,7 @@ import adictive.games.components.MovementComponent;
 import adictive.games.components.PlayerComponent;
 
 
-public class PlayerInputSystem extends EntitySystem {
+public class PlayerInputSystem extends EntitySystem implements Reseteable {
     private final Family family = Family.all(PlayerComponent.class, MovementComponent.class).get();
     private final ComponentMapper<MovementComponent> movementMapper = ComponentMapper.getFor(MovementComponent.class);
 
@@ -38,5 +38,11 @@ public class PlayerInputSystem extends EntitySystem {
             movementComponent.accel.set(0,0);
         }
 
+    }
+
+    @Override
+    public void reset() {
+        touch.setZero();
+        touchOrigin.set(-1,-1,-1);
     }
 }

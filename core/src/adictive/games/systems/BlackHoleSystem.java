@@ -7,24 +7,21 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 
-import adictive.games.SquareWorld;
 import adictive.games.components.AttractionComponent;
 import adictive.games.components.BlackHoleComponent;
 import adictive.games.components.MovementComponent;
 import adictive.games.components.TransformComponent;
 
-public class BlackHoleSystem extends IteratingSystem {
+public class BlackHoleSystem extends IteratingSystem implements Reseteable {
     private static final ComponentMapper<MovementComponent> movementComponent = ComponentMapper.getFor(MovementComponent.class);
     private static final ComponentMapper<BlackHoleComponent> holeMapper = ComponentMapper.getFor(BlackHoleComponent.class);
     private static final Family HOLE_FAMILY = Family.all(BlackHoleComponent.class, TransformComponent.class).get();
     private static final Family ATTRACTABLE_FAMILY = Family.all(AttractionComponent.class, MovementComponent.class).get();
 
     private final Vector2 tmp = new Vector2();
-    private final SquareWorld world;
 
-    public BlackHoleSystem(SquareWorld world) {
+    public BlackHoleSystem() {
         super(HOLE_FAMILY);
-        this.world = world;
     }
 
     @Override
@@ -48,5 +45,10 @@ public class BlackHoleSystem extends IteratingSystem {
         float distance = tmp.len();
         tmp.nor().scl(attraction + (float) Math.pow(1 + attraction/distance,3)).scl(deltaTime);
         mv.velocity.add(tmp);
+    }
+
+    @Override
+    public void reset() {
+        // Do nothing. This system does not hold state
     }
 }

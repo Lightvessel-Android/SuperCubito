@@ -10,7 +10,7 @@ import adictive.games.components.MovementComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TransformComponent;
 
-public class MovementSystem extends IteratingSystem {
+public class MovementSystem extends IteratingSystem implements Reseteable {
     private final Vector2 tmp = new Vector2();
 
     private final ComponentMapper<TransformComponent> tm;
@@ -45,5 +45,10 @@ public class MovementSystem extends IteratingSystem {
         if (velLen > 0) {
             transformComponent.rotation = movementComponent.velocity.angle();
         }
+    }
+
+    @Override
+    public void reset() {
+        // Do nothing. Does not hold game state.
     }
 }

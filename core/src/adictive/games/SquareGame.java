@@ -4,16 +4,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import adictive.games.play.PlayScreen;
+import adictive.games.systems.Reseteable;
 import adictive.games.utils.GameData;
 
 public class SquareGame extends Game {
-    public SpriteBatch batcher;
     private FPSLogger logger;
-
-    private int level = 0;
 
     public SquareGame() {
         logger = new FPSLogger();
@@ -21,8 +18,7 @@ public class SquareGame extends Game {
 
     @Override
     public void create() {
-        batcher = new SpriteBatch();
-        goToLevel(GameData.getCurrentLevel());
+        setScreen(new PlayScreen(this));
     }
 
     @Override
@@ -34,16 +30,13 @@ public class SquareGame extends Game {
         super.render();
     }
 
-    public void goToLevel(int level) {
-        this.level = level;
-        setScreen(new PlayScreen(this, level));
-    }
-
     public void goToNextLevel() {
-        goToLevel(++level);
+        GameData.incrementCurrentLevel();
+        ((Reseteable)getScreen()).reset();
     }
 
     public void goToPrevLevel() {
-        if (level > 1) goToLevel(--level);
+        GameData.decrementCurrentLevel();
+        ((Reseteable)getScreen()).reset();
     }
 }

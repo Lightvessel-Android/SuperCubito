@@ -22,7 +22,7 @@ import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
 import adictive.games.play.PlayScreen;
 
-public class CollisionSystem extends EntitySystem {
+public class CollisionSystem extends EntitySystem implements Reseteable {
 
     public static final byte WALL  = 1;
     public static final byte WIN   = 2;
@@ -34,7 +34,7 @@ public class CollisionSystem extends EntitySystem {
 
     private static final float PADDING = 0.01f;
 
-    private final Family boundsFamily = Family.all(BoundsComponent.class, TransformComponent.class).get();
+    private static final Family BOUNDS_FAMILY = Family.all(BoundsComponent.class, TransformComponent.class).get();
 
     private final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private final ComponentMapper<BoundsComponent> boundsMapper = ComponentMapper.getFor(BoundsComponent.class);
@@ -48,8 +48,23 @@ public class CollisionSystem extends EntitySystem {
 
     public CollisionSystem(SquareWorld world, PlayScreen screen) {
         super();
-        entityMap = new Entity[world.getWidth()][world.getHeight()][MAX_ENTITIES_ON_TILE];
+        this.entityMap = new Entity[world.getWidth()][world.getHeight()][MAX_ENTITIES_ON_TILE];
         this.screen = screen;
+    }
+
+    @Override
+    public void reset() {
+        for (int i = 0; i < entityMap.length;i++) {
+            for (int j = 0; j < entityMap[i].length;j++) {
+                for (int k = 0; k < MAX_ENTITIES_ON_TILE;k++) {
+                    entityMap[i][j][k] = null;
+                }
+            }
+        }
+        enemies.clear();
+        player = null;
+        playerTr = null;
+        playerBc = null;
     }
 
     @Override
@@ -67,7 +82,7 @@ public class CollisionSystem extends EntitySystem {
         final int y = (int) (playerTr.pos.y + playerBc.bounds.y / 2);
         final Entity hole = entityMap[x][y][HOLE];
         if (hole != null) {
-            screen.restart();
+            screen.killed();
         }
     }
 
@@ -92,7 +107,7 @@ public class CollisionSystem extends EntitySystem {
             final BoundsComponent enemyBc = boundsMapper.get(enemy);
 
             if (playerOverlaps(enemyTr, enemyBc)) {
-                screen.restart();
+                screen.killed();
                 break;
             }
         }
@@ -108,7 +123,7 @@ public class CollisionSystem extends EntitySystem {
     private void checkPointAgainstRectangleInsideCellCollision(int x, int y, byte type) {
         Entity spike = entityMap[x][y][type];
         if (spike != null && playerOverlaps(spike.getComponent(TransformComponent.class), spike.getComponent(BoundsComponent.class))) {
-            screen.restart();
+            screen.killed();
         }
     }
 
@@ -176,7 +191,7 @@ public class CollisionSystem extends EntitySystem {
     @Override
     public void addedToEngine(final Engine engine) {
         super.addedToEngine(engine);
-        engine.addEntityListener(boundsFamily, new EntityListener() {
+        engine.addEntityListener(BOUNDS_FAMILY, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
                 final TransformComponent tc = transformMapper.get(entity);

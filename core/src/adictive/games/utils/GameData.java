@@ -20,4 +20,12 @@ public class GameData {
         prefs.flush();
         return level;
     }
+
+    public static int decrementCurrentLevel() {
+        final Preferences prefs = Gdx.app.getPreferences(PREFS_NAME);
+        int level = Math.max(prefs.getInteger(DATA_LEVEL, 1) - 1, 1);
+        prefs.putInteger(DATA_LEVEL, level);
+        prefs.flush();
+        return level;
+    }
 }

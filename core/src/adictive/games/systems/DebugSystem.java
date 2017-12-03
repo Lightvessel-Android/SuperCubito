@@ -15,7 +15,7 @@ import adictive.games.components.BoundsComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.play.PlayScreen;
 
-public class DebugSystem extends EntitySystem {
+public class DebugSystem extends EntitySystem implements Reseteable {
 
     private SquareWorld world;
     private PlayScreen screen;
@@ -67,5 +67,10 @@ public class DebugSystem extends EntitySystem {
         TransformComponent tr = entity.getComponent(TransformComponent.class);
         BoundsComponent bc = entity.getComponent(BoundsComponent.class);
         shapeRenderer.rect(tr.pos.x + bc.bounds.x, tr.pos.y+ bc.bounds.y, bc.bounds.width, bc.bounds.height);
+    }
+
+    @Override
+    public void reset() {
+        // do nothing. does not hold game state
     }
 }

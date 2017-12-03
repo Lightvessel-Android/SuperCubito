@@ -19,7 +19,7 @@ import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
 import adictive.games.utils.SortedOnInsertList;
 
-public class RenderingSystem extends EntitySystem {
+public class RenderingSystem extends EntitySystem implements Reseteable {
 
     public static final int VIEWPORT_WIDTH_MTS = 15;
     public static final int VIEWPORT_HEIGHT_MTS = 15;
@@ -47,6 +47,12 @@ public class RenderingSystem extends EntitySystem {
                         transformMapper.get(entityA).pos.z);
             }
         });
+    }
+
+
+    @Override
+    public void reset() {
+        renderQueue.clear();
     }
 
     @Override

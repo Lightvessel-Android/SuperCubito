@@ -26,8 +26,9 @@ import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
 import adictive.games.level.LevelWriter;
 import adictive.games.play.PlayScreen;
+import adictive.games.utils.GameData;
 
-public class DesignerSystem extends EntitySystem {
+public class DesignerSystem extends EntitySystem implements Reseteable {
     private static final Vector3 UP    = new Vector3( 0f,  1f, 0f);
     private static final Vector3 DOWN  = new Vector3( 0f, -1f, 0f);
     private static final Vector3 LEFT  = new Vector3(-1f,  0f, 0f);
@@ -48,6 +49,8 @@ public class DesignerSystem extends EntitySystem {
     private final Vector3 cursor = new Vector3(0,0,0);
 
     private Brush[] brushes;
+
+    private LevelWriter levelWriter = new LevelWriter();
 
     private int state = 0;
 
@@ -188,7 +191,7 @@ public class DesignerSystem extends EntitySystem {
     }
 
     private void saveLevel() {
-        new LevelWriter(screen.level).write(getEngine());
+        levelWriter.write(getEngine(), GameData.getCurrentLevel());
     }
 
     private void drawGrid() {
@@ -219,6 +222,11 @@ public class DesignerSystem extends EntitySystem {
         if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             world.getCamera().position.add(RIGHT);
         }
+    }
+
+    @Override
+    public void reset() {
+        // DO nothing. Does not hold game state.
     }
 
     class Brush {

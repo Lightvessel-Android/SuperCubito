@@ -19,7 +19,7 @@ import adictive.games.SquareWorld;
 import adictive.games.components.LightComponent;
 import adictive.games.components.TransformComponent;
 
-public class LightSystem extends EntitySystem {
+public class LightSystem extends EntitySystem implements Reseteable {
 
     public static final Family LIGHTS = Family.all(LightComponent.class).get();
 
@@ -96,5 +96,10 @@ public class LightSystem extends EntitySystem {
 
     private static int powerOfTwo(float n) {
         return (int) Math.pow(2, Math.ceil(Math.log(n)/Math.log(2)));
+    }
+
+    @Override
+    public void reset() {
+        // Do nothing. Does not hold game state.
     }
 }

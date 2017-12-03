@@ -8,7 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import adictive.games.components.CameraComponent;
 import adictive.games.components.TransformComponent;
 
-public class FollowCameraSystem extends IteratingSystem {
+public class FollowCameraSystem extends IteratingSystem implements Reseteable {
     private final ComponentMapper<TransformComponent> tm;
     private final ComponentMapper<CameraComponent> cm;
 
@@ -25,5 +25,10 @@ public class FollowCameraSystem extends IteratingSystem {
 
         cam.camera.position.x = target.pos.x;
         cam.camera.position.y = target.pos.y;
+    }
+
+    @Override
+    public void reset() {
+        // Do nothing. Does not hold game state.
     }
 }

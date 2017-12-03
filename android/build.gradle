@@ -1,5 +1,5 @@
 android {
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '26.0.2'
     compileSdkVersion 26
 
     defaultConfig {
@@ -22,12 +22,14 @@ android {
         instrumentTest.setRoot('tests')
     }
 
+    flavorDimensions "normal"
+
     productFlavors {
         cube {
             applicationId "game.addictive.hard.cube"
             def facebookAppId = "156496048280442"
-
             manifestPlaceholders = [manifestApplicationId          : applicationId]
+            dimension "normal"
         }
     }
 }
@@ -111,9 +113,6 @@ dependencies {
 
     compile 'com.google.android.gms:play-services-ads:11.0.4'
 
-    //compile 'com.google.android.exoplayer:exoplayer:r1.5.11'
-
     compile 'com.facebook.android:audience-network-sdk:4.26.0'
-    compile 'com.google.android.exoplayer:exoplayer:r1.4.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }

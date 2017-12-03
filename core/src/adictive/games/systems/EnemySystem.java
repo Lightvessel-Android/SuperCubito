@@ -8,7 +8,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.TransformComponent;
 
-public class EnemySystem extends IteratingSystem {
+public class EnemySystem extends IteratingSystem implements Reseteable {
     private static final ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
     private static final ComponentMapper<EnemyComponent> enemyMapper = ComponentMapper.getFor(EnemyComponent.class);
 
@@ -44,5 +44,10 @@ public class EnemySystem extends IteratingSystem {
         ec.direction.scl(nextPos);
         ec.posInLine = nextPos;
         tc.pos.add(ec.direction.x - tc.size.x/2, ec.direction.y - tc.size.y/2, 0f);
+    }
+
+    @Override
+    public void reset() {
+        // Do nothing. Does not hold game state
     }
 }

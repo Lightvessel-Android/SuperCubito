@@ -18,15 +18,15 @@ import adictive.games.components.WallComponent;
 import adictive.games.components.WinComponent;
 
 public class LevelWriter {
-    private final String fileName;
 
-    public LevelWriter(int level) {
-        this.fileName = "level" + level + ".txt";
+    public LevelWriter() {
+
     }
 
-    public void write(final Engine engine) {
+    public void write(final Engine engine, int level) {
         PrintWriter writer;
         try {
+            String fileName = "level" + level + ".txt";
             writer = new PrintWriter("levels/" + fileName, "UTF-8");
             ImmutableArray<Entity> entities = engine.getEntities();
             for (Entity e : entities) {

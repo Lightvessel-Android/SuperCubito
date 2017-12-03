@@ -15,17 +15,16 @@ import adictive.games.components.WinComponent;
 
 public class LevelLoader {
 
-    private final String fileName;
     private SquareWorld world;
     private Engine engine;
 
-    public LevelLoader(int levelNumber, SquareWorld world, Engine engine) {
-        this.fileName = "level" + levelNumber + ".txt";
+    public LevelLoader(SquareWorld world, Engine engine) {
         this.world = world;
         this.engine = engine;
     }
 
-    public void load() {
+    public void load(int levelNumber) {
+        String fileName = "level" + levelNumber + ".txt";
         FileHandle fileHandle = Gdx.files.internal("levels/" + fileName);
         String s = fileHandle.readString();
         String[] lines = s.split("\n");

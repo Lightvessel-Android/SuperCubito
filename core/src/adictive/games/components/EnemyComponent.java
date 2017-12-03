@@ -47,9 +47,6 @@ public class EnemyComponent implements Component {
         boundsComponent.bounds.set(0,0,0.5f,0.5f);
         block.add(boundsComponent);
 
-        LightComponent lightComponent = new LightComponent();
-        lightComponent.radius = 3;
-        block.add(lightComponent);
         return block;
     }
 

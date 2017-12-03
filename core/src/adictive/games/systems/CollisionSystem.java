@@ -6,12 +6,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.BlackHoleComponent;
 import adictive.games.components.BoundsComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
@@ -28,6 +28,7 @@ public class CollisionSystem extends EntitySystem {
     public static final byte WIN   = 2;
     public static final byte COIN  = 3;
     public static final byte SPIKE = 4;
+    public static final byte HOLE  = 5;
 
     private static final int MAX_ENTITIES_ON_TILE  = 8;
 
@@ -55,9 +56,19 @@ public class CollisionSystem extends EntitySystem {
     public void update(float deltaTime) {
         checkWallCollisionAndRespond();
         checkEnemyCollision();
-        checkSpikeCollision();
+        checkRectangleCollisionInsideCell(SPIKE);
+        checkBlackHoleCollision();
         checkWinBlockCollision();
         checkCoinCollision();
+    }
+
+    private void checkBlackHoleCollision() {
+        final int x = (int) (playerTr.pos.x + playerBc.bounds.x / 2);
+        final int y = (int) (playerTr.pos.y + playerBc.bounds.y / 2);
+        final Entity hole = entityMap[x][y][HOLE];
+        if (hole != null) {
+            screen.restart();
+        }
     }
 
     private void checkCoinCollision() {
@@ -87,15 +98,15 @@ public class CollisionSystem extends EntitySystem {
         }
     }
 
-    private void checkSpikeCollision() {
-        checkSpikeVertexCollision((int)playerTr.pos.x, (int)playerTr.pos.y);
-        checkSpikeVertexCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)playerTr.pos.y);
-        checkSpikeVertexCollision((int)playerTr.pos.x, (int)(playerTr.pos.y + playerBc.bounds.height ));
-        checkSpikeVertexCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)(playerTr.pos.y + playerBc.bounds.height));
+    private void checkRectangleCollisionInsideCell(byte type) {
+        checkPointAgainstRectangleInsideCellCollision((int)playerTr.pos.x, (int)playerTr.pos.y, type);
+        checkPointAgainstRectangleInsideCellCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)playerTr.pos.y, type);
+        checkPointAgainstRectangleInsideCellCollision((int)playerTr.pos.x, (int)(playerTr.pos.y + playerBc.bounds.height ), type);
+        checkPointAgainstRectangleInsideCellCollision((int)(playerTr.pos.x + playerBc.bounds.width), (int)(playerTr.pos.y + playerBc.bounds.height), type);
     }
 
-    private void checkSpikeVertexCollision(int x, int y) {
-        Entity spike = entityMap[x][y][SPIKE];
+    private void checkPointAgainstRectangleInsideCellCollision(int x, int y, byte type) {
+        Entity spike = entityMap[x][y][type];
         if (spike != null && playerOverlaps(spike.getComponent(TransformComponent.class), spike.getComponent(BoundsComponent.class))) {
             screen.restart();
         }
@@ -168,41 +179,41 @@ public class CollisionSystem extends EntitySystem {
         engine.addEntityListener(boundsFamily, new EntityListener() {
             @Override
             public void entityAdded(Entity entity) {
+                final TransformComponent tc = transformMapper.get(entity);
+
                 if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.add(entity);
                 } else if (entity.getComponent(PlayerComponent.class) != null) {
                     player = entity;
-                    playerTr = transformMapper.get(player);
+                    playerTr = tc;
                     playerBc = boundsMapper.get(player);
                 } else if (entity.getComponent(WallComponent.class) != null) {
-                    final Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][WALL] = entity;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][WALL] = entity;
                 } else if (entity.getComponent(WinComponent.class) != null) {
-                    final Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][WIN] = entity;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][WIN] = entity;
                 } else if (entity.getComponent(CoinComponent.class) != null) {
-                    final Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][COIN] = entity;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][COIN] = entity;
                 } else if (entity.getComponent(SpikeComponent.class) != null) {
-                    final Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][SPIKE] = entity;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][SPIKE] = entity;
+                } else if (entity.getComponent(BlackHoleComponent.class) != null) {
+                    entityMap[(int)(tc.pos.x + tc.size.x/2)][(int)(tc.pos.y + tc.size.y/2)][HOLE] = entity;
                 }
             }
 
             @Override
             public void entityRemoved(Entity entity) {
+                final TransformComponent tc = transformMapper.get(entity);
+
                 if (entity.getComponent(WallComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][WALL] = null;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][WALL] = null;
                 } else if (entity.getComponent(WinComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][WIN] = null;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][WIN] = null;
                 } else if (entity.getComponent(CoinComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][COIN] = null;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][COIN] = null;
                 } else if (entity.getComponent(SpikeComponent.class) != null) {
-                    Vector3 pos = transformMapper.get(entity).pos;
-                    entityMap[(int) pos.x][(int) pos.y][SPIKE] = null;
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][SPIKE] = null;
+                } else if (entity.getComponent(BlackHoleComponent.class) != null) {
+                    entityMap[(int) tc.pos.x][(int) tc.pos.y][HOLE] = null;
                 } else if (entity.getComponent(EnemyComponent.class) != null) {
                     enemies.remove(entity);
                 } else if (entity.getComponent(PlayerComponent.class) != null) {

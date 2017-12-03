@@ -10,6 +10,7 @@ import adictive.games.SquareGame;
 import adictive.games.SquareWorld;
 import adictive.games.components.CoinComponent;
 import adictive.games.level.LevelLoader;
+import adictive.games.systems.BlackHoleSystem;
 import adictive.games.systems.CollisionSystem;
 import adictive.games.systems.DebugSystem;
 import adictive.games.systems.DesignerSystem;
@@ -45,6 +46,7 @@ public class PlayScreen extends ScreenAdapter {
 
         engine.addSystem(new PlayerInputSystem());
         engine.addSystem(new EnemySystem());
+        engine.addSystem(new BlackHoleSystem(world));
         engine.addSystem(new MovementSystem());
         engine.addSystem(new CollisionSystem(world, this));
         engine.addSystem(new RenderingSystem(world));
@@ -98,6 +100,7 @@ public class PlayScreen extends ScreenAdapter {
         engine.getSystem(PlayerInputSystem.class).setProcessing(!pause);
         engine.getSystem(EnemySystem.class).setProcessing(!pause);
         engine.getSystem(LightSystem.class).setProcessing(!pause);
+        engine.getSystem(BlackHoleSystem.class).setProcessing(!pause);
     }
 
     private DebugSystem getDebugSystem() {

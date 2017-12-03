@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
+import adictive.games.components.BlackHoleComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
@@ -48,6 +49,8 @@ public class LevelWriter {
             writer.println(winBlockToCSV(e));
         } else if (e.getComponent(CoinComponent.class) != null) {
             writer.println(coinToCSV(e));
+        }  else if (e.getComponent(BlackHoleComponent.class) != null) {
+            writer.println(holeToCSV(e));
         } else if (e.getComponent(SpikeComponent.class) != null) {
             writer.println(spikeToCSV(e));
         }
@@ -81,6 +84,12 @@ public class LevelWriter {
     public String blockToCSV(Entity e) {
         TransformComponent tc = e.getComponent(TransformComponent.class);
         return csv("Block", (int)tc.pos.x, (int)tc.pos.y);
+    }
+
+    public String holeToCSV(Entity e) {
+        TransformComponent tc = e.getComponent(TransformComponent.class);
+        BlackHoleComponent bhc = e.getComponent(BlackHoleComponent.class);
+        return csv("Hole", tc.pos.x, tc.pos.y, bhc.attraction);
     }
 
     private static String csv(Object... e) {

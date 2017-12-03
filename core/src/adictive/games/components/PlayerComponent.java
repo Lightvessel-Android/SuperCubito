@@ -52,6 +52,7 @@ public class PlayerComponent implements Component {
         player.add(lightComponent);
 
         player.add(new MovementComponent());
+        player.add(new AttractionComponent());
         return player;
     }
 }

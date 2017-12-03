@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.BlackHoleComponent;
 import adictive.games.components.BoundsComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
@@ -64,6 +65,7 @@ public class DesignerSystem extends EntitySystem {
                 new SpikeBrush(0,0, 90f),
                 new SpikeBrush(0,0, 180f),
                 new SpikeBrush(0,0, 270f),
+                new BlackHoleBrush(0,0, 4f),
                 new PlayerBrush(world, 0,0)
         };
     }
@@ -408,6 +410,24 @@ public class DesignerSystem extends EntitySystem {
             if (getEngine().getSystem(CollisionSystem.class).entityMap[x][y][CollisionSystem.SPIKE] != null) return;
 
             SpikeComponent.addNew(getEngine(), x, y, rotation);
+        }
+    }
+
+    class BlackHoleBrush extends Brush {
+        private float attraction;
+
+        BlackHoleBrush(int x, int y, float attraction) {
+            super(BlackHoleComponent.create(x, y, attraction));
+            this.attraction = attraction;
+        }
+
+        @Override
+        public void paint() {
+            final float x = ((int)cursor.x - BlackHoleComponent.SIDE/2) + 0.5f;
+            final float y = ((int)cursor.y - BlackHoleComponent.SIDE/2) + 0.5f;
+            if (getEngine().getSystem(CollisionSystem.class).entityMap[(int)x][(int)y][CollisionSystem.HOLE] != null) return;
+
+            BlackHoleComponent.addNew(getEngine(), x, y, attraction);
         }
     }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import adictive.games.SquareWorld;
+import adictive.games.components.BlackHoleComponent;
 import adictive.games.components.CoinComponent;
 import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
@@ -49,8 +50,20 @@ public class LevelLoader {
                 case "Spike":
                     parseSpike(entity);
                     break;
+                case "Hole":
+                    parseHole(entity);
+                    break;
             }
         }
+    }
+
+    private void parseHole(String[] line) {
+        BlackHoleComponent.addNew(
+                engine,
+                Float.parseFloat(line[1]), //x
+                Float.parseFloat(line[2]), //y
+                Float.parseFloat(line[3])       //attraction
+        );
     }
 
     private void parseSpike(String[] line) {
@@ -58,7 +71,7 @@ public class LevelLoader {
                 engine,
                 (int)Float.parseFloat(line[1]), //x
                 (int)Float.parseFloat(line[2]), //y
-                Float.parseFloat(line[3])  //rotation
+                Float.parseFloat(line[3])       //rotation
         );
     }
 

@@ -20,6 +20,7 @@ import adictive.games.systems.LightSystem;
 import adictive.games.systems.MovementSystem;
 import adictive.games.systems.PlayerInputSystem;
 import adictive.games.systems.RenderingSystem;
+import adictive.games.utils.GameData;
 
 public class PlayScreen extends ScreenAdapter {
     private static final Family COINS_FAMILY = Family.all(CoinComponent.class).get();
@@ -69,7 +70,7 @@ public class PlayScreen extends ScreenAdapter {
 
     public void win() {
         if (engine.getEntitiesFor(COINS_FAMILY).size() == 0 ) {
-            superCubito.goToNextLevel();
+            superCubito.goToLevel(GameData.incrementCurrentLevel());
         }
     }
 

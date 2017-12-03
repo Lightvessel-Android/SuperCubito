@@ -5,32 +5,24 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.ads.AdInterface;
-import com.mygdx.game.analytics.Analytic;
-import com.mygdx.game.utils.Settings;
 
 import adictive.games.play.PlayScreen;
+import adictive.games.utils.GameData;
 
 public class SquareGame extends Game {
     public SpriteBatch batcher;
-    public final AdInterface adInterface;
-    public final Analytic analytic;
     private FPSLogger logger;
 
     private int level = 0;
 
-    public SquareGame(AdInterface adInterface, Analytic analytic) {
-        this.adInterface = adInterface;
-        this.analytic = analytic;
+    public SquareGame() {
         logger = new FPSLogger();
     }
 
     @Override
     public void create() {
         batcher = new SpriteBatch();
-        Settings.load();
-        com.mygdx.game.utils.Assets.load();
-        goToNextLevel();
+        goToLevel(GameData.getCurrentLevel());
     }
 
     @Override

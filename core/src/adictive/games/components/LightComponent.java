@@ -4,7 +4,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static com.mygdx.game.utils.Assets.loadTexture;
+import static adictive.games.utils.AssetsUtils.loadTexture;
+
 
 public class LightComponent implements Component {
     public static final TextureRegion CIRCULAR = new TextureRegion(loadTexture("data/light_circular.png"));

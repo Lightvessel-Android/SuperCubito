@@ -9,7 +9,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.utils.SortedOnInsertList;
 
 import java.util.Comparator;
 
@@ -18,6 +17,7 @@ import adictive.games.components.EnemyComponent;
 import adictive.games.components.PlayerComponent;
 import adictive.games.components.TextureComponent;
 import adictive.games.components.TransformComponent;
+import adictive.games.utils.SortedOnInsertList;
 
 public class RenderingSystem extends EntitySystem {
 

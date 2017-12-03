@@ -1,4 +1,4 @@
-package com.mygdx.game.utils;
+package adictive.games.utils;
 
 
 import java.util.ArrayList;

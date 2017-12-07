@@ -1,3 +1,5 @@
+apply plugin: 'io.fabric'
+
 android {
     buildToolsVersion '26.0.2'
     compileSdkVersion 26
@@ -5,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 26
-        multiDexEnabled true
+        multiDexEnabled false
     }
 
     sourceSets {
@@ -26,8 +28,7 @@ android {
 
     productFlavors {
         cube {
-            applicationId "game.addictive.hard.cube"
-            def facebookAppId = "156496048280442"
+            applicationId "addictive.hard.game"
             manifestPlaceholders = [manifestApplicationId          : applicationId]
             dimension "normal"
         }
@@ -110,9 +111,10 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile 'com.jakewharton.timber:timber:4.5.1'
-
-    compile 'com.google.android.gms:play-services-ads:11.0.4'
-
-    compile 'com.facebook.android:audience-network-sdk:4.26.0'
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
+        transitive = true
+    }
+    compile 'com.google.firebase:firebase-core:11.6.2'
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -5,14 +5,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 
+import adictive.games.analytics.IAnalyticsManager;
 import adictive.games.play.PlayScreen;
 import adictive.games.systems.Reseteable;
 import adictive.games.utils.GameData;
 
 public class SquareGame extends Game {
-    private FPSLogger logger;
+    private final FPSLogger logger;
+    public final IAnalyticsManager analyticsManager;
 
-    public SquareGame() {
+    public SquareGame(IAnalyticsManager analyticsManager) {
+        this.analyticsManager = analyticsManager;
         logger = new FPSLogger();
     }
 

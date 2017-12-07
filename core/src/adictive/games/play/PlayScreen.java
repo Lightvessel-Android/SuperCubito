@@ -131,9 +131,11 @@ public class PlayScreen extends ScreenAdapter implements Reseteable {
                 break;
             case KILLED:
                 reset();
+                superCubito.analyticsManager.loseLevel(GameData.getCurrentLevel());
                 break;
             case WIN:
-                GameData.incrementCurrentLevel();
+                int level = GameData.incrementCurrentLevel();
+                superCubito.analyticsManager.winLevel(level);
                 reset();
                 break;
         }

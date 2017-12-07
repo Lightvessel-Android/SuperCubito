@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "241514930671",
+    "firebase_url": "https://game-kubito.firebaseio.com",
+    "project_id": "game-kubito",
+    "storage_bucket": "game-kubito.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241514930671:android:8af9aa61990f2deb",
+        "android_client_info": {
+          "package_name": "addictive.hard.game"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "241514930671-ghrdm0ecsk938f6t0i3oo5i5777kf79c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "addictive.hard.game",
+            "certificate_hash": "a3a5b3a3455039c317c953f47d0ef2a73a776b8b"
+          }
+        },
+        {
+          "client_id": "241514930671-i9bdf2mfcpce1secheke7dkq86iv9rmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiu5-_tTFtA0cfxsrnhoFvw8PxYM_wU6g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "241514930671-i9bdf2mfcpce1secheke7dkq86iv9rmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
